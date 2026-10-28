@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Documentos e coisas',label:'Exame e inspeção',text:'<p>O <b>exame documental</b> analisa contratos, notas, processos e atas. A <b>inspeção física</b> vai até o bem para confirmar existência, quantidade e estado.</p>',scene:function(){return sc2('PASSO 1 DE 6',[['Exame documental','a','papel']],[['Inspeção física','m','bem']],'o documento e a coisa')}},
+{title:'2. Cálculos e processos',label:'Recalcular e ver',text:'<p>A <b>conferência de cálculos</b> refaz reajustes, encargos e folha. A <b>observação</b> acompanha a rotina sendo executada, para ver como ela de fato acontece.</p>',scene:function(){return sc2('PASSO 2 DE 6',[['Conferência de cálculos','a','refazer']],[['Observação','m','ver acontecer']],'o número e a rotina')}},
+{title:'3. Pessoas e terceiros',label:'Perguntar',text:'<p>A <b>entrevista</b> é oral e feita com quem conhece o assunto. A <b>circularização</b> pede <b>confirmação por escrito a terceiros</b>, como o banco ou o fornecedor, e por isso é mais confiável.</p>',scene:function(){return sc2('PASSO 3 DE 6',[['Entrevista','a','oral']],[['Circularização','m','terceiro, por escrito']],'quem responde')}},
+{title:'4. Saldos e contas',label:'Confrontar',text:'<p>A <b>conciliação</b> confronta duas fontes de um mesmo saldo e explica a diferença. A <b>análise de contas contábeis</b> examina a composição e o movimento de uma conta.</p>',scene:function(){return sc2('PASSO 4 DE 6',[['Conciliação','a','duas fontes']],[['Análise de contas','m','composição']],'o saldo e a conta')}},
+{title:'5. Índices e tendências',label:'Revisão analítica',text:'<p>A <b>revisão analítica</b> compara índices, relações e tendências para achar variações atípicas. Ela <b>indica onde investigar</b>, e não prova a irregularidade.</p>',scene:function(){return sc('PASSO 5 DE 6',[['Índices','a'],['Tendências','n'],['Variações','n']],'revisão analítica')}},
+{title:'6. Quadro-resumo',label:'Resumo',text:'<p>Documento, bem, cálculo, rotina, pessoa, terceiro, saldo, conta e tendência. Nove técnicas, nove palavras-chave.</p>',scene:function(){return sc('RESUMO',[['Documental','d'],['Física','d'],['Cálculos','d'],['Observação','d'],['Entrevista','d']],'mais circularização, conciliações, contas e revisão analítica')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pelas nove técnicas de auditoria: exame documental, inspeção física, conferência de cálculos, observação, entrevista, circularização, conciliações, análise de contas contábeis e revisão analítica'});
+})();
