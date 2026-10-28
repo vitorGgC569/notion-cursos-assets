@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Concurso e provimento',label:'Ingresso',text:'<p>Cargo efetivo exige <b>concurso</b>, válido por <b>2 anos</b>, prorrogável <b>uma vez</b>. Formas de provimento: nomeação, readaptação, reversão, reintegração, recondução, aproveitamento e promoção.</p>',scene:function(){return sc2('PASSO 1 DE 6',[['Concurso','a','2 anos']],[['Prorrogação','m','uma vez']],'art. 13')}},
+{title:'2. Posse e exercício',label:'Prazos',text:'<p>Posse em <b>30 dias</b> da publicação da nomeação, mais <b>15</b> se prorrogada. Só há posse na <b>nomeação</b>. Exercício em até <b>30 dias</b> da posse.</p>',scene:function(){return sc('PASSO 2 DE 6',[['Posse 30 dias','a'],['+15 dias','n'],['Exercício 30 dias','n']],'arts. 20 e 24')}},
+{title:'3. Estágio e estabilidade',label:'3 anos',text:'<p>Estágio de <b>três anos</b>, com cinco requisitos: iniciativa, assiduidade e pontualidade, relacionamento interpessoal, eficiência e comprometimento. Depois, a <b>estabilidade</b>.</p>',scene:function(){return sc('PASSO 3 DE 6',[['Estágio 3 anos','a'],['5 requisitos','n'],['Estabilidade','n']],'arts. 33 e 43')}},
+{title:'4. Vacância e movimentação',label:'Cargo e local',text:'<p>Vacância: exoneração, demissão, aposentadoria, falecimento, promoção, readaptação, posse em outro cargo inacumulável. Local de exercício: <b>remoção</b>, <b>disposição</b> e <b>cessão</b>.</p>',scene:function(){return sc2('PASSO 4 DE 6',[['Vacância','a','8 causas']],[['Remoção, disposição, cessão','m','local de exercício']],'arts. 58 e 64')}},
+{title:'5. Jornada e licenças',label:'Números',text:'<p>Jornada de <b>8h, 40h e 200h</b>. Férias de <b>30 dias</b>. Maternidade <b>180 dias</b>, paternidade <b>20 dias</b>, saúde até <b>24 meses</b>.</p>',scene:function(){return sc('PASSO 5 DE 6',[['8h/40h/200h','a'],['180 e 20 dias','n'],['Férias 30','n']],'jornada, férias e licenças')}},
+{title:'6. Penalidades e PAD',label:'Disciplina',text:'<p>Sete penalidades. Prescrição de <b>3</b> e <b>6 anos</b>. PAD com cinco fases, comissão de <b>três efetivos</b> e prazos de <b>120, 60 e 45 dias</b>.</p>',scene:function(){return sc2('PASSO 6 DE 6',[['7 penalidades','a','prescrição 3 e 6 anos']],[['PAD 120, 60, 45 dias','m','comissão de 3']],'arts. 193, 201, 217, 220 e 237')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pela Lei 20.756: concurso, posse e exercício, estágio probatório, vacância e movimentação, jornada e licenças, penalidades e PAD'});
+})();
