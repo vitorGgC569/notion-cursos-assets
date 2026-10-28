@@ -1,0 +1,287 @@
+
+======================================================================
+L7. Indices, B-tree e planos de execucao
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+SQLite
+======================================================================
+Tabela pessoa com 50000 linhas geradas (dados didaticos). Coluna ativo = 1 em 1% das linhas.
+sq> SELECT COUNT(*) AS linhas FROM pessoa
+linhas
+------
+50000
+(1 linha)
+
+--- 1. Busca por igualdade SEM indice: varredura da tabela inteira
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa WHERE cpf = '00000007919'
+   SCAN pessoa
+
+--- 2. Cria indice B-tree em cpf e repete
+sq> CREATE INDEX idx_pessoa_cpf ON pessoa (cpf)
+OK
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa WHERE cpf = '00000007919'
+   SEARCH pessoa USING INDEX idx_pessoa_cpf (cpf=?)
+
+--- 3. Indice UNIQUE faz o papel de restricao e de indice ao mesmo tempo
+sq> CREATE UNIQUE INDEX uq_pessoa_nome ON pessoa (nome)
+OK
+sq> INSERT INTO pessoa VALUES (50001,'x','pessoa1','Goiania',1990,0)
+ERRO: UNIQUE constraint failed: pessoa.nome
+
+--- 4. Indice composto: vale o prefixo mais a esquerda
+sq> CREATE INDEX idx_cid_nasc ON pessoa (cidade, nascimento)
+OK
+[usa as duas colunas]
+sq> EXPLAIN QUERY PLAN SELECT id FROM pessoa WHERE cidade = 'Goiania' AND nascimento = 1990
+   SEARCH pessoa USING COVERING INDEX idx_cid_nasc (cidade=? AND nascimento=?)
+[usa so o prefixo cidade]
+sq> EXPLAIN QUERY PLAN SELECT id FROM pessoa WHERE cidade = 'Goiania' AND ativo = 1
+   SEARCH pessoa USING INDEX idx_cid_nasc (cidade=?)
+[so a segunda coluna: nao e o prefixo mais a esquerda]
+sq> EXPLAIN QUERY PLAN SELECT id FROM pessoa WHERE nascimento = 1990
+   SCAN pessoa USING COVERING INDEX idx_cid_nasc
+Leitura: o SQLite varre o indice inteiro (SCAN ... COVERING INDEX); o PostgreSQL 18 faz varias buscas no indice, uma por valor distinto de cidade (skip scan, novo na versao 18; veja Index Searches). Nos dois casos a coluna lider continua sendo a mais importante.
+
+--- 5. Funcao sobre a coluna impede o uso do indice (nao "sargable")
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa WHERE substr(cpf, 1, 5) = '00000'
+   SCAN pessoa
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa WHERE cpf >= '00000' AND cpf < '00001'
+   SEARCH pessoa USING INDEX idx_pessoa_cpf (cpf>? AND cpf<?)
+
+--- 6. Baixa seletividade: indice em coluna com poucos valores distintos
+sq> CREATE INDEX idx_ativo ON pessoa (ativo)
+OK
+[ativo = 1 (1% das linhas): raro, o indice compensa]
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa WHERE ativo = 1
+   SEARCH pessoa USING INDEX idx_ativo (ativo=?)
+[ativo = 0 (99% das linhas): o otimizador prefere ler a tabela toda]
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa WHERE ativo = 0
+   SEARCH pessoa USING INDEX idx_ativo (ativo=?)
+
+--- 7. Indice parcial (somente as linhas ativas) e indice de cobertura
+sq> CREATE INDEX idx_ativos_parcial ON pessoa (nome) WHERE ativo = 1
+OK
+sq> CREATE INDEX idx_cobre ON pessoa (cidade, nome)
+OK
+[COVERING INDEX: a resposta sai do proprio indice]
+sq> EXPLAIN QUERY PLAN SELECT cidade, nome FROM pessoa WHERE cidade = 'Catalao'
+   SEARCH pessoa USING COVERING INDEX idx_cobre (cidade=?)
+sq> SELECT name FROM sqlite_master WHERE type = 'index' AND tbl_name = 'pessoa' ORDER BY 1
+name
+------------------
+idx_ativo
+idx_ativos_parcial
+idx_cid_nasc
+idx_cobre
+idx_pessoa_cpf
+uq_pessoa_nome
+(6 linhas)
+
+--- 8. Ordenacao: o indice evita o SORT
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa ORDER BY nome LIMIT 3
+   SCAN pessoa USING INDEX uq_pessoa_nome
+sq> EXPLAIN QUERY PLAN SELECT * FROM pessoa ORDER BY nascimento, nome LIMIT 3
+   SCAN pessoa
+   USE TEMP B-TREE FOR ORDER BY
+
+--- 9. JOIN: a chave estrangeira sem indice obriga varredura
+[sem indice em pedido.pessoa_id]
+sq> EXPLAIN QUERY PLAN SELECT p.nome, SUM(o.valor) FROM pessoa p JOIN pedido o ON o.pessoa_id = p.id WHERE p.cpf = '00000300922' GROUP BY p.nome
+   SCAN o
+   SEARCH p USING INTEGER PRIMARY KEY (rowid=?)
+   USE TEMP B-TREE FOR GROUP BY
+sq> CREATE INDEX idx_pedido_pessoa ON pedido (pessoa_id)
+OK
+[com indice em pedido.pessoa_id]
+sq> EXPLAIN QUERY PLAN SELECT p.nome, SUM(o.valor) FROM pessoa p JOIN pedido o ON o.pessoa_id = p.id WHERE p.cpf = '00000300922' GROUP BY p.nome
+   SEARCH p USING INDEX idx_pessoa_cpf (cpf=?)
+   SEARCH o USING INDEX idx_pedido_pessoa (pessoa_id=?)
+   USE TEMP B-TREE FOR GROUP BY
+
+--- 10. Custo do indice: toda escrita atualiza tambem os indices
+sq> SELECT COUNT(*) AS indices_da_tabela_pessoa FROM sqlite_master WHERE type = 'index' AND tbl_name = 'pessoa'
+indices_da_tabela_pessoa
+------------------------
+6
+(1 linha)
+
+======================================================================
+PostgreSQL
+======================================================================
+Tabela pessoa com 200000 linhas geradas (dados didaticos). Coluna ativo = 1 em 1% das linhas.
+pg> SELECT COUNT(*) AS linhas FROM pessoa
+linhas
+------
+200000
+(1 linha)
+
+--- 1. Busca por igualdade SEM indice: varredura da tabela inteira
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa WHERE cpf = '00000007919'
+   Seq Scan on pessoa (actual rows=1.00 loops=1)
+     Filter: (cpf = '00000007919'::text)
+     Rows Removed by Filter: 199999
+
+--- 2. Cria indice B-tree em cpf e repete
+pg> CREATE INDEX idx_pessoa_cpf ON pessoa (cpf)
+OK
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa WHERE cpf = '00000007919'
+   Index Scan using idx_pessoa_cpf on pessoa (actual rows=1.00 loops=1)
+     Index Cond: (cpf = '00000007919'::text)
+     Index Searches: 1
+
+--- 3. Indice UNIQUE faz o papel de restricao e de indice ao mesmo tempo
+pg> CREATE UNIQUE INDEX uq_pessoa_nome ON pessoa (nome)
+OK
+pg> INSERT INTO pessoa VALUES (200001,'x','pessoa1','Goiania',1990,0)
+ERRO: duplicate key value violates unique constraint "uq_pessoa_nome"
+
+--- 4. Indice composto: vale o prefixo mais a esquerda
+pg> CREATE INDEX idx_cid_nasc ON pessoa (cidade, nascimento)
+OK
+[usa as duas colunas]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT id FROM pessoa WHERE cidade = 'Goiania' AND nascimento = 1990
+   Bitmap Heap Scan on pessoa (actual rows=3333.00 loops=1)
+     Recheck Cond: ((cidade = 'Goiania'::text) AND (nascimento = 1990))
+     Heap Blocks: exact=1869
+     ->  Bitmap Index Scan on idx_cid_nasc (actual rows=3333.00 loops=1)
+           Index Cond: ((cidade = 'Goiania'::text) AND (nascimento = 1990))
+           Index Searches: 1
+[usa so o prefixo cidade]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT id FROM pessoa WHERE cidade = 'Goiania' AND ativo = 1
+   Bitmap Heap Scan on pessoa (actual rows=2000.00 loops=1)
+     Recheck Cond: (cidade = 'Goiania'::text)
+     Filter: (ativo = 1)
+     Rows Removed by Filter: 38000
+     Heap Blocks: exact=1870
+     ->  Bitmap Index Scan on idx_cid_nasc (actual rows=40000.00 loops=1)
+           Index Cond: (cidade = 'Goiania'::text)
+           Index Searches: 1
+[so a segunda coluna: nao e o prefixo mais a esquerda]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT id FROM pessoa WHERE nascimento = 1990
+   Bitmap Heap Scan on pessoa (actual rows=3333.00 loops=1)
+     Recheck Cond: (nascimento = 1990)
+     Heap Blocks: exact=1869
+     ->  Bitmap Index Scan on idx_cid_nasc (actual rows=3333.00 loops=1)
+           Index Cond: (nascimento = 1990)
+           Index Searches: 11
+Leitura: o SQLite varre o indice inteiro (SCAN ... COVERING INDEX); o PostgreSQL 18 faz varias buscas no indice, uma por valor distinto de cidade (skip scan, novo na versao 18; veja Index Searches). Nos dois casos a coluna lider continua sendo a mais importante.
+
+--- 5. Funcao sobre a coluna impede o uso do indice (nao "sargable")
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa WHERE substr(cpf, 1, 5) = '00000'
+   Gather (actual rows=126.00 loops=1)
+     Workers Planned: 1
+     Workers Launched: 1
+     ->  Parallel Seq Scan on pessoa (actual rows=63.00 loops=2)
+           Filter: (substr(cpf, 1, 5) = '00000'::text)
+           Rows Removed by Filter: 99937
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa WHERE cpf >= '00000' AND cpf < '00001'
+   Index Scan using idx_pessoa_cpf on pessoa (actual rows=126.00 loops=1)
+     Index Cond: ((cpf >= '00000'::text) AND (cpf < '00001'::text))
+     Index Searches: 1
+
+--- 6. Baixa seletividade: indice em coluna com poucos valores distintos
+pg> CREATE INDEX idx_ativo ON pessoa (ativo)
+OK
+[ativo = 1 (1% das linhas): raro, o indice compensa]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa WHERE ativo = 1
+   Index Scan using idx_ativo on pessoa (actual rows=2000.00 loops=1)
+     Index Cond: (ativo = 1)
+     Index Searches: 1
+[ativo = 0 (99% das linhas): o otimizador prefere ler a tabela toda]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa WHERE ativo = 0
+   Seq Scan on pessoa (actual rows=198000.00 loops=1)
+     Filter: (ativo = 0)
+     Rows Removed by Filter: 2000
+
+--- 7. Indice parcial (somente as linhas ativas) e indice de cobertura
+pg> CREATE INDEX idx_ativos_parcial ON pessoa (nome) WHERE ativo = 1
+OK
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT nome FROM pessoa WHERE ativo = 1 AND nome = 'pessoa100'
+   Index Only Scan using idx_ativos_parcial on pessoa (actual rows=1.00 loops=1)
+     Index Cond: (nome = 'pessoa100'::text)
+     Heap Fetches: 1
+     Index Searches: 1
+pg> CREATE INDEX idx_cobre ON pessoa (cidade) INCLUDE (nome)
+OK
+[Index Only Scan: a resposta sai do proprio indice]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT COUNT(nome) FROM pessoa WHERE cidade = 'Catalao'
+   Aggregate (actual rows=1.00 loops=1)
+     ->  Index Only Scan using idx_cobre on pessoa (actual rows=40000.00 loops=1)
+           Index Cond: (cidade = 'Catalao'::text)
+           Heap Fetches: 4
+           Index Searches: 1
+pg> SELECT indexname FROM pg_indexes WHERE tablename = 'pessoa' ORDER BY 1
+indexname
+------------------
+idx_ativo
+idx_ativos_parcial
+idx_cid_nasc
+idx_cobre
+idx_pessoa_cpf
+pessoa_pkey
+uq_pessoa_nome
+(7 linhas)
+pg> SELECT pg_size_pretty(pg_relation_size('pessoa')) AS tabela, pg_size_pretty(pg_relation_size('idx_pessoa_cpf')) AS indice_cpf
+tabela | indice_cpf
+-------+-----------
+15 MB  | 6184 kB
+(1 linha)
+
+--- 8. Ordenacao: o indice evita o SORT
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa ORDER BY nome LIMIT 3
+   Limit (actual rows=3.00 loops=1)
+     ->  Index Scan using uq_pessoa_nome on pessoa (actual rows=3.00 loops=1)
+           Index Searches: 1
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT * FROM pessoa ORDER BY nascimento, nome LIMIT 3
+   Limit (actual rows=3.00 loops=1)
+     ->  Gather Merge (actual rows=3.00 loops=1)
+           Workers Planned: 1
+           Workers Launched: 1
+           ->  Sort (actual rows=2.50 loops=2)
+                 Sort Key: nascimento, nome
+                 Sort Method: top-N heapsort  Memory: 25kB
+                 Worker 0:  Sort Method: top-N heapsort  Memory: 25kB
+                 ->  Parallel Seq Scan on pessoa (actual rows=100000.00 loops=2)
+
+--- 9. JOIN: a chave estrangeira sem indice obriga varredura
+[sem indice em pedido.pessoa_id]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT p.nome, SUM(o.valor) FROM pessoa p JOIN pedido o ON o.pessoa_id = p.id WHERE p.cpf = '00000300922' GROUP BY p.nome
+   GroupAggregate (actual rows=1.00 loops=1)
+     Group Key: p.nome
+     ->  Sort (actual rows=1.00 loops=1)
+           Sort Key: p.nome
+           Sort Method: quicksort  Memory: 25kB
+           ->  Hash Join (actual rows=1.00 loops=1)
+                 Hash Cond: (o.pessoa_id = p.id)
+                 ->  Seq Scan on pedido o (actual rows=20000.00 loops=1)
+                 ->  Hash (actual rows=1.00 loops=1)
+                       Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                       ->  Index Scan using idx_pessoa_cpf on pessoa p (actual rows=1.00 loops=1)
+                             Index Cond: (cpf = '00000300922'::text)
+                             Index Searches: 1
+pg> CREATE INDEX idx_pedido_pessoa ON pedido (pessoa_id)
+OK
+[com indice em pedido.pessoa_id]
+pg> EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) SELECT p.nome, SUM(o.valor) FROM pessoa p JOIN pedido o ON o.pessoa_id = p.id WHERE p.cpf = '00000300922' GROUP BY p.nome
+   GroupAggregate (actual rows=1.00 loops=1)
+     Group Key: p.nome
+     ->  Sort (actual rows=1.00 loops=1)
+           Sort Key: p.nome
+           Sort Method: quicksort  Memory: 25kB
+           ->  Nested Loop (actual rows=1.00 loops=1)
+                 ->  Index Scan using idx_pessoa_cpf on pessoa p (actual rows=1.00 loops=1)
+                       Index Cond: (cpf = '00000300922'::text)
+                       Index Searches: 1
+                 ->  Index Scan using idx_pedido_pessoa on pedido o (actual rows=1.00 loops=1)
+                       Index Cond: (pessoa_id = p.id)
+                       Index Searches: 1
+
+--- 10. Custo do indice: toda escrita atualiza tambem os indices
+pg> SELECT COUNT(*) AS indices_da_tabela_pessoa FROM pg_indexes WHERE tablename = 'pessoa'
+indices_da_tabela_pessoa
+------------------------
+7
+(1 linha)

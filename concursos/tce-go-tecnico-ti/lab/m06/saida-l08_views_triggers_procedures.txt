@@ -1,0 +1,230 @@
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+Views (SQLite e PostgreSQL)
+======================================================================
+
+[SQLite]
+sq> CREATE VIEW processos_recentes AS SELECT numeroprocesso AS numero_do_processo, tribunalprocesso AS numero_do_tribunal FROM processo WHERE anoinicioprocesso >= 2008
+OK
+sq> SELECT * FROM processos_recentes ORDER BY 1
+numero_do_processo | numero_do_tribunal
+-------------------+-------------------
+000182             | 3
+000346             | 15
+000467             | 5
+001001             | 20
+(4 linhas)
+A view nao guarda dados: ela guarda a consulta. Mudou a tabela, mudou a view:
+sq> UPDATE processo SET anoinicioprocesso = 2000 WHERE numeroprocesso = '000182'
+OK (1 linha afetada)
+sq> SELECT * FROM processos_recentes ORDER BY 1
+numero_do_processo | numero_do_tribunal
+-------------------+-------------------
+000346             | 15
+000467             | 5
+001001             | 20
+(3 linhas)
+Seguranca: a view esconde colunas e linhas; o usuario recebe GRANT na view, nao na tabela (veja DCL abaixo, em PostgreSQL).
+
+[PostgreSQL]
+pg> CREATE VIEW processos_recentes AS SELECT numeroprocesso AS numero_do_processo, tribunalprocesso AS numero_do_tribunal FROM processo WHERE anoinicioprocesso >= 2008
+OK
+pg> SELECT * FROM processos_recentes ORDER BY 1
+numero_do_processo | numero_do_tribunal
+-------------------+-------------------
+000182             | 3
+000346             | 15
+000467             | 5
+001001             | 20
+(4 linhas)
+A view nao guarda dados: ela guarda a consulta. Mudou a tabela, mudou a view:
+pg> UPDATE processo SET anoinicioprocesso = 2000 WHERE numeroprocesso = '000182'
+OK (1 linha afetada)
+pg> SELECT * FROM processos_recentes ORDER BY 1
+numero_do_processo | numero_do_tribunal
+-------------------+-------------------
+000346             | 15
+000467             | 5
+001001             | 20
+(3 linhas)
+Seguranca: a view esconde colunas e linhas; o usuario recebe GRANT na view, nao na tabela (veja DCL abaixo, em PostgreSQL).
+
+Sintaxes erradas da prova TRT-3 2015 Q51 (CREATE VIEW ... ON/WITH SELECT):
+pg> CREATE VIEW v_errada ON SELECT numeroprocesso FROM processo
+ERRO: syntax error at or near "ON"
+pg> CREATE VIEW v_errada WITH SELECT numeroprocesso FROM processo
+ERRO: syntax error at or near "SELECT"
+
+======================================================================
+PostgreSQL: view materializada (guarda o resultado) e REFRESH
+======================================================================
+pg> CREATE MATERIALIZED VIEW mv_total AS SELECT tribunalprocesso, COUNT(*) AS qtd FROM processo GROUP BY tribunalprocesso
+OK (5 linhas afetadas)
+pg> SELECT * FROM mv_total ORDER BY 1
+tribunalprocesso | qtd
+-----------------+----
+2                | 1
+3                | 1
+5                | 1
+15               | 1
+20               | 1
+(5 linhas)
+pg> INSERT INTO processo VALUES ('002002', 3, 2020)
+OK (1 linha afetada)
+[a materializada ainda mostra o valor antigo]
+pg> SELECT * FROM mv_total WHERE tribunalprocesso = 3
+tribunalprocesso | qtd
+-----------------+----
+3                | 1
+(1 linha)
+pg> REFRESH MATERIALIZED VIEW mv_total
+OK
+pg> SELECT * FROM mv_total WHERE tribunalprocesso = 3
+tribunalprocesso | qtd
+-----------------+----
+3                | 2
+(1 linha)
+
+======================================================================
+PostgreSQL: DCL, GRANT e REVOKE de verdade (TRT-14 2022 Q36 e Analista Q44; TRT-5 Analista Q26)
+======================================================================
+pg> CREATE ROLE analista LOGIN PASSWORD 'x'
+OK
+pg> SELECT has_table_privilege('analista', 'processo', 'SELECT') AS pode_select_antes
+pode_select_antes
+-----------------
+False
+(1 linha)
+pg> GRANT SELECT ON processos_recentes TO analista
+OK
+pg> SELECT has_table_privilege('analista', 'processos_recentes', 'SELECT') AS pode_select_na_view, has_table_privilege('analista', 'processo', 'SELECT') AS pode_select_na_tabela
+pode_select_na_view | pode_select_na_tabela
+--------------------+----------------------
+True                | False
+(1 linha)
+pg> REVOKE SELECT ON processos_recentes FROM analista
+OK
+pg> SELECT has_table_privilege('analista', 'processos_recentes', 'SELECT') AS pode_select_na_view
+pode_select_na_view
+-------------------
+False
+(1 linha)
+A sintaxe do Oracle GRANT create session, create table, create view TO analista (TRT-5 Analista Q26) NAO foi executada: privilegios de sistema sao do Oracle e nao existem no PostgreSQL.
+pg> GRANT create session, create table, create view TO analista
+ERRO: syntax error at or near "session"
+
+======================================================================
+Triggers: auditoria automatica (PostgreSQL com PL/pgSQL)
+======================================================================
+pg> CREATE FUNCTION audita() RETURNS trigger LANGUAGE plpgsql AS $$
+   BEGIN
+     IF TG_OP = 'UPDATE' THEN
+       INSERT INTO auditoria (quando, operacao, numero, antes, depois) VALUES ('t', TG_OP, OLD.numeroprocesso, OLD.tribunalprocesso, NEW.tribunalprocesso);
+       RETURN NEW;
+     ELSIF TG_OP = 'DELETE' THEN
+       INSERT INTO auditoria (quando, operacao, numero, antes, depois) VALUES ('t', TG_OP, OLD.numeroprocesso, OLD.tribunalprocesso, NULL);
+       RETURN OLD;
+     END IF;
+     RETURN NEW;
+   END $$
+OK
+pg> CREATE TRIGGER trg_audita AFTER UPDATE OR DELETE ON processo FOR EACH ROW EXECUTE FUNCTION audita()
+OK
+pg> UPDATE processo SET tribunalprocesso = 4 WHERE numeroprocesso = '000467'
+OK (1 linha afetada)
+pg> DELETE FROM processo WHERE numeroprocesso = '000999'
+OK (1 linha afetada)
+pg> SELECT operacao, numero, antes, depois FROM auditoria ORDER BY id
+operacao | numero | antes | depois
+---------+--------+-------+-------
+UPDATE   | 000467 | 5     | 4
+DELETE   | 000999 | 2     | NULL
+(2 linhas)
+
+Trigger BEFORE: valida e pode alterar a linha antes de gravar
+pg> CREATE FUNCTION valida_ano() RETURNS trigger LANGUAGE plpgsql AS $$
+   BEGIN
+     IF NEW.anoinicioprocesso < 1980 THEN RAISE EXCEPTION 'ano invalido: %', NEW.anoinicioprocesso; END IF;
+     NEW.numeroprocesso := upper(NEW.numeroprocesso);
+     RETURN NEW;
+   END $$
+OK
+pg> CREATE TRIGGER trg_valida BEFORE INSERT ON processo FOR EACH ROW EXECUTE FUNCTION valida_ano()
+OK
+pg> INSERT INTO processo VALUES ('abc1', 1, 1970)
+ERRO: ano invalido: 1970
+pg> INSERT INTO processo VALUES ('abc1', 1, 2021)
+OK (1 linha afetada)
+pg> SELECT * FROM processo WHERE tribunalprocesso = 1
+numeroprocesso | tribunalprocesso | anoinicioprocesso
+---------------+------------------+------------------
+ABC1           | 1                | 2021
+(1 linha)
+
+======================================================================
+Procedures e funcoes (PostgreSQL): FUNCTION devolve valor; PROCEDURE e chamada com CALL e pode controlar a transacao
+======================================================================
+pg> CREATE FUNCTION total_por_tribunal(t INTEGER) RETURNS BIGINT LANGUAGE sql AS $$ SELECT COUNT(*) FROM processo WHERE tribunalprocesso = t $$
+OK
+pg> SELECT total_por_tribunal(3) AS processos_no_tribunal_3
+processos_no_tribunal_3
+-----------------------
+2
+(1 linha)
+pg> CREATE PROCEDURE arquiva_lote() LANGUAGE plpgsql AS $$
+   BEGIN
+     INSERT INTO log_lote SELECT COUNT(*) FROM processo;
+     COMMIT;
+     INSERT INTO log_lote SELECT COUNT(*) FROM processo WHERE anoinicioprocesso > 2010;
+     COMMIT;
+   END $$
+OK
+pg> CALL arquiva_lote()
+OK
+pg> SELECT * FROM log_lote ORDER BY n
+n
+-
+3
+6
+(2 linhas)
+Funcao nao pode dar COMMIT dentro dela; procedure (PostgreSQL 11+) pode:
+pg> CREATE FUNCTION f_commit() RETURNS void LANGUAGE plpgsql AS $$ BEGIN COMMIT; END $$
+OK
+pg> SELECT f_commit()
+ERRO: invalid transaction termination
+pg> DO $$
+   DECLARE r RECORD; soma INTEGER := 0;
+   BEGIN
+     FOR r IN SELECT tribunalprocesso FROM processo LOOP soma := soma + r.tribunalprocesso; END LOOP;
+     RAISE NOTICE 'soma = %', soma;
+     EXCEPTION WHEN others THEN RAISE;
+   END $$
+AVISO (RAISE NOTICE): soma = 46
+OK
+
+======================================================================
+SQLite: triggers tambem existem (sem PL/pgSQL; o corpo e SQL puro)
+======================================================================
+sq> CREATE TRIGGER trg_audita AFTER UPDATE OF tribunalprocesso ON processo
+   BEGIN
+     INSERT INTO auditoria (operacao, numero, antes, depois) VALUES ('UPDATE', OLD.numeroprocesso, OLD.tribunalprocesso, NEW.tribunalprocesso);
+   END
+OK
+sq> CREATE TRIGGER trg_valida BEFORE INSERT ON processo WHEN NEW.anoinicioprocesso < 1980
+   BEGIN
+     SELECT RAISE(ABORT, 'ano invalido');
+   END
+OK
+sq> UPDATE processo SET tribunalprocesso = 4 WHERE numeroprocesso = '000467'
+OK (1 linha afetada)
+sq> SELECT operacao, numero, antes, depois FROM auditoria
+operacao | numero | antes | depois
+---------+--------+-------+-------
+UPDATE   | 000467 | 5     | 4
+(1 linha)
+sq> INSERT INTO processo VALUES ('abc1', 1, 1970)
+ERRO: ano invalido
+
+SQLite nao tem CREATE PROCEDURE nem PL/SQL. Oracle (PL/SQL) nao foi executado neste laboratorio.

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Calculadora de dependências funcionais · TCE-GO 2026 · Técnico de Controle Externo, TI</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#app">Ir para o conteúdo</a>
+<div class="wrap"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">TCE-GO 2026 · Técnico de Controle Externo, TI</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 6</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<p class="kicker">Módulo 6 · Banco de Dados</p><h1>Calculadora de dependências funcionais</h1><p class="lead">Informe os atributos e as dependências funcionais para obter o fecho de um conjunto de atributos, as chaves candidatas e a forma normal mais alta (2FN, 3FN ou FNBC), com as dependências que a violam.</p>
+<style>.cwrap label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}.cwrap input,.cwrap textarea{font:15px var(--mono);padding:9px 12px;border:1px solid var(--line-2);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);width:100%;max-width:520px}
+.cwrap textarea{min-height:130px}.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.tbl th{color:var(--muted);font-weight:600;width:28%}
+.bn{color:var(--accent);font-weight:700}.muted{color:var(--muted);font-size:13px}.cwrap .btn{margin:10px 8px 0 0}</style>
+<div class="cwrap"><label for="attrs">Atributos da relação (separados por vírgula)</label><input id="attrs" type="text" value="A, B, C, D, E">
+<label for="fds">Dependências funcionais (uma por linha, no formato X -&gt; Y)</label><textarea id="fds" spellcheck="false">A -&gt; B
+B -&gt; A
+A -&gt; C
+B -&gt; D
+B -&gt; E
+D -&gt; B</textarea>
+<label for="xset">Calcular o fecho de (atributos separados por vírgula)</label><input id="xset" type="text" value="C">
+<button class="btn" id="ex1" type="button">Exemplo: STN 2024, Q60 (original)</button><button class="btn" id="ex2" type="button">Exemplo: Q60 com C -&gt; D (gabarito B)</button><button class="btn" id="ex3" type="button">Exemplo: pedido, produto e cliente</button><button class="btn" id="ex4" type="button">Exemplo: 3FN que viola a FNBC</button>
+<div id="outm" aria-live="polite"></div></div><div id="app" hidden></div>
+<div class="foot"><span>Módulo 6</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="../assets/app.js"></script><script type="application/json" id="data">{"id": "m06-calculadora-dependencias"}</script><script src="../assets/calc-fd.js"></script>
+<script>(function(){var f=document.getElementById('full');if(f){f.href=location.href.split('?')[0]}if(window.top===window.self&&f)f.style.display='none'})();</script>
+</body></html>

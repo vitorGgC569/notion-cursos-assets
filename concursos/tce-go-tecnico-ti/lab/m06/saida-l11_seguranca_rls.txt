@@ -1,0 +1,91 @@
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+Papeis e privilegio minimo
+======================================================================
+pg> GRANT SELECT (id, nome, lotacao) ON servidor TO leitor
+OK
+[como leitor]
+pg> SELECT id, nome, lotacao FROM servidor ORDER BY id
+id | nome | lotacao
+---+------+--------
+1  | Ana  | TI
+2  | Bia  | RH
+3  | Caio | TI
+(3 linhas)
+[como leitor]
+pg> SELECT cpf FROM servidor
+ERRO: permission denied for table servidor
+[como leitor]
+pg> SELECT * FROM servidor
+ERRO: permission denied for table servidor
+GRANT por coluna: o leitor enxerga nome e lotacao, nunca cpf nem salario. SELECT * tambem falha, porque inclui colunas sem permissao.
+
+======================================================================
+Mascaramento com view (LGPD: minimizacao)
+======================================================================
+pg> CREATE VIEW servidor_mascarado AS SELECT id, nome, '***.***.***-' || RIGHT(cpf, 2) AS cpf, lotacao FROM servidor
+OK
+pg> GRANT SELECT ON servidor_mascarado TO leitor
+OK
+[como leitor]
+pg> SELECT * FROM servidor_mascarado ORDER BY id
+id | nome | cpf            | lotacao
+---+------+----------------+--------
+1  | Ana  | ***.***.***-11 | TI
+2  | Bia  | ***.***.***-22 | RH
+3  | Caio | ***.***.***-33 | TI
+(3 linhas)
+
+======================================================================
+Row Level Security (RLS): cada gestor ve so a propria lotacao
+======================================================================
+pg> GRANT SELECT ON servidor TO gestor_ti
+OK
+pg> ALTER TABLE servidor ENABLE ROW LEVEL SECURITY
+OK
+pg> CREATE POLICY so_ti ON servidor FOR SELECT TO gestor_ti USING (lotacao = 'TI')
+OK
+[como gestor_ti]
+pg> SELECT id, nome, lotacao FROM servidor ORDER BY id
+id | nome | lotacao
+---+------+--------
+1  | Ana  | TI
+3  | Caio | TI
+(2 linhas)
+O dono da tabela (superusuario aqui) ignora a politica; um papel sem politica aplicavel ve zero linhas (negacao por padrao):
+pg> GRANT SELECT ON servidor TO leitor
+OK
+[como leitor]
+pg> SELECT COUNT(*) AS linhas_visiveis FROM servidor
+linhas_visiveis
+---------------
+0
+(1 linha)
+pg> SELECT COUNT(*) AS linhas_do_dono FROM servidor
+linhas_do_dono
+--------------
+3
+(1 linha)
+
+======================================================================
+Revogacao e consulta aos privilegios
+======================================================================
+pg> REVOKE ALL ON servidor FROM leitor
+OK
+pg> SELECT has_table_privilege('leitor', 'servidor', 'SELECT') AS leitor_le_servidor, has_table_privilege('gestor_ti', 'servidor', 'SELECT') AS gestor_le_servidor
+leitor_le_servidor | gestor_le_servidor
+-------------------+-------------------
+False              | True
+(1 linha)
+
+======================================================================
+SQL injection: concatenacao versus consulta parametrizada
+======================================================================
+Entrada maliciosa: x' OR '1'='1
+Concatenada: SELECT nome FROM servidor WHERE nome = 'x' OR '1'='1'
+  linhas devolvidas: 3 (todas!)
+Parametrizada: SELECT nome FROM servidor WHERE nome = %s
+  linhas devolvidas: 0
+O parametro e tratado como dado, nunca como parte do comando.

@@ -1,0 +1,224 @@
+
+======================================================================
+L5. Normalizacao na pratica
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+SQLite
+======================================================================
+
+--- Tabela nao normalizada: um pedido com varios itens numa unica coluna (viola a 1FN)
+sq> SELECT * FROM pedido0 ORDER BY 1
+pedido | cliente | cidade   | uf | itens
+-------+---------+----------+----+-------------
+1      | Ana     | Goiania  | GO | caneta,lapis
+2      | Bia     | Anapolis | GO | caneta
+(2 linhas)
+Buscar quem comprou "lapis" exige LIKE em texto: a coluna itens nao e atomica.
+
+--- 1FN: valores atomicos, uma linha por (pedido, produto)
+sq> SELECT * FROM pedido1 ORDER BY 1, 2
+pedido | produto | preco | qtd | cliente | cidade   | uf
+-------+---------+-------+-----+---------+----------+---
+1      | caneta  | 3     | 10  | Ana     | Goiania  | GO
+1      | lapis   | 1     | 20  | Ana     | Goiania  | GO
+2      | caneta  | 3     | 5   | Bia     | Anapolis | GO
+3      | caneta  | 3     | 7   | Caio    | Goiania  | GO
+(4 linhas)
+Chave: (pedido, produto). Dependencias: pedido -> cliente, cidade, uf (parcial); produto -> preco (parcial); cidade -> uf (transitiva).
+
+--- Teste de dependencia funcional com SQL: X -> Y vale se nao existe X com mais de um Y
+pedido -> cliente : VALE nos dados (violacoes: 0)
+produto -> preco : VALE nos dados (violacoes: 0)
+cidade -> uf : VALE nos dados (violacoes: 0)
+uf -> cidade : NAO vale (violacoes: 1)
+cliente -> cidade : VALE nos dados (violacoes: 0)
+(Atencao: o teste so refuta; a dependencia funcional e uma regra do negocio, nao um fato dos dados.)
+
+--- Anomalia de atualizacao: mudar a cidade do cliente Ana em apenas uma das linhas
+sq> UPDATE pedido1 SET cidade = 'Aparecida' WHERE pedido = 1 AND produto = 'caneta'
+OK (1 linha afetada)
+sq> SELECT pedido, produto, cliente, cidade FROM pedido1 WHERE cliente = 'Ana' ORDER BY 2
+pedido | produto | cliente | cidade
+-------+---------+---------+----------
+1      | caneta  | Ana     | Aparecida
+1      | lapis   | Ana     | Goiania
+(2 linhas)
+A mesma cliente aparece com duas cidades: inconsistencia.
+
+--- 2FN: elimina dependencia parcial (atributos que dependem so de parte da chave)
+sq> SELECT * FROM pedido2 ORDER BY 1
+pedido | cliente | cidade   | uf
+-------+---------+----------+---
+1      | Ana     | Goiania  | GO
+2      | Bia     | Anapolis | GO
+3      | Caio    | Goiania  | GO
+(3 linhas)
+
+--- 3FN: elimina dependencia transitiva (cidade -> uf, e pedido -> cidade)
+sq> SELECT * FROM cidade ORDER BY 1
+cidade   | uf
+---------+---
+Anapolis | GO
+Goiania  | GO
+(2 linhas)
+sq> SELECT * FROM pedido3 ORDER BY 1
+pedido | cliente | cidade
+-------+---------+---------
+1      | Ana     | Goiania
+2      | Bia     | Anapolis
+3      | Caio    | Goiania
+(3 linhas)
+
+--- Decomposicao sem perdas: a juncao das tabelas normalizadas reconstroi a tabela original
+sq> SELECT COUNT(*) AS linhas_da_juncao FROM (
+   SELECT p.pedido, i.produto, pr.preco, i.qtd, p.cliente, p.cidade, c.uf
+   FROM pedido3 p JOIN item i ON i.pedido = p.pedido JOIN produto pr ON pr.produto = i.produto JOIN cidade c ON c.cidade = p.cidade) t
+linhas_da_juncao
+----------------
+4
+(1 linha)
+sq> WITH j AS (SELECT p.pedido, i.produto, pr.preco, i.qtd, p.cliente, p.cidade, c.uf
+     FROM pedido3 p JOIN item i ON i.pedido = p.pedido JOIN produto pr ON pr.produto = i.produto JOIN cidade c ON c.cidade = p.cidade),
+   o AS (SELECT pedido, produto, preco, qtd, cliente, cidade, uf FROM pedido1)
+   SELECT (SELECT COUNT(*) FROM (SELECT * FROM j EXCEPT SELECT * FROM o) x) + (SELECT COUNT(*) FROM (SELECT * FROM o EXCEPT SELECT * FROM j) y) AS linhas_diferentes
+linhas_diferentes
+-----------------
+0
+(1 linha)
+Zero diferencas: a decomposicao e sem perda (e preserva as dependencias).
+
+--- Mudar a cidade da Ana agora e um UPDATE de uma unica linha
+sq> UPDATE pedido3 SET cidade = 'Anapolis' WHERE cliente = 'Ana'
+OK (1 linha afetada)
+
+--- Desnormalizacao consciente: uma view/consulta pronta para leitura (trade-off: redundancia por desempenho)
+sq> SELECT * FROM vw_pedidos ORDER BY pedido, produto
+pedido | cliente | cidade   | uf | produto | qtd | preco | total
+-------+---------+----------+----+---------+-----+-------+------
+1      | Ana     | Anapolis | GO | caneta  | 10  | 3     | 30
+1      | Ana     | Anapolis | GO | lapis   | 20  | 1     | 20
+2      | Bia     | Anapolis | GO | caneta  | 5   | 3     | 15
+3      | Caio    | Goiania  | GO | caneta  | 7   | 3     | 21
+(4 linhas)
+
+======================================================================
+PostgreSQL
+======================================================================
+
+--- Tabela nao normalizada: um pedido com varios itens numa unica coluna (viola a 1FN)
+pg> SELECT * FROM pedido0 ORDER BY 1
+pedido | cliente | cidade   | uf | itens
+-------+---------+----------+----+-------------
+1      | Ana     | Goiania  | GO | caneta,lapis
+2      | Bia     | Anapolis | GO | caneta
+(2 linhas)
+Buscar quem comprou "lapis" exige LIKE em texto: a coluna itens nao e atomica.
+
+--- 1FN: valores atomicos, uma linha por (pedido, produto)
+pg> SELECT * FROM pedido1 ORDER BY 1, 2
+pedido | produto | preco | qtd | cliente | cidade   | uf
+-------+---------+-------+-----+---------+----------+---
+1      | caneta  | 3     | 10  | Ana     | Goiania  | GO
+1      | lapis   | 1     | 20  | Ana     | Goiania  | GO
+2      | caneta  | 3     | 5   | Bia     | Anapolis | GO
+3      | caneta  | 3     | 7   | Caio    | Goiania  | GO
+(4 linhas)
+Chave: (pedido, produto). Dependencias: pedido -> cliente, cidade, uf (parcial); produto -> preco (parcial); cidade -> uf (transitiva).
+
+--- Teste de dependencia funcional com SQL: X -> Y vale se nao existe X com mais de um Y
+pedido -> cliente : VALE nos dados (violacoes: 0)
+produto -> preco : VALE nos dados (violacoes: 0)
+cidade -> uf : VALE nos dados (violacoes: 0)
+uf -> cidade : NAO vale (violacoes: 1)
+cliente -> cidade : VALE nos dados (violacoes: 0)
+(Atencao: o teste so refuta; a dependencia funcional e uma regra do negocio, nao um fato dos dados.)
+
+--- Anomalia de atualizacao: mudar a cidade do cliente Ana em apenas uma das linhas
+pg> UPDATE pedido1 SET cidade = 'Aparecida' WHERE pedido = 1 AND produto = 'caneta'
+OK (1 linha afetada)
+pg> SELECT pedido, produto, cliente, cidade FROM pedido1 WHERE cliente = 'Ana' ORDER BY 2
+pedido | produto | cliente | cidade
+-------+---------+---------+----------
+1      | caneta  | Ana     | Aparecida
+1      | lapis   | Ana     | Goiania
+(2 linhas)
+A mesma cliente aparece com duas cidades: inconsistencia.
+
+--- 2FN: elimina dependencia parcial (atributos que dependem so de parte da chave)
+pg> SELECT * FROM pedido2 ORDER BY 1
+pedido | cliente | cidade   | uf
+-------+---------+----------+---
+1      | Ana     | Goiania  | GO
+2      | Bia     | Anapolis | GO
+3      | Caio    | Goiania  | GO
+(3 linhas)
+
+--- 3FN: elimina dependencia transitiva (cidade -> uf, e pedido -> cidade)
+pg> SELECT * FROM cidade ORDER BY 1
+cidade   | uf
+---------+---
+Anapolis | GO
+Goiania  | GO
+(2 linhas)
+pg> SELECT * FROM pedido3 ORDER BY 1
+pedido | cliente | cidade
+-------+---------+---------
+1      | Ana     | Goiania
+2      | Bia     | Anapolis
+3      | Caio    | Goiania
+(3 linhas)
+
+--- Decomposicao sem perdas: a juncao das tabelas normalizadas reconstroi a tabela original
+pg> SELECT COUNT(*) AS linhas_da_juncao FROM (
+   SELECT p.pedido, i.produto, pr.preco, i.qtd, p.cliente, p.cidade, c.uf
+   FROM pedido3 p JOIN item i ON i.pedido = p.pedido JOIN produto pr ON pr.produto = i.produto JOIN cidade c ON c.cidade = p.cidade) t
+linhas_da_juncao
+----------------
+4
+(1 linha)
+pg> WITH j AS (SELECT p.pedido, i.produto, pr.preco, i.qtd, p.cliente, p.cidade, c.uf
+     FROM pedido3 p JOIN item i ON i.pedido = p.pedido JOIN produto pr ON pr.produto = i.produto JOIN cidade c ON c.cidade = p.cidade),
+   o AS (SELECT pedido, produto, preco, qtd, cliente, cidade, uf FROM pedido1)
+   SELECT (SELECT COUNT(*) FROM (SELECT * FROM j EXCEPT SELECT * FROM o) x) + (SELECT COUNT(*) FROM (SELECT * FROM o EXCEPT SELECT * FROM j) y) AS linhas_diferentes
+linhas_diferentes
+-----------------
+0
+(1 linha)
+Zero diferencas: a decomposicao e sem perda (e preserva as dependencias).
+
+--- Mudar a cidade da Ana agora e um UPDATE de uma unica linha
+pg> UPDATE pedido3 SET cidade = 'Anapolis' WHERE cliente = 'Ana'
+OK (1 linha afetada)
+
+--- Desnormalizacao consciente: uma view/consulta pronta para leitura (trade-off: redundancia por desempenho)
+pg> SELECT * FROM vw_pedidos ORDER BY pedido, produto
+pedido | cliente | cidade   | uf | produto | qtd | preco | total
+-------+---------+----------+----+---------+-----+-------+------
+1      | Ana     | Anapolis | GO | caneta  | 10  | 3     | 30
+1      | Ana     | Anapolis | GO | lapis   | 20  | 1     | 20
+2      | Bia     | Anapolis | GO | caneta  | 5   | 3     | 15
+3      | Caio    | Goiania  | GO | caneta  | 7   | 3     | 21
+(4 linhas)
+
+======================================================================
+Python (nao e SQL): fecho de atributos e chaves candidatas, para a STN 2024 Q60
+======================================================================
+Esquema T(A,B,C,D,E). Dependencias lidas do enunciado: A->B, B->A, A->C, B->D, B->E, D->B
+Declaracao SQL: A, B, C e D sao UNIQUE NOT NULL; E nao.
+fecho(A) = {A,B,C,D,E}
+fecho(B) = {A,B,C,D,E}
+fecho(C) = {C}
+fecho(D) = {A,B,C,D,E}
+fecho(E) = {E}
+Chaves candidatas com as dependencias dadas: {A}, {B}, {D}
+Chaves declaradas no CREATE TABLE (UNIQUE NOT NULL): {A}, {B}, {C}, {D}
+Em BCNF, todo determinante e superchave. O esquema so e coerente se as dependencias levarem exatamente as chaves declaradas e nenhuma outra (E nao e UNIQUE).
+A) A,B,C,D -> E: chaves = {A}, {B}, {D} ; determinantes que nao sao superchave: nenhum ; chaves == declaradas: False
+B) C -> D: chaves = {A}, {B}, {C}, {D} ; determinantes que nao sao superchave: nenhum ; chaves == declaradas: True
+C) C -> E: chaves = {A}, {B}, {D} ; determinantes que nao sao superchave: ['C'] ; chaves == declaradas: False
+D) E -> A: chaves = {A}, {B}, {D}, {E} ; determinantes que nao sao superchave: nenhum ; chaves == declaradas: False
+E) E -> A,B,C,D: chaves = {A}, {B}, {D}, {E} ; determinantes que nao sao superchave: nenhum ; chaves == declaradas: False
+Somente a alternativa B (C -> D) faz de C uma chave, como o UNIQUE de C declara, sem criar chave nova (como E) nem deixar determinante fora da chave (como C -> E).

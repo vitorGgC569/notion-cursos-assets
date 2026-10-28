@@ -1,0 +1,388 @@
+
+======================================================================
+L2. Consultas SQL, juncoes e subconsultas
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+SQLite
+======================================================================
+
+Dados didaticos criados pelo laboratorio, com a mesma estrutura do modelo da prova (TRT-5 2022, Analista, Q21 a Q25).
+sq> SELECT * FROM departamento ORDER BY 1
+nomedepartamento | telefonedepartamento | localdepartamento
+-----------------+----------------------+------------------
+Juridico         | 333                  | Bloco C
+RH               | 222                  | Bloco B
+TI               | 111                  | Bloco A
+(3 linhas)
+
+--- TRT-5 2022 Analista Q22: nome de cada departamento e quantidade de funcionarios (gabarito D)
+
+[alternativa A]
+sq> SELECT f.nomedepartamento, (SELECT COUNT(f.nomefuncionario) FROM funcionario f WHERE f.nomedepartamento = d.nomedepartamento) FROM departamento d
+ERRO: no such column: f.nomedepartamento
+
+[alternativa B]
+sq> SELECT f.nomedepartamento, (SELECT COUNT(f.nomefuncionario) FROM funcionario f WHERE d.nomedepartamento = f.nomedepartamento) AS quantidade_funcionarios FROM departamento d GROUP BY f.nomedepartamento
+ERRO: no such column: f.nomedepartamento
+
+[alternativa C]
+sq> SELECT d.nomedepartamento, COUNT(f.nomefuncionario) FROM funcionario f, departamento d
+nomedepartamento | COUNT(f.nomefuncionario)
+-----------------+-------------------------
+Juridico         | 9
+(1 linha)
+
+[alternativa D]
+sq> SELECT d.nomedepartamento, (SELECT COUNT(f.nomefuncionario) FROM funcionario f WHERE d.nomedepartamento = f.nomedepartamento) AS quantidade_funcionarios FROM departamento d GROUP BY d.nomedepartamento ORDER BY 1
+nomedepartamento | quantidade_funcionarios
+-----------------+------------------------
+Juridico         | 0
+RH               | 1
+TI               | 2
+(3 linhas)
+
+[alternativa E]
+sq> SELECT d.nomedepartamento, COUNT(f.nomefuncionario) FROM funcionario f, departamento d WHERE d.nomedepartamento = f.nomedepartamento
+nomedepartamento | COUNT(f.nomefuncionario)
+-----------------+-------------------------
+TI               | 3
+(1 linha)
+
+--- TRT-5 2022 Analista Q23: nome, departamento e senha de todos os funcionarios, sem repeticao (gabarito E; esperado: 3 linhas)
+[alternativa A] -> 3 linhas
+[alternativa B] -> 15 linhas
+[alternativa C] -> 9 linhas
+[alternativa D] -> 27 linhas
+[alternativa E] -> 3 linhas
+
+sq> SELECT f.nomefuncionario, f.nomedepartamento, (SELECT l.senha FROM login l WHERE f.emailfuncionario = l.emailfuncionario) as senha FROM funcionario f ORDER BY 1
+nomefuncionario | nomedepartamento | senha
+----------------+------------------+------
+Ana             | TI               | s1
+Bia             | TI               | s2
+Caio            | RH               | s3
+(3 linhas)
+
+--- TRT-2 2014 Tecnico Q39: nome do funcionario e do departamento (gabarito D)
+[alternativa A / E: sem condicao de juncao = produto cartesiano, 2 x 4 = 8 linhas]
+8 linhas
+[alternativa B]
+sq> select fnome, dnome from f2, d2 where depno = depno
+ERRO: ambiguous column name: depno
+[alternativa D]
+sq> select f.fnome, d.dnome from f2 f, d2 d where f.depno = d.depno ORDER BY 1
+fnome | dnome
+------+------
+Ana   | TI
+Bia   | TI
+Caio  | RH
+Dora  | RH
+(4 linhas)
+
+--- TRT-2 2014 Tecnico Q40: media e soma dos salarios dos cargos iniciados por "anali" (gabarito C)
+[alternativa A]
+sq> select avg(fsal),sum(fsal) from f2 where fcargo='anali%'
+avg(fsal) | sum(fsal)
+----------+----------
+NULL      | NULL
+(1 linha)
+[alternativa B]
+sq> select average(fsal),sum(fsal) from f2 where fcargo like 'anali'
+ERRO: no such function: average
+[alternativa C]
+sq> select avg(fsal),sum(fsal) from f2 where fcargo like 'anali%'
+avg(fsal) | sum(fsal)
+----------+----------
+8000.0    | 24000
+(1 linha)
+[alternativa D]
+sq> select avg(fsal),sum(fsal) from f2 where fcargo begin 'anali'
+ERRO: near "begin": syntax error
+[alternativa E]
+sq> select avg(fsal),sum(fsal) from f2 where fcargo like 'anali*'
+avg(fsal) | sum(fsal)
+----------+----------
+NULL      | NULL
+(1 linha)
+
+--- TRT-2 2018 Tecnico Q44: departamentos 10 ou 20, ordem alfabetica crescente por nome (gabarito A)
+[alternativa A]
+sq> SELECT nome, codDep FROM func WHERE codDep IN (10,20) ORDER BY nome ASC
+nome | coddep
+-----+-------
+Ana  | 20
+Caio | 10
+Zeca | 10
+(3 linhas)
+[alternativa B]
+sq> SELECT nome, codDep FROM func WHERE codDep CONTAIN(10 OR 20) ORDER BY nome ASC
+ERRO: near "CONTAIN": syntax error
+[alternativa C]
+sq> SELECT nome, codDep FROM func WHERE codDep=10 OR codDep=20 ORDER ASC nome
+ERRO: near "ASC": syntax error
+[alternativa D]
+sq> SELECT nome, codDep FROM func WHERE codDep BELONG(10 OR 20) ORDER BY nome ASCENDING
+ERRO: near "BELONG": syntax error
+[alternativa E]
+sq> SELECT nome, codDep FROM func WHERE codDep BETWEEN(10,20) ORDER BY nome ASC
+ERRO: near "ORDER": syntax error
+
+--- TRT-3 2015 Tecnico Q50: advogados SEM processo (gabarito C)
+[alternativa A]
+sq> SELECT nomeAdvogado FROM advogado WHERE numeroOABAdvogado IS NOT(SELECT numeroOABAdvogado FROM advogado_processo)
+nomeadvogado
+------------
+Joao
+Paulo
+(2 linhas)
+[alternativa C]
+sq> SELECT nomeadvogado FROM advogado WHERE numerooabadvogado NOT IN (SELECT numerooabadvogado FROM advogado_processo)
+nomeadvogado
+------------
+Paulo
+(1 linha)
+[alternativa D]
+sq> SELECT DISTINCT nomeadvogado FROM advogado JOIN advogado_processo ON advogado.numerooabadvogado=advogado_processo.numerooabadvogado
+nomeadvogado
+------------
+Marta
+Joao
+(2 linhas)
+[alternativa E]
+sq> SELECT DISTINCT nomeadvogado FROM advogado WHERE nomeadvogado NOT IN (SELECT nomeadvogado FROM advogado_processo)
+nomeadvogado
+------------
+(0 linhas)
+[equivalente com LEFT JOIN anti-juncao]
+sq> SELECT a.nomeadvogado FROM advogado a LEFT JOIN advogado_processo p ON a.numerooabadvogado = p.numerooabadvogado WHERE p.numerooabadvogado IS NULL
+nomeadvogado
+------------
+Paulo
+(1 linha)
+
+[armadilha: uma linha com NULL na subconsulta faz o NOT IN devolver NENHUMA linha]
+sq> INSERT INTO advogado_processo VALUES (NULL,'000999','Defesa')
+OK (1 linha afetada)
+sq> SELECT nomeadvogado FROM advogado WHERE numerooabadvogado NOT IN (SELECT numerooabadvogado FROM advogado_processo)
+nomeadvogado
+------------
+(0 linhas)
+[NOT EXISTS nao sofre desse problema]
+sq> SELECT nomeadvogado FROM advogado a WHERE NOT EXISTS (SELECT 1 FROM advogado_processo p WHERE p.numerooabadvogado = a.numerooabadvogado)
+nomeadvogado
+------------
+Paulo
+(1 linha)
+
+--- TRT-5 2022 Tecnico Q51: cidades sem repeticao (gabarito D)
+[alternativa A]
+sq> SELECT COUNT (DISTINCT Cidade) FROM Cadastro
+COUNT (DISTINCT Cidade)
+-----------------------
+2
+(1 linha)
+[alternativa B]
+sq> SELECT COUNT (MODE Cidade) FROM Cadastro
+ERRO: near "Cidade": syntax error
+[alternativa C]
+sq> DISPLAY UNIQUE Cidade FROM Cadastro
+ERRO: near "DISPLAY": syntax error
+[alternativa D]
+sq> SELECT DISTINCT Cidade FROM Cadastro ORDER BY 1
+cidade
+------
+Recife
+Santos
+(2 linhas)
+[alternativa E]
+sq> SELECT UNIQUE Cidade FROM Cadastro
+ERRO: near "UNIQUE": syntax error
+
+======================================================================
+PostgreSQL
+======================================================================
+
+Dados didaticos criados pelo laboratorio, com a mesma estrutura do modelo da prova (TRT-5 2022, Analista, Q21 a Q25).
+pg> SELECT * FROM departamento ORDER BY 1
+nomedepartamento | telefonedepartamento | localdepartamento
+-----------------+----------------------+------------------
+Juridico         | 333                  | Bloco C
+RH               | 222                  | Bloco B
+TI               | 111                  | Bloco A
+(3 linhas)
+
+--- TRT-5 2022 Analista Q22: nome de cada departamento e quantidade de funcionarios (gabarito D)
+
+[alternativa A]
+pg> SELECT f.nomedepartamento, (SELECT COUNT(f.nomefuncionario) FROM funcionario f WHERE f.nomedepartamento = d.nomedepartamento) FROM departamento d
+ERRO: missing FROM-clause entry for table "f"
+
+[alternativa B]
+pg> SELECT f.nomedepartamento, (SELECT COUNT(f.nomefuncionario) FROM funcionario f WHERE d.nomedepartamento = f.nomedepartamento) AS quantidade_funcionarios FROM departamento d GROUP BY f.nomedepartamento
+ERRO: missing FROM-clause entry for table "f"
+
+[alternativa C]
+pg> SELECT d.nomedepartamento, COUNT(f.nomefuncionario) FROM funcionario f, departamento d
+ERRO: column "d.nomedepartamento" must appear in the GROUP BY clause or be used in an aggregate function
+
+[alternativa D]
+pg> SELECT d.nomedepartamento, (SELECT COUNT(f.nomefuncionario) FROM funcionario f WHERE d.nomedepartamento = f.nomedepartamento) AS quantidade_funcionarios FROM departamento d GROUP BY d.nomedepartamento ORDER BY 1
+nomedepartamento | quantidade_funcionarios
+-----------------+------------------------
+Juridico         | 0
+RH               | 1
+TI               | 2
+(3 linhas)
+
+[alternativa E]
+pg> SELECT d.nomedepartamento, COUNT(f.nomefuncionario) FROM funcionario f, departamento d WHERE d.nomedepartamento = f.nomedepartamento
+ERRO: column "d.nomedepartamento" must appear in the GROUP BY clause or be used in an aggregate function
+
+--- TRT-5 2022 Analista Q23: nome, departamento e senha de todos os funcionarios, sem repeticao (gabarito E; esperado: 3 linhas)
+[alternativa A] -> ERRO: column "d.nomedepartamento" must appear in the GROUP BY clause or be used in an aggregate function
+[alternativa B] -> 15 linhas
+[alternativa C] -> 9 linhas
+[alternativa D] -> 27 linhas
+[alternativa E] -> 3 linhas
+
+pg> SELECT f.nomefuncionario, f.nomedepartamento, (SELECT l.senha FROM login l WHERE f.emailfuncionario = l.emailfuncionario) as senha FROM funcionario f ORDER BY 1
+nomefuncionario | nomedepartamento | senha
+----------------+------------------+------
+Ana             | TI               | s1
+Bia             | TI               | s2
+Caio            | RH               | s3
+(3 linhas)
+
+--- TRT-2 2014 Tecnico Q39: nome do funcionario e do departamento (gabarito D)
+[alternativa A / E: sem condicao de juncao = produto cartesiano, 2 x 4 = 8 linhas]
+8 linhas
+[alternativa B]
+pg> select fnome, dnome from f2, d2 where depno = depno
+ERRO: column reference "depno" is ambiguous
+[alternativa D]
+pg> select f.fnome, d.dnome from f2 f, d2 d where f.depno = d.depno ORDER BY 1
+fnome | dnome
+------+------
+Ana   | TI
+Bia   | TI
+Caio  | RH
+Dora  | RH
+(4 linhas)
+
+--- TRT-2 2014 Tecnico Q40: media e soma dos salarios dos cargos iniciados por "anali" (gabarito C)
+[alternativa A]
+pg> select avg(fsal),sum(fsal) from f2 where fcargo='anali%'
+avg  | sum
+-----+-----
+NULL | NULL
+(1 linha)
+[alternativa B]
+pg> select average(fsal),sum(fsal) from f2 where fcargo like 'anali'
+ERRO: function average(numeric) does not exist
+[alternativa C]
+pg> select avg(fsal),sum(fsal) from f2 where fcargo like 'anali%'
+avg                   | sum
+----------------------+------
+8000.0000000000000000 | 24000
+(1 linha)
+[alternativa D]
+pg> select avg(fsal),sum(fsal) from f2 where fcargo begin 'anali'
+ERRO: syntax error at or near "begin"
+[alternativa E]
+pg> select avg(fsal),sum(fsal) from f2 where fcargo like 'anali*'
+avg  | sum
+-----+-----
+NULL | NULL
+(1 linha)
+
+--- TRT-2 2018 Tecnico Q44: departamentos 10 ou 20, ordem alfabetica crescente por nome (gabarito A)
+[alternativa A]
+pg> SELECT nome, codDep FROM func WHERE codDep IN (10,20) ORDER BY nome ASC
+nome | coddep
+-----+-------
+Ana  | 20
+Caio | 10
+Zeca | 10
+(3 linhas)
+[alternativa B]
+pg> SELECT nome, codDep FROM func WHERE codDep CONTAIN(10 OR 20) ORDER BY nome ASC
+ERRO: syntax error at or near "CONTAIN"
+[alternativa C]
+pg> SELECT nome, codDep FROM func WHERE codDep=10 OR codDep=20 ORDER ASC nome
+ERRO: syntax error at or near "ASC"
+[alternativa D]
+pg> SELECT nome, codDep FROM func WHERE codDep BELONG(10 OR 20) ORDER BY nome ASCENDING
+ERRO: syntax error at or near "BELONG"
+[alternativa E]
+pg> SELECT nome, codDep FROM func WHERE codDep BETWEEN(10,20) ORDER BY nome ASC
+ERRO: syntax error at or near "ORDER"
+
+--- TRT-3 2015 Tecnico Q50: advogados SEM processo (gabarito C)
+[alternativa A]
+pg> SELECT nomeAdvogado FROM advogado WHERE numeroOABAdvogado IS NOT(SELECT numeroOABAdvogado FROM advogado_processo)
+ERRO: syntax error at or near "("
+[alternativa C]
+pg> SELECT nomeadvogado FROM advogado WHERE numerooabadvogado NOT IN (SELECT numerooabadvogado FROM advogado_processo)
+nomeadvogado
+------------
+Paulo
+(1 linha)
+[alternativa D]
+pg> SELECT DISTINCT nomeadvogado FROM advogado JOIN advogado_processo ON advogado.numerooabadvogado=advogado_processo.numerooabadvogado
+nomeadvogado
+------------
+Marta
+Joao
+(2 linhas)
+[alternativa E]
+pg> SELECT DISTINCT nomeadvogado FROM advogado WHERE nomeadvogado NOT IN (SELECT nomeadvogado FROM advogado_processo)
+nomeadvogado
+------------
+(0 linhas)
+[equivalente com LEFT JOIN anti-juncao]
+pg> SELECT a.nomeadvogado FROM advogado a LEFT JOIN advogado_processo p ON a.numerooabadvogado = p.numerooabadvogado WHERE p.numerooabadvogado IS NULL
+nomeadvogado
+------------
+Paulo
+(1 linha)
+
+[armadilha: uma linha com NULL na subconsulta faz o NOT IN devolver NENHUMA linha]
+pg> INSERT INTO advogado_processo VALUES (NULL,'000999','Defesa')
+OK (1 linha afetada)
+pg> SELECT nomeadvogado FROM advogado WHERE numerooabadvogado NOT IN (SELECT numerooabadvogado FROM advogado_processo)
+nomeadvogado
+------------
+(0 linhas)
+[NOT EXISTS nao sofre desse problema]
+pg> SELECT nomeadvogado FROM advogado a WHERE NOT EXISTS (SELECT 1 FROM advogado_processo p WHERE p.numerooabadvogado = a.numerooabadvogado)
+nomeadvogado
+------------
+Paulo
+(1 linha)
+
+--- TRT-5 2022 Tecnico Q51: cidades sem repeticao (gabarito D)
+[alternativa A]
+pg> SELECT COUNT (DISTINCT Cidade) FROM Cadastro
+count
+-----
+2
+(1 linha)
+[alternativa B]
+pg> SELECT COUNT (MODE Cidade) FROM Cadastro
+ERRO: syntax error at or near "Cidade"
+[alternativa C]
+pg> DISPLAY UNIQUE Cidade FROM Cadastro
+ERRO: syntax error at or near "DISPLAY"
+[alternativa D]
+pg> SELECT DISTINCT Cidade FROM Cadastro ORDER BY 1
+cidade
+------
+Recife
+Santos
+(2 linhas)
+[alternativa E]
+pg> SELECT UNIQUE Cidade FROM Cadastro
+ERRO: syntax error at or near "Cidade"

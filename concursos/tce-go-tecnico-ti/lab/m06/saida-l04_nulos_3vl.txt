@@ -1,0 +1,176 @@
+
+======================================================================
+L4. NULL e logica de tres valores
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+SQLite
+======================================================================
+Tabela exemplo, uma linha (A, B, C) = (10, 20, NULL), como no enunciado da Q62:
+sq> SELECT * FROM exemplo
+a  | b  | c
+---+----+-----
+10 | 20 | NULL
+(1 linha)
+
+--- STN 2024 Q62 (gabarito B): valores de x1, y1, x2, y2, x3, y3
+sq> select
+   case when (not C is null or B = 15) then 1 else 0 end x1,
+   case when not (not C is null or B = 15) then 1 else 0 end y1,
+   case when (C = null or B <> null) then 1 else 0 end x2,
+   case when not (C = null or B <> null) then 1 else 0 end y2,
+   case when (C < A or C > A) then 1 else 0 end x3,
+   case when not (C < A or C > A) then 1 else 0 end y3
+   from exemplo
+x1 | y1 | x2 | y2 | x3 | y3
+---+----+----+----+----+---
+0  | 1  | 0  | 0  | 0  | 0
+(1 linha)
+Alternativa B = 0, 1, 0, 0, 0, 0. O resultado do banco bate com a alternativa B.
+
+--- Por que: cada expressao avaliada sozinha (UNKNOWN aparece como NULL)
+sq> SELECT
+    (NOT c IS NULL OR b = 15) AS e1,
+    NOT (NOT c IS NULL OR b = 15) AS e1_negada,
+    (c = NULL OR b <> NULL) AS e2,
+    NOT (c = NULL OR b <> NULL) AS e2_negada,
+    (c < a OR c > a) AS e3,
+    NOT (c < a OR c > a) AS e3_negada
+   FROM exemplo
+e1 | e1_negada | e2   | e2_negada | e3   | e3_negada
+---+-----------+------+-----------+------+----------
+0  | 1         | NULL | NULL      | NULL | NULL
+(1 linha)
+Regra: CASE WHEN so executa o THEN se a condicao for TRUE. UNKNOWN (NULL) cai no ELSE. NOT UNKNOWN continua UNKNOWN.
+
+--- Tabelas-verdade do SQL, executadas
+sq> SELECT (NULL AND 1) AS u_and_t, (NULL AND 0) AS u_and_f, (NULL OR 1) AS u_or_t, (NULL OR 0) AS u_or_f, (NOT NULL) AS not_u
+u_and_t | u_and_f | u_or_t | u_or_f | not_u
+--------+---------+--------+--------+------
+NULL    | 0       | 1      | NULL   | NULL
+(1 linha)
+UNKNOWN (NULL) E TRUE = UNKNOWN; UNKNOWN E FALSE = FALSE; UNKNOWN OU TRUE = TRUE; UNKNOWN OU FALSE = UNKNOWN; NAO UNKNOWN = UNKNOWN. (No SQLite, TRUE e FALSE sao 1 e 0.)
+
+--- Comparacoes com NULL: = NULL nunca e verdadeiro; use IS NULL
+sq> SELECT COUNT(*) AS todas, COUNT(x) AS nao_nulos, SUM(CASE WHEN x = NULL THEN 1 ELSE 0 END) AS igual_null, SUM(CASE WHEN x IS NULL THEN 1 ELSE 0 END) AS is_null FROM t
+todas | nao_nulos | igual_null | is_null
+------+-----------+------------+--------
+4     | 2         | 0          | 2
+(1 linha)
+
+--- NOT IN com NULL, e COALESCE/NULLIF
+sq> SELECT 3 AS valor, (3 IN (1, 2, NULL)) AS in_com_null, (3 NOT IN (1, 2, NULL)) AS not_in_com_null, (1 IN (1, 2, NULL)) AS achou
+valor | in_com_null | not_in_com_null | achou
+------+-------------+-----------------+------
+3     | NULL        | NULL            | 1
+(1 linha)
+sq> SELECT COALESCE(NULL, NULL, 7) AS coalesce, NULLIF(5, 5) AS nullif_igual, NULLIF(5, 6) AS nullif_diferente
+coalesce | nullif_igual | nullif_diferente
+---------+--------------+-----------------
+7        | NULL         | 5
+(1 linha)
+
+--- DISTINCT, GROUP BY e UNIQUE tratam NULLs de modos diferentes
+sq> SELECT DISTINCT x FROM t ORDER BY x
+x
+----
+NULL
+1
+2
+(3 linhas)
+sq> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+sq> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+sq> SELECT COUNT(*) AS nulls_em_coluna_unique FROM u
+nulls_em_coluna_unique
+----------------------
+2
+(1 linha)
+
+======================================================================
+PostgreSQL
+======================================================================
+Tabela exemplo, uma linha (A, B, C) = (10, 20, NULL), como no enunciado da Q62:
+pg> SELECT * FROM exemplo
+a  | b  | c
+---+----+-----
+10 | 20 | NULL
+(1 linha)
+
+--- STN 2024 Q62 (gabarito B): valores de x1, y1, x2, y2, x3, y3
+pg> select
+   case when (not C is null or B = 15) then 1 else 0 end x1,
+   case when not (not C is null or B = 15) then 1 else 0 end y1,
+   case when (C = null or B <> null) then 1 else 0 end x2,
+   case when not (C = null or B <> null) then 1 else 0 end y2,
+   case when (C < A or C > A) then 1 else 0 end x3,
+   case when not (C < A or C > A) then 1 else 0 end y3
+   from exemplo
+x1 | y1 | x2 | y2 | x3 | y3
+---+----+----+----+----+---
+0  | 1  | 0  | 0  | 0  | 0
+(1 linha)
+Alternativa B = 0, 1, 0, 0, 0, 0. O resultado do banco bate com a alternativa B.
+
+--- Por que: cada expressao avaliada sozinha (UNKNOWN aparece como NULL)
+pg> SELECT
+    (NOT c IS NULL OR b = 15) AS e1,
+    NOT (NOT c IS NULL OR b = 15) AS e1_negada,
+    (c = NULL OR b <> NULL) AS e2,
+    NOT (c = NULL OR b <> NULL) AS e2_negada,
+    (c < a OR c > a) AS e3,
+    NOT (c < a OR c > a) AS e3_negada
+   FROM exemplo
+e1    | e1_negada | e2   | e2_negada | e3   | e3_negada
+------+-----------+------+-----------+------+----------
+False | True      | NULL | NULL      | NULL | NULL
+(1 linha)
+Regra: CASE WHEN so executa o THEN se a condicao for TRUE. UNKNOWN (NULL) cai no ELSE. NOT UNKNOWN continua UNKNOWN.
+
+--- Tabelas-verdade do SQL, executadas
+pg> SELECT (CAST(NULL AS BOOLEAN) AND TRUE) AS u_and_t, (CAST(NULL AS BOOLEAN) AND FALSE) AS u_and_f, (CAST(NULL AS BOOLEAN) OR TRUE) AS u_or_t, (CAST(NULL AS BOOLEAN) OR FALSE) AS u_or_f, (NOT CAST(NULL AS BOOLEAN)) AS not_u
+u_and_t | u_and_f | u_or_t | u_or_f | not_u
+--------+---------+--------+--------+------
+NULL    | False   | True   | NULL   | NULL
+(1 linha)
+UNKNOWN (NULL) E TRUE = UNKNOWN; UNKNOWN E FALSE = FALSE; UNKNOWN OU TRUE = TRUE; UNKNOWN OU FALSE = UNKNOWN; NAO UNKNOWN = UNKNOWN. (No SQLite, TRUE e FALSE sao 1 e 0.)
+
+--- Comparacoes com NULL: = NULL nunca e verdadeiro; use IS NULL
+pg> SELECT COUNT(*) AS todas, COUNT(x) AS nao_nulos, SUM(CASE WHEN x = NULL THEN 1 ELSE 0 END) AS igual_null, SUM(CASE WHEN x IS NULL THEN 1 ELSE 0 END) AS is_null FROM t
+todas | nao_nulos | igual_null | is_null
+------+-----------+------------+--------
+4     | 2         | 0          | 2
+(1 linha)
+
+--- NOT IN com NULL, e COALESCE/NULLIF
+pg> SELECT 3 AS valor, (3 IN (1, 2, NULL)) AS in_com_null, (3 NOT IN (1, 2, NULL)) AS not_in_com_null, (1 IN (1, 2, NULL)) AS achou
+valor | in_com_null | not_in_com_null | achou
+------+-------------+-----------------+------
+3     | NULL        | NULL            | True
+(1 linha)
+pg> SELECT COALESCE(NULL, NULL, 7) AS coalesce, NULLIF(5, 5) AS nullif_igual, NULLIF(5, 6) AS nullif_diferente
+coalesce | nullif_igual | nullif_diferente
+---------+--------------+-----------------
+7        | NULL         | 5
+(1 linha)
+
+--- DISTINCT, GROUP BY e UNIQUE tratam NULLs de modos diferentes
+pg> SELECT DISTINCT x FROM t ORDER BY x
+x
+----
+1
+2
+NULL
+(3 linhas)
+pg> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+pg> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+pg> SELECT COUNT(*) AS nulls_em_coluna_unique FROM u
+nulls_em_coluna_unique
+----------------------
+2
+(1 linha)

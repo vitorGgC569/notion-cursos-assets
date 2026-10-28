@@ -1,0 +1,262 @@
+
+======================================================================
+L9. Modelagem dimensional, OLAP e funcoes de janela
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+SQLite
+======================================================================
+Esquema estrela: a tabela fato (medidas) no centro e tres dimensoes (tempo, produto, loja). Dados didaticos.
+sq> SELECT COUNT(*) AS linhas_da_fato FROM fato_venda
+linhas_da_fato
+--------------
+9
+(1 linha)
+
+--- Consulta tipica de BI: junta a fato com as dimensoes e agrega
+sq> SELECT t.trimestre, p.categoria, SUM(f.receita) AS receita, SUM(f.qtd) AS qtd
+   FROM fato_venda f JOIN dim_tempo t ON t.tempo_id = f.tempo_id JOIN dim_produto p ON p.produto_id = f.produto_id
+   GROUP BY t.trimestre, p.categoria ORDER BY 1, 2
+trimestre | categoria   | receita | qtd
+----------+-------------+---------+----
+1         | Informatica | 360     | 6
+1         | Papelaria   | 450     | 35
+2         | Informatica | 180     | 3
+2         | Papelaria   | 570     | 29
+(4 linhas)
+
+--- Drill-up com ROLLUP: subtotais por UF e total geral (PostgreSQL); no SQLite use UNION ALL
+[SQLite 3.46 nao implementa ROLLUP nem CUBE:]
+sq> SELECT l.uf, p.categoria, SUM(f.receita) FROM fato_venda f JOIN dim_loja l ON l.loja_id = f.loja_id JOIN dim_produto p ON p.produto_id = f.produto_id GROUP BY ROLLUP (l.uf, p.categoria)
+ERRO: no such function: ROLLUP
+sq> SELECT l.uf, p.categoria, SUM(f.receita) AS receita FROM fato_venda f JOIN dim_loja l ON l.loja_id = f.loja_id JOIN dim_produto p ON p.produto_id = f.produto_id GROUP BY l.uf, p.categoria
+   UNION ALL SELECT l.uf, NULL, SUM(f.receita) FROM fato_venda f JOIN dim_loja l ON l.loja_id = f.loja_id GROUP BY l.uf
+   UNION ALL SELECT NULL, NULL, SUM(f.receita) FROM fato_venda f ORDER BY 1, 2
+uf   | categoria   | receita
+-----+-------------+--------
+NULL | NULL        | 1560
+DF   | NULL        | 560
+DF   | Informatica | 180
+DF   | Papelaria   | 380
+GO   | NULL        | 1000
+GO   | Informatica | 360
+GO   | Papelaria   | 640
+(7 linhas)
+
+--- Medidas: aditiva (receita), nao aditiva (margem %) e semiaditiva (saldo)
+sq> SELECT SUM(receita) AS receita_total_correta,
+    SUM((receita - custo) * 100.0 / receita) AS soma_de_margens_ERRADA,
+    (SUM(receita) - SUM(custo)) * 100.0 / SUM(receita) AS margem_total_correta
+   FROM fato_venda
+receita_total_correta | soma_de_margens_ERRADA | margem_total_correta
+----------------------+------------------------+---------------------
+1560                  | 340.0                  | 37.69230769230769
+(1 linha)
+Nao aditiva: percentuais e razoes nao se somam; some os componentes e divida no final.
+Semiaditiva: o saldo SOMA entre contas num mesmo mes, mas NAO entre meses:
+sq> SELECT mes, SUM(saldo) AS saldo_do_mes FROM fato_saldo GROUP BY mes ORDER BY mes
+mes | saldo_do_mes
+----+-------------
+1   | 300
+2   | 350
+3   | 420
+(3 linhas)
+sq> SELECT conta, SUM(saldo) AS soma_entre_meses_ERRADA, AVG(saldo) AS media, (SELECT saldo FROM fato_saldo s2 WHERE s2.conta = s.conta AND s2.mes = 3) AS ultimo_saldo FROM fato_saldo s GROUP BY conta ORDER BY conta
+conta | soma_entre_meses_ERRADA | media              | ultimo_saldo
+------+-------------------------+--------------------+-------------
+1     | 370                     | 123.33333333333333 | 120
+2     | 700                     | 233.33333333333334 | 300
+(2 linhas)
+
+--- Funcoes de janela (SQL:2003): RANK, LAG, soma acumulada e media movel
+sq> SELECT mes, SUM(saldo) AS total,
+    LAG(SUM(saldo)) OVER (ORDER BY mes) AS mes_anterior,
+    SUM(SUM(saldo)) OVER (ORDER BY mes) AS acumulado
+   FROM fato_saldo GROUP BY mes ORDER BY mes
+mes | total | mes_anterior | acumulado
+----+-------+--------------+----------
+1   | 300   | NULL         | 300
+2   | 350   | 300          | 650
+3   | 420   | 350          | 1070
+(3 linhas)
+sq> SELECT p.categoria, p.produto, SUM(f.receita) AS receita,
+    RANK() OVER (PARTITION BY p.categoria ORDER BY SUM(f.receita) DESC) AS posicao,
+    ROUND(100.0 * SUM(f.receita) / SUM(SUM(f.receita)) OVER (PARTITION BY p.categoria), 1) AS pct_da_categoria
+   FROM fato_venda f JOIN dim_produto p ON p.produto_id = f.produto_id GROUP BY p.categoria, p.produto ORDER BY 1, 4
+categoria   | produto | receita | posicao | pct_da_categoria
+------------+---------+---------+---------+-----------------
+Informatica | Mouse   | 540     | 1       | 100.0
+Papelaria   | Caderno | 570     | 1       | 55.9
+Papelaria   | Caneta  | 450     | 2       | 44.1
+(3 linhas)
+sq> SELECT t.mes, SUM(f.receita) AS receita, ROUND(AVG(SUM(f.receita)) OVER (ORDER BY t.mes ROWS BETWEEN 1 PRECEDING AND CURRENT ROW), 1) AS media_movel_2
+   FROM fato_venda f JOIN dim_tempo t ON t.tempo_id = f.tempo_id GROUP BY t.mes ORDER BY t.mes
+mes | receita | media_movel_2
+----+---------+--------------
+1   | 370     | 370.0
+2   | 440     | 405.0
+4   | 420     | 430.0
+5   | 330     | 375.0
+(4 linhas)
+
+--- Estrela x floco de neve (TRT-22 Q27 e TJ-RJ Q39): a mesma pergunta, dimensao desnormalizada x normalizada
+Estrela: dim_produto ja traz a categoria (1 juncao entre a fato e a dimensao, texto repetido):
+sq> SELECT p.categoria, SUM(f.receita) AS receita FROM fato_venda f JOIN dim_produto p ON p.produto_id = f.produto_id GROUP BY p.categoria ORDER BY 1
+categoria   | receita
+------------+--------
+Informatica | 540
+Papelaria   | 1020
+(2 linhas)
+Floco de neve: a categoria foi normalizada em outra tabela (2 juncoes para a mesma resposta, sem repetir o texto):
+sq> SELECT c.categoria, SUM(f.receita) AS receita FROM fato_venda f JOIN sn_produto p ON p.produto_id = f.produto_id JOIN sn_categoria c ON c.categoria_id = p.categoria_id GROUP BY c.categoria ORDER BY 1
+categoria   | receita
+------------+--------
+Informatica | 540
+Papelaria   | 1020
+(2 linhas)
+
+--- Dimensao com historico (SCD tipo 2): nova linha a cada mudanca, com validade
+sq> SELECT * FROM dim_cliente ORDER BY sk
+sk | cliente_id | cidade   | inicio     | fim        | atual
+---+------------+----------+------------+------------+------
+1  | 10         | Goiania  | 2020-01-01 | 2024-06-30 | 0
+2  | 10         | Brasilia | 2024-07-01 | 9999-12-31 | 1
+(2 linhas)
+Uma venda de 2023 deve apontar para a chave substituta 1 (Goiania), a de 2025 para a 2 (Brasilia): o fato guarda a chave substituta, nao a chave de negocio.
+
+======================================================================
+PostgreSQL
+======================================================================
+Esquema estrela: a tabela fato (medidas) no centro e tres dimensoes (tempo, produto, loja). Dados didaticos.
+pg> SELECT COUNT(*) AS linhas_da_fato FROM fato_venda
+linhas_da_fato
+--------------
+9
+(1 linha)
+
+--- Consulta tipica de BI: junta a fato com as dimensoes e agrega
+pg> SELECT t.trimestre, p.categoria, SUM(f.receita) AS receita, SUM(f.qtd) AS qtd
+   FROM fato_venda f JOIN dim_tempo t ON t.tempo_id = f.tempo_id JOIN dim_produto p ON p.produto_id = f.produto_id
+   GROUP BY t.trimestre, p.categoria ORDER BY 1, 2
+trimestre | categoria   | receita | qtd
+----------+-------------+---------+----
+1         | Informatica | 360     | 6
+1         | Papelaria   | 450     | 35
+2         | Informatica | 180     | 3
+2         | Papelaria   | 570     | 29
+(4 linhas)
+
+--- Drill-up com ROLLUP: subtotais por UF e total geral (PostgreSQL); no SQLite use UNION ALL
+pg> SELECT l.uf, p.categoria, SUM(f.receita) AS receita
+   FROM fato_venda f JOIN dim_loja l ON l.loja_id = f.loja_id JOIN dim_produto p ON p.produto_id = f.produto_id
+   GROUP BY ROLLUP (l.uf, p.categoria) ORDER BY l.uf NULLS LAST, p.categoria NULLS LAST
+uf   | categoria   | receita
+-----+-------------+--------
+DF   | Informatica | 180
+DF   | Papelaria   | 380
+DF   | NULL        | 560
+GO   | Informatica | 360
+GO   | Papelaria   | 640
+GO   | NULL        | 1000
+NULL | NULL        | 1560
+(7 linhas)
+
+--- CUBE: todas as combinacoes de agrupamento (PostgreSQL); GROUPING() distingue NULL de subtotal
+pg> SELECT COALESCE(l.uf, 'TOTAL') AS uf, COALESCE(p.categoria, 'TOTAL') AS categoria, SUM(f.receita) AS receita, GROUPING(l.uf, p.categoria) AS nivel
+   FROM fato_venda f JOIN dim_loja l ON l.loja_id = f.loja_id JOIN dim_produto p ON p.produto_id = f.produto_id
+   GROUP BY CUBE (l.uf, p.categoria) ORDER BY nivel, 1, 2
+uf    | categoria   | receita | nivel
+------+-------------+---------+------
+DF    | Informatica | 180     | 0
+DF    | Papelaria   | 380     | 0
+GO    | Informatica | 360     | 0
+GO    | Papelaria   | 640     | 0
+DF    | TOTAL       | 560     | 1
+GO    | TOTAL       | 1000    | 1
+TOTAL | Informatica | 540     | 2
+TOTAL | Papelaria   | 1020    | 2
+TOTAL | TOTAL       | 1560    | 3
+(9 linhas)
+
+--- Medidas: aditiva (receita), nao aditiva (margem %) e semiaditiva (saldo)
+pg> SELECT SUM(receita) AS receita_total_correta,
+    SUM((receita - custo) * 100.0 / receita) AS soma_de_margens_ERRADA,
+    (SUM(receita) - SUM(custo)) * 100.0 / SUM(receita) AS margem_total_correta
+   FROM fato_venda
+receita_total_correta | soma_de_margens_errada | margem_total_correta
+----------------------+------------------------+---------------------
+1560                  | 339.9999999999999999   | 37.6923076923076923
+(1 linha)
+Nao aditiva: percentuais e razoes nao se somam; some os componentes e divida no final.
+Semiaditiva: o saldo SOMA entre contas num mesmo mes, mas NAO entre meses:
+pg> SELECT mes, SUM(saldo) AS saldo_do_mes FROM fato_saldo GROUP BY mes ORDER BY mes
+mes | saldo_do_mes
+----+-------------
+1   | 300
+2   | 350
+3   | 420
+(3 linhas)
+pg> SELECT conta, SUM(saldo) AS soma_entre_meses_ERRADA, AVG(saldo) AS media, (SELECT saldo FROM fato_saldo s2 WHERE s2.conta = s.conta AND s2.mes = 3) AS ultimo_saldo FROM fato_saldo s GROUP BY conta ORDER BY conta
+conta | soma_entre_meses_errada | media                | ultimo_saldo
+------+-------------------------+----------------------+-------------
+1     | 370                     | 123.3333333333333333 | 120
+2     | 700                     | 233.3333333333333333 | 300
+(2 linhas)
+
+--- Funcoes de janela (SQL:2003): RANK, LAG, soma acumulada e media movel
+pg> SELECT mes, SUM(saldo) AS total,
+    LAG(SUM(saldo)) OVER (ORDER BY mes) AS mes_anterior,
+    SUM(SUM(saldo)) OVER (ORDER BY mes) AS acumulado
+   FROM fato_saldo GROUP BY mes ORDER BY mes
+mes | total | mes_anterior | acumulado
+----+-------+--------------+----------
+1   | 300   | NULL         | 300
+2   | 350   | 300          | 650
+3   | 420   | 350          | 1070
+(3 linhas)
+pg> SELECT p.categoria, p.produto, SUM(f.receita) AS receita,
+    RANK() OVER (PARTITION BY p.categoria ORDER BY SUM(f.receita) DESC) AS posicao,
+    ROUND(100.0 * SUM(f.receita) / SUM(SUM(f.receita)) OVER (PARTITION BY p.categoria), 1) AS pct_da_categoria
+   FROM fato_venda f JOIN dim_produto p ON p.produto_id = f.produto_id GROUP BY p.categoria, p.produto ORDER BY 1, 4
+categoria   | produto | receita | posicao | pct_da_categoria
+------------+---------+---------+---------+-----------------
+Informatica | Mouse   | 540     | 1       | 100.0
+Papelaria   | Caderno | 570     | 1       | 55.9
+Papelaria   | Caneta  | 450     | 2       | 44.1
+(3 linhas)
+pg> SELECT t.mes, SUM(f.receita) AS receita, ROUND(AVG(SUM(f.receita)) OVER (ORDER BY t.mes ROWS BETWEEN 1 PRECEDING AND CURRENT ROW), 1) AS media_movel_2
+   FROM fato_venda f JOIN dim_tempo t ON t.tempo_id = f.tempo_id GROUP BY t.mes ORDER BY t.mes
+mes | receita | media_movel_2
+----+---------+--------------
+1   | 370     | 370.0
+2   | 440     | 405.0
+4   | 420     | 430.0
+5   | 330     | 375.0
+(4 linhas)
+
+--- Estrela x floco de neve (TRT-22 Q27 e TJ-RJ Q39): a mesma pergunta, dimensao desnormalizada x normalizada
+Estrela: dim_produto ja traz a categoria (1 juncao entre a fato e a dimensao, texto repetido):
+pg> SELECT p.categoria, SUM(f.receita) AS receita FROM fato_venda f JOIN dim_produto p ON p.produto_id = f.produto_id GROUP BY p.categoria ORDER BY 1
+categoria   | receita
+------------+--------
+Informatica | 540
+Papelaria   | 1020
+(2 linhas)
+Floco de neve: a categoria foi normalizada em outra tabela (2 juncoes para a mesma resposta, sem repetir o texto):
+pg> SELECT c.categoria, SUM(f.receita) AS receita FROM fato_venda f JOIN sn_produto p ON p.produto_id = f.produto_id JOIN sn_categoria c ON c.categoria_id = p.categoria_id GROUP BY c.categoria ORDER BY 1
+categoria   | receita
+------------+--------
+Informatica | 540
+Papelaria   | 1020
+(2 linhas)
+
+--- Dimensao com historico (SCD tipo 2): nova linha a cada mudanca, com validade
+pg> SELECT * FROM dim_cliente ORDER BY sk
+sk | cliente_id | cidade   | inicio     | fim        | atual
+---+------------+----------+------------+------------+------
+1  | 10         | Goiania  | 2020-01-01 | 2024-06-30 | 0
+2  | 10         | Brasilia | 2024-07-01 | 9999-12-31 | 1
+(2 linhas)
+Uma venda de 2023 deve apontar para a chave substituta 1 (Goiania), a de 2025 para a 2 (Brasilia): o fato guarda a chave substituta, nao a chave de negocio.

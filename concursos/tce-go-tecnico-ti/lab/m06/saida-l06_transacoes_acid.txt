@@ -1,0 +1,261 @@
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+A de Atomicidade e C de Consistencia (PostgreSQL)
+======================================================================
+pg> SELECT * FROM conta ORDER BY id
+id | titular | saldo
+---+---------+------
+1  | Ana     | 100
+2  | Bia     | 50
+(2 linhas)
+
+--- transferencia de 150 da Ana para a Bia: o debito viola o CHECK, e a transacao inteira deve ser desfeita
+pg> BEGIN
+OK
+pg> UPDATE conta SET saldo = saldo + 150 WHERE id = 2
+OK (1 linha afetada)
+pg> UPDATE conta SET saldo = saldo - 150 WHERE id = 1
+ERRO: new row for relation "conta" violates check constraint "conta_saldo_check"
+pg> SELECT * FROM conta ORDER BY id
+ERRO: current transaction is aborted, commands ignored until end of transaction block
+pg> ROLLBACK
+OK
+Depois do ROLLBACK, nada do que a transacao fez permaneceu (tudo ou nada):
+pg> SELECT * FROM conta ORDER BY id
+id | titular | saldo
+---+---------+------
+1  | Ana     | 100
+2  | Bia     | 50
+(2 linhas)
+
+--- transferencia de 30: COMMIT confirma as duas operacoes juntas
+pg> BEGIN
+OK
+pg> UPDATE conta SET saldo = saldo - 30 WHERE id = 1
+OK (1 linha afetada)
+pg> UPDATE conta SET saldo = saldo + 30 WHERE id = 2
+OK (1 linha afetada)
+pg> COMMIT
+OK
+pg> SELECT *, (SELECT SUM(saldo) FROM conta) AS total FROM conta ORDER BY id
+id | titular | saldo | total
+---+---------+-------+------
+1  | Ana     | 70    | 150
+2  | Bia     | 80    | 150
+(2 linhas)
+
+--- SAVEPOINT: desfazer apenas parte da transacao
+pg> BEGIN
+OK
+pg> UPDATE conta SET saldo = saldo + 1 WHERE id = 1
+OK (1 linha afetada)
+pg> SAVEPOINT s1
+OK
+pg> UPDATE conta SET saldo = saldo - 1000 WHERE id = 1
+ERRO: new row for relation "conta" violates check constraint "conta_saldo_check"
+Em PostgreSQL, depois de um erro a transacao fica abortada; so ROLLBACK TO SAVEPOINT a recupera:
+pg> SELECT * FROM conta WHERE id = 1
+ERRO: current transaction is aborted, commands ignored until end of transaction block
+pg> ROLLBACK TO SAVEPOINT s1
+OK
+pg> SELECT * FROM conta WHERE id = 1
+id | titular | saldo
+---+---------+------
+1  | Ana     | 71
+(1 linha)
+pg> COMMIT
+OK
+
+======================================================================
+I de Isolamento: nivel READ COMMITTED (padrao do PostgreSQL)
+======================================================================
+pg> SHOW default_transaction_isolation
+default_transaction_isolation
+-----------------------------
+read committed
+(1 linha)
+pg> BEGIN
+OK
+[sessao A]
+pg> SELECT saldo FROM conta WHERE id = 1
+saldo
+-----
+71
+(1 linha)
+[sessao B altera e confirma]
+pg> UPDATE conta SET saldo = saldo + 500 WHERE id = 1
+OK (1 linha afetada)
+[sessao A le de novo, ainda dentro da transacao: leitura nao repetivel]
+pg> SELECT saldo FROM conta WHERE id = 1
+saldo
+-----
+571
+(1 linha)
+pg> COMMIT
+OK
+
+======================================================================
+Isolamento: REPEATABLE READ (snapshot) e conflito de escrita
+======================================================================
+pg> BEGIN ISOLATION LEVEL REPEATABLE READ
+OK
+[sessao A]
+pg> SELECT saldo FROM conta WHERE id = 1
+saldo
+-----
+71
+(1 linha)
+[sessao B altera e confirma]
+pg> UPDATE conta SET saldo = saldo + 500 WHERE id = 1
+OK (1 linha afetada)
+[sessao A: continua vendo o snapshot do inicio]
+pg> SELECT saldo FROM conta WHERE id = 1
+saldo
+-----
+71
+(1 linha)
+[sessao A tenta atualizar a mesma linha que B ja alterou]
+pg> UPDATE conta SET saldo = saldo + 1 WHERE id = 1
+ERRO: could not serialize access due to concurrent update
+pg> ROLLBACK
+OK
+
+======================================================================
+Leitura suja (dirty read): nao ocorre no PostgreSQL, mesmo pedindo READ UNCOMMITTED
+======================================================================
+pg> BEGIN ISOLATION LEVEL READ UNCOMMITTED
+OK
+pg> BEGIN
+OK
+pg> UPDATE conta SET saldo = 99999 WHERE id = 2
+OK (1 linha afetada)
+[sessao A enxerga a alteracao nao confirmada de B?]
+pg> SELECT saldo FROM conta WHERE id = 2
+saldo
+-----
+80
+(1 linha)
+pg> ROLLBACK
+OK
+pg> COMMIT
+OK
+
+======================================================================
+Atualizacao perdida (lost update) e SELECT ... FOR UPDATE
+======================================================================
+Sem trava: as duas sessoes leem 10 e gravam 11; a segunda soma se perde.
+pg> BEGIN
+OK
+pg> BEGIN
+OK
+pg> UPDATE contador SET v = 11 WHERE id = 1
+OK (1 linha afetada)
+pg> COMMIT
+OK
+pg> UPDATE contador SET v = 11 WHERE id = 1
+OK (1 linha afetada)
+pg> COMMIT
+OK
+pg> SELECT v AS valor_final_esperado_12 FROM contador
+valor_final_esperado_12
+-----------------------
+11
+(1 linha)
+
+Com SELECT ... FOR UPDATE: a segunda sessao espera a primeira terminar e le o valor novo.
+pg> BEGIN
+OK
+pg> SELECT v FROM contador WHERE id = 1 FOR UPDATE
+v
+--
+10
+(1 linha)
+[sessao B esta bloqueada esperando a trava de A]
+pg> UPDATE contador SET v = 11 WHERE id = 1
+OK (1 linha afetada)
+pg> COMMIT
+OK
+sessao B leu 11 (e nao 10) e gravou 12
+pg> SELECT v AS valor_final FROM contador
+valor_final
+-----------
+12
+(1 linha)
+
+======================================================================
+Deadlock: duas transacoes se esperando
+======================================================================
+pg> UPDATE lin SET x = 1 WHERE id = 1
+OK (1 linha afetada)
+pg> UPDATE lin SET x = 1 WHERE id = 2
+OK (1 linha afetada)
+[A pede a linha 2, que B segura, e fica esperando]
+[B pede a linha 1, que A segura: o ciclo fecha]
+sessao B: ERRO: deadlock detected
+sessao A: UPDATE concluido depois que B foi abortada
+O PostgreSQL detecta o ciclo e aborta uma das transacoes (codigo 40P01); a outra prossegue.
+
+======================================================================
+Bloqueios: um UPDATE em andamento bloqueia outro UPDATE na mesma linha, mas nao os SELECTs (MVCC)
+======================================================================
+pg> UPDATE contador SET v = 100 WHERE id = 1
+OK (1 linha afetada)
+[B le a mesma linha enquanto A ainda nao confirmou: nao bloqueia e ve o valor antigo]
+pg> SELECT v FROM contador WHERE id = 1
+v
+--
+12
+(1 linha)
+
+======================================================================
+SQLite 3.46: transacoes, rollback e travas (dois arquivos temporarios)
+======================================================================
+sq> BEGIN
+OK
+sq> UPDATE conta SET saldo = saldo + 150 WHERE id = 2
+OK (1 linha afetada)
+sq> UPDATE conta SET saldo = saldo - 150 WHERE id = 1
+ERRO: CHECK constraint failed: saldo >= 0
+sq> ROLLBACK
+OK
+sq> SELECT * FROM conta ORDER BY id
+id | saldo
+---+------
+1  | 100
+2  | 50
+(2 linhas)
+
+Padrao do SQLite (modo rollback journal): um escritor por vez no arquivo.
+sq> BEGIN IMMEDIATE
+OK
+sq> UPDATE conta SET saldo = saldo + 1 WHERE id = 1
+OK (1 linha afetada)
+[outra conexao tenta escrever]
+sq> UPDATE conta SET saldo = saldo + 1 WHERE id = 2
+ERRO: database is locked
+[outra conexao le: no modo padrao leitura passa enquanto o escritor nao fez COMMIT]
+sq> SELECT saldo FROM conta WHERE id = 1
+saldo
+-----
+100
+(1 linha)
+sq> COMMIT
+OK
+sq> PRAGMA journal_mode = WAL
+journal_mode
+------------
+wal
+(1 linha)
+Em modo WAL, leitores nao bloqueiam o escritor e vice-versa; ainda existe um unico escritor por vez.
+sq> PRAGMA synchronous
+synchronous
+-----------
+2
+(1 linha)
+sq> PRAGMA journal_mode
+journal_mode
+------------
+wal
+(1 linha)

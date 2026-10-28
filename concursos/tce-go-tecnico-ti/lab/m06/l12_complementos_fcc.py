@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+# L12: complementos das questoes FCC: array do PostgreSQL (TRT-1 Q47), UPDATE (Analista TRT-14 Q45), REPLACE (Analista TRT-22 Q23), ORDER BY DESC (TRT-14 Q39) e classificacao DDL/DML/DCL (TRT-14 Q36, TRT-23 Q52, Analista TRT-14 Q44).
+from common import *
+pg = PGServer('l12'); P = pg.conn(); sq = sqlite_mem(); versions(P)
+h('TRT-1 2014 Q47 (gabarito D): atributo array de duas dimensoes no PostgreSQL')
+print('A prova mostra so o trecho "teste [ ] [ ]"; aqui o tipo INTEGER e acrescentado depois do nome para formar a declaracao completa.')
+for k, t in {'A': 'teste [ [ ] ]', 'B': 'teste 2 [ ]', 'C': 'teste [ 2 ]', 'D': 'teste [ ] [ ]', 'E': 'teste [ ] x [ ]'}.items():
+    print('[alternativa %s]' % k); P.run("CREATE TABLE ta_%s (id INTEGER, %s)" % (k.lower(), t.replace("teste", "teste INTEGER")))
+print('\nDeclaracao correta (D, tambem aceita integer[][] sem espaco) e uso:')
+P.run("CREATE TABLE agenda (id INTEGER, teste INTEGER[][])")
+print('A alternativa C (integer [ 2 ]) e aceita, mas o tamanho e ignorado e o array continua com UMA dimensao:'); P.run("CREATE TABLE ta_c2 (v INTEGER [ 2 ])"); P.run("SELECT attndims FROM pg_attribute WHERE attrelid = 'ta_c2'::regclass AND attname = 'v'"); P.run("SELECT attndims AS dimensoes_declaradas_em_D FROM pg_attribute WHERE attrelid = 'ta_d'::regclass AND attname = 'teste'")
+P.run("INSERT INTO agenda VALUES (1, '{{1,2},{3,4}}')"); P.run("SELECT teste, teste[2][1] AS linha2_coluna1, array_ndims(teste) AS dimensoes FROM agenda")
+
+h('Analista TRT-14 Q45 (gabarito E): UPDATE tabela SET ... WHERE condicao')
+P.run("CREATE TABLE emp (id INTEGER PRIMARY KEY, nome TEXT, cidade TEXT, salario NUMERIC)", show=False)
+P.run("INSERT INTO emp VALUES (1,'Ana','GO',100),(2,'Bia','DF',200),(3,'Caio','GO',300)", show=False)
+P.run("UPDATE emp SET cidade = 'Goiania', salario = 150 WHERE id = 1")
+P.run("SELECT * FROM emp ORDER BY id")
+print('Sem WHERE o UPDATE altera TODAS as linhas:'); P.run("UPDATE emp SET salario = 0"); P.run("SELECT SUM(salario) AS soma FROM emp")
+print('Alternativas com LET, GET e FOR:'); P.run("UPDATE emp LET salario = 1 WHERE id = 1"); P.run("UPDATE emp SET salario = 1 FOR id = 1")
+
+h('Analista TRT-22 Q23 (gabarito B): REPLACE em SELECT (a prova e Oracle; REPLACE existe tambem no PostgreSQL)')
+P.run("CREATE TABLE trtserv (codigo INTEGER, servico TEXT, local TEXT)", show=False)
+P.run("INSERT INTO trtserv VALUES (1,'Servico de Informacao ao Cidadao - SIC','Teresina'),(2,'Ouvidoria','Teresina'),(3,'Cartilha Rede Ouvir','Estado do Piaui')", show=False)
+P.run("SELECT REPLACE(local, 'Teresina', 'TRT-22') FROM trtserv")
+print('Alternativa D (SUBST nao existe) e uso de aspas duplas (identificador, nao texto):')
+P.run("SELECT SUBST(local, 'Teresina', 'TRT-22') FROM trtserv"); P.run('SELECT REPLACE(local, "Teresina", "TRT-22") FROM trtserv')
+print('SELECT REPLACE(...) nao altera a tabela, so a exibicao (a questao diz "atualizar e mostrar"; o gabarito oficial e B):'); P.run("SELECT local FROM trtserv WHERE codigo = 1")
+
+h('TRT-14 2022 Q39 (gabarito C): SELECT * FROM Clientes ORDER BY Estado DESC')
+P.run("CREATE TABLE clientes (id INTEGER, nome TEXT, estado TEXT)", show=False)
+P.run("INSERT INTO clientes VALUES (1,'A','GO'),(2,'B','SP'),(3,'C','BA')", show=False)
+P.run("SELECT * FROM clientes ORDER BY estado DESC")
+P.run("SELECT * FROM clientes CLASS BY estado DESC")
+
+h('Classificacao dos comandos: DDL, DML, DCL e DQL (TRT-14 Q36, TRT-23 Q52, Analista TRT-14 Q44)')
+print('Cada comando abaixo e executado; o tipo (DDL, DML, DCL) e a leitura da teoria. Em PostgreSQL TRUNCATE e DDL transacional; MERGE e DML (PostgreSQL 15+):')
+P.run("CREATE TABLE m (id INTEGER PRIMARY KEY, v TEXT)", show=False); P.run("CREATE TABLE o (id INTEGER PRIMARY KEY, v TEXT)", show=False)
+P.run("INSERT INTO m VALUES (1,'x')", show=False); P.run("INSERT INTO o VALUES (1,'novo'),(2,'outro')", show=False)
+P.run("MERGE INTO m USING o ON m.id = o.id WHEN MATCHED THEN UPDATE SET v = o.v WHEN NOT MATCHED THEN INSERT VALUES (o.id, o.v)")
+P.run("SELECT * FROM m ORDER BY id")
+P.run("CREATE ROLE usuario_x"); P.run("GRANT SELECT ON m TO usuario_x"); P.run("REVOKE SELECT ON m FROM usuario_x")
+P.run("TRUNCATE m"); P.run("SELECT COUNT(*) FROM m")
+print('SQLite nao tem GRANT/REVOKE (nao ha controle de acesso por usuario no motor):'); sq.run("GRANT SELECT ON t TO u")
+print('LOCK TABLE e CALL em PostgreSQL:'); P.run("BEGIN"); P.run("LOCK TABLE m IN ACCESS EXCLUSIVE MODE"); P.run("ROLLBACK")
+pg.close()

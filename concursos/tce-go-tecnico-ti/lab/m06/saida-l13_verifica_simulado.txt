@@ -1,0 +1,138 @@
+
+======================================================================
+L13. Verificacao dos itens do simulado que dependem de SQL
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+SQLite
+======================================================================
+
+--- Simulado item 11: LEFT JOIN com COUNT(f.id) e, para contraste, COUNT(*)
+sq> SELECT d.nome, COUNT(f.id) AS q FROM dep d LEFT JOIN func f ON f.dep_id = d.id GROUP BY d.nome ORDER BY d.nome
+nome     | q
+---------+--
+Juridico | 0
+RH       | 2
+TI       | 1
+(3 linhas)
+sq> SELECT d.nome, COUNT(*) AS q_errado FROM dep d LEFT JOIN func f ON f.dep_id = d.id GROUP BY d.nome ORDER BY d.nome
+nome     | q_errado
+---------+---------
+Juridico | 1
+RH       | 2
+TI       | 1
+(3 linhas)
+
+--- Simulado item 12: NOT IN com NULL, e NOT EXISTS para contraste
+sq> SELECT COUNT(*) AS not_in FROM a WHERE x NOT IN (SELECT y FROM b)
+not_in
+------
+0
+(1 linha)
+sq> SELECT COUNT(*) AS not_exists FROM a WHERE NOT EXISTS (SELECT 1 FROM b WHERE b.y = a.x)
+not_exists
+----------
+2
+(1 linha)
+
+--- Simulado item 13: COUNT(*), COUNT(c) e AVG(c) com NULL
+sq> SELECT COUNT(*) AS cont_todas, COUNT(c) AS cont_c, AVG(c) AS media FROM v
+cont_todas | cont_c | media
+-----------+--------+------
+4          | 3      | 20.0
+(1 linha)
+
+--- Simulado item 15: WHERE c <> 'a' com NULL
+sq> SELECT COUNT(*) AS diferentes FROM t WHERE c <> 'a'
+diferentes
+----------
+1
+(1 linha)
+sq> SELECT COUNT(*) AS diferentes_ou_nulos FROM t WHERE c <> 'a' OR c IS NULL
+diferentes_ou_nulos
+-------------------
+2
+(1 linha)
+
+--- Simulado item 4: coluna UNIQUE aceita varios NULL; repetir o valor falha
+sq> INSERT INTO u VALUES ('111')
+OK (1 linha afetada)
+sq> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+sq> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+sq> INSERT INTO u VALUES ('111')
+ERRO: UNIQUE constraint failed: u.cpf
+sq> SELECT COUNT(*) AS linhas FROM u
+linhas
+------
+3
+(1 linha)
+
+======================================================================
+PostgreSQL
+======================================================================
+
+--- Simulado item 11: LEFT JOIN com COUNT(f.id) e, para contraste, COUNT(*)
+pg> SELECT d.nome, COUNT(f.id) AS q FROM dep d LEFT JOIN func f ON f.dep_id = d.id GROUP BY d.nome ORDER BY d.nome
+nome     | q
+---------+--
+Juridico | 0
+RH       | 2
+TI       | 1
+(3 linhas)
+pg> SELECT d.nome, COUNT(*) AS q_errado FROM dep d LEFT JOIN func f ON f.dep_id = d.id GROUP BY d.nome ORDER BY d.nome
+nome     | q_errado
+---------+---------
+Juridico | 1
+RH       | 2
+TI       | 1
+(3 linhas)
+
+--- Simulado item 12: NOT IN com NULL, e NOT EXISTS para contraste
+pg> SELECT COUNT(*) AS not_in FROM a WHERE x NOT IN (SELECT y FROM b)
+not_in
+------
+0
+(1 linha)
+pg> SELECT COUNT(*) AS not_exists FROM a WHERE NOT EXISTS (SELECT 1 FROM b WHERE b.y = a.x)
+not_exists
+----------
+2
+(1 linha)
+
+--- Simulado item 13: COUNT(*), COUNT(c) e AVG(c) com NULL
+pg> SELECT COUNT(*) AS cont_todas, COUNT(c) AS cont_c, AVG(c) AS media FROM v
+cont_todas | cont_c | media
+-----------+--------+--------------------
+4          | 3      | 20.0000000000000000
+(1 linha)
+
+--- Simulado item 15: WHERE c <> 'a' com NULL
+pg> SELECT COUNT(*) AS diferentes FROM t WHERE c <> 'a'
+diferentes
+----------
+1
+(1 linha)
+pg> SELECT COUNT(*) AS diferentes_ou_nulos FROM t WHERE c <> 'a' OR c IS NULL
+diferentes_ou_nulos
+-------------------
+2
+(1 linha)
+
+--- Simulado item 4: coluna UNIQUE aceita varios NULL; repetir o valor falha
+pg> INSERT INTO u VALUES ('111')
+OK (1 linha afetada)
+pg> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+pg> INSERT INTO u VALUES (NULL)
+OK (1 linha afetada)
+pg> INSERT INTO u VALUES ('111')
+ERRO: duplicate key value violates unique constraint "u_cpf_key"
+pg> SELECT COUNT(*) AS linhas FROM u
+linhas
+------
+3
+(1 linha)

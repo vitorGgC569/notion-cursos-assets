@@ -1,0 +1,143 @@
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+TRT-1 2014 Q47 (gabarito D): atributo array de duas dimensoes no PostgreSQL
+======================================================================
+A prova mostra so o trecho "teste [ ] [ ]"; aqui o tipo INTEGER e acrescentado depois do nome para formar a declaracao completa.
+[alternativa A]
+pg> CREATE TABLE ta_a (id INTEGER, teste INTEGER [ [ ] ])
+ERRO: syntax error at or near "["
+[alternativa B]
+pg> CREATE TABLE ta_b (id INTEGER, teste INTEGER 2 [ ])
+ERRO: syntax error at or near "2"
+[alternativa C]
+pg> CREATE TABLE ta_c (id INTEGER, teste INTEGER [ 2 ])
+OK
+[alternativa D]
+pg> CREATE TABLE ta_d (id INTEGER, teste INTEGER [ ] [ ])
+OK
+[alternativa E]
+pg> CREATE TABLE ta_e (id INTEGER, teste INTEGER [ ] x [ ])
+ERRO: syntax error at or near "x"
+
+Declaracao correta (D, tambem aceita integer[][] sem espaco) e uso:
+pg> CREATE TABLE agenda (id INTEGER, teste INTEGER[][])
+OK
+A alternativa C (integer [ 2 ]) e aceita, mas o tamanho e ignorado e o array continua com UMA dimensao:
+pg> CREATE TABLE ta_c2 (v INTEGER [ 2 ])
+OK
+pg> SELECT attndims FROM pg_attribute WHERE attrelid = 'ta_c2'::regclass AND attname = 'v'
+attndims
+--------
+1
+(1 linha)
+pg> SELECT attndims AS dimensoes_declaradas_em_D FROM pg_attribute WHERE attrelid = 'ta_d'::regclass AND attname = 'teste'
+dimensoes_declaradas_em_d
+-------------------------
+2
+(1 linha)
+pg> INSERT INTO agenda VALUES (1, '{{1,2},{3,4}}')
+OK (1 linha afetada)
+pg> SELECT teste, teste[2][1] AS linha2_coluna1, array_ndims(teste) AS dimensoes FROM agenda
+teste            | linha2_coluna1 | dimensoes
+-----------------+----------------+----------
+[[1, 2], [3, 4]] | 3              | 2
+(1 linha)
+
+======================================================================
+Analista TRT-14 Q45 (gabarito E): UPDATE tabela SET ... WHERE condicao
+======================================================================
+pg> UPDATE emp SET cidade = 'Goiania', salario = 150 WHERE id = 1
+OK (1 linha afetada)
+pg> SELECT * FROM emp ORDER BY id
+id | nome | cidade  | salario
+---+------+---------+--------
+1  | Ana  | Goiania | 150
+2  | Bia  | DF      | 200
+3  | Caio | GO      | 300
+(3 linhas)
+Sem WHERE o UPDATE altera TODAS as linhas:
+pg> UPDATE emp SET salario = 0
+OK (3 linhas afetadas)
+pg> SELECT SUM(salario) AS soma FROM emp
+soma
+----
+0
+(1 linha)
+Alternativas com LET, GET e FOR:
+pg> UPDATE emp LET salario = 1 WHERE id = 1
+ERRO: syntax error at or near "salario"
+pg> UPDATE emp SET salario = 1 FOR id = 1
+ERRO: syntax error at or near "FOR"
+
+======================================================================
+Analista TRT-22 Q23 (gabarito B): REPLACE em SELECT (a prova e Oracle; REPLACE existe tambem no PostgreSQL)
+======================================================================
+pg> SELECT REPLACE(local, 'Teresina', 'TRT-22') FROM trtserv
+replace
+---------------
+TRT-22
+TRT-22
+Estado do Piaui
+(3 linhas)
+Alternativa D (SUBST nao existe) e uso de aspas duplas (identificador, nao texto):
+pg> SELECT SUBST(local, 'Teresina', 'TRT-22') FROM trtserv
+ERRO: function subst(text, unknown, unknown) does not exist
+pg> SELECT REPLACE(local, "Teresina", "TRT-22") FROM trtserv
+ERRO: column "Teresina" does not exist
+SELECT REPLACE(...) nao altera a tabela, so a exibicao (a questao diz "atualizar e mostrar"; o gabarito oficial e B):
+pg> SELECT local FROM trtserv WHERE codigo = 1
+local
+--------
+Teresina
+(1 linha)
+
+======================================================================
+TRT-14 2022 Q39 (gabarito C): SELECT * FROM Clientes ORDER BY Estado DESC
+======================================================================
+pg> SELECT * FROM clientes ORDER BY estado DESC
+id | nome | estado
+---+------+-------
+2  | B    | SP
+1  | A    | GO
+3  | C    | BA
+(3 linhas)
+pg> SELECT * FROM clientes CLASS BY estado DESC
+ERRO: syntax error at or near "BY"
+
+======================================================================
+Classificacao dos comandos: DDL, DML, DCL e DQL (TRT-14 Q36, TRT-23 Q52, Analista TRT-14 Q44)
+======================================================================
+Cada comando abaixo e executado; o tipo (DDL, DML, DCL) e a leitura da teoria. Em PostgreSQL TRUNCATE e DDL transacional; MERGE e DML (PostgreSQL 15+):
+pg> MERGE INTO m USING o ON m.id = o.id WHEN MATCHED THEN UPDATE SET v = o.v WHEN NOT MATCHED THEN INSERT VALUES (o.id, o.v)
+OK (2 linhas afetadas)
+pg> SELECT * FROM m ORDER BY id
+id | v
+---+------
+1  | novo
+2  | outro
+(2 linhas)
+pg> CREATE ROLE usuario_x
+OK
+pg> GRANT SELECT ON m TO usuario_x
+OK
+pg> REVOKE SELECT ON m FROM usuario_x
+OK
+pg> TRUNCATE m
+OK
+pg> SELECT COUNT(*) FROM m
+count
+-----
+0
+(1 linha)
+SQLite nao tem GRANT/REVOKE (nao ha controle de acesso por usuario no motor):
+sq> GRANT SELECT ON t TO u
+ERRO: near "GRANT": syntax error
+LOCK TABLE e CALL em PostgreSQL:
+pg> BEGIN
+OK
+pg> LOCK TABLE m IN ACCESS EXCLUSIVE MODE
+OK
+pg> ROLLBACK
+OK

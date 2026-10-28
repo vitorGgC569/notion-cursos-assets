@@ -1,0 +1,170 @@
+
+======================================================================
+L1. DDL e restricoes de integridade
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+PostgreSQL: CREATE TABLE com restricoes nomeadas (TRT-22 2022, Tecnico, Q23 e Q26)
+======================================================================
+po> DROP TABLE IF EXISTS trtfunc
+OK
+po> CREATE TABLE trtfunc (
+     nromatricula numeric(10) NOT NULL,
+     nomefunc varchar(100) NOT NULL,
+     telefone varchar(50),
+     salario numeric(10,2),
+     CONSTRAINT matricula_unica UNIQUE (nromatricula, nomefunc),
+     CONSTRAINT valor_positivo CHECK (salario > 0)
+   )
+OK
+po> INSERT INTO trtfunc VALUES (1, 'Ana', '6199', 3500.00)
+OK (1 linha afetada)
+
+--- mesmo par (matricula, nome): viola UNIQUE
+po> INSERT INTO trtfunc VALUES (1, 'Ana', '6188', 4000.00)
+ERRO: duplicate key value violates unique constraint "matricula_unica"
+
+--- mesma matricula com outro nome: o UNIQUE e do PAR, entao passa
+po> INSERT INTO trtfunc VALUES (1, 'Bia', NULL, 4000.00)
+OK (1 linha afetada)
+
+--- salario negativo: viola CHECK valor_positivo
+po> INSERT INTO trtfunc VALUES (2, 'Caio', NULL, -10)
+ERRO: new row for relation "trtfunc" violates check constraint "valor_positivo"
+
+--- nome nulo: viola NOT NULL
+po> INSERT INTO trtfunc VALUES (3, NULL, NULL, 10)
+ERRO: null value in column "nomefunc" of relation "trtfunc" violates not-null constraint
+
+--- NULL em salario: CHECK devolve UNKNOWN e a linha PASSA (pegadinha)
+po> INSERT INTO trtfunc VALUES (4, 'Dora', NULL, NULL)
+OK (1 linha afetada)
+po> SELECT * FROM trtfunc ORDER BY nromatricula, nomefunc
+nromatricula | nomefunc | telefone | salario
+-------------+----------+----------+--------
+1            | Ana      | 6199     | 3500.00
+1            | Bia      | NULL     | 4000.00
+4            | Dora     | NULL     | NULL
+(3 linhas)
+
+======================================================================
+PostgreSQL: DROP TABLE IF EXISTS e SERIAL (TRT-22 2022, Tecnico, Q24; Analista Q26)
+======================================================================
+po> DROP TABLE IF EXISTS trtcontatos
+OK
+po> DROP TABLE IF EXISTS trtcontatos
+OK
+po> CREATE TABLE trtcontatos (
+     cod serial PRIMARY KEY,
+     orgao varchar(255) NOT NULL,
+     email varchar(255) NOT NULL,
+     descricao varchar(255)
+   )
+OK
+
+--- INSERT de varias linhas e RETURNING * (Analista TRT-22 Q26, alternativa C)
+po> INSERT INTO trtcontatos (orgao, email) VALUES
+    ('Ouvidoria','ouvidoria@trt22.jus.br'),
+    ('Escola Judicial','ejud@trt22.jus.br'),
+    ('Corregedoria','secor@trt22.jus.br')
+   RETURNING *
+cod | orgao           | email                  | descricao
+----+-----------------+------------------------+----------
+1   | Ouvidoria       | ouvidoria@trt22.jus.br | NULL
+2   | Escola Judicial | ejud@trt22.jus.br      | NULL
+3   | Corregedoria    | secor@trt22.jus.br     | NULL
+(3 linhas)
+
+--- alternativa A diz que PostgreSQL nao aceita varias linhas; alternativa E diz que seria cod_serial (nenhuma funciona):
+po> CREATE TABLE t_errado (cod_serial PRIMARY KEY, x int)
+ERRO: syntax error at or near "PRIMARY"
+
+--- SERIAL e so atalho: cria uma sequence
+po> SELECT pg_get_serial_sequence('trtcontatos','cod') AS sequencia
+sequencia
+--------------------------
+public.trtcontatos_cod_seq
+(1 linha)
+
+======================================================================
+PostgreSQL: chave estrangeira (TRT-2 2018, Tecnico, Q45)
+======================================================================
+po> DROP TABLE IF EXISTS funcionario; DROP TABLE IF EXISTS departamento
+OK
+po> CREATE TABLE departamento (coddep varchar(10) PRIMARY KEY, local_ point)
+OK
+
+--- forma correta (alternativa E): references departamento(coddep)
+po> CREATE TABLE funcionario (coddep varchar(10) references departamento(coddep), salario real, dataadm date)
+OK
+
+--- forma de alternativa A: foreign key departamento(coddep)
+po> CREATE TABLE f2 (coddep varchar(10) foreign key departamento(coddep))
+ERRO: syntax error at or near "foreign"
+
+--- forma de alternativa D: constraint departamento(coddep)
+po> CREATE TABLE f3 (coddep varchar(10) constraint departamento(coddep))
+ERRO: syntax error at or near "("
+po> INSERT INTO departamento VALUES ('10', NULL)
+OK (1 linha afetada)
+po> INSERT INTO funcionario VALUES ('10', 1000, '2018-01-02')
+OK (1 linha afetada)
+
+--- departamento inexistente: viola a FK
+po> INSERT INTO funcionario VALUES ('99', 1000, '2018-01-02')
+ERRO: insert or update on table "funcionario" violates foreign key constraint "funcionario_coddep_fkey"
+
+--- apagar o pai com filho existente: viola a FK (acao padrao NO ACTION)
+po> DELETE FROM departamento WHERE coddep = '10'
+ERRO: update or delete on table "departamento" violates foreign key constraint "funcionario_coddep_fkey" on table "funcionario"
+
+======================================================================
+PostgreSQL: remover uma constraint (TRT-3 2015, Tecnico, Q48, alternativa D)
+======================================================================
+po> CREATE TABLE processo (numeroprocesso varchar(10) PRIMARY KEY, anoinicioprocesso int, CONSTRAINT chkanoprocesso CHECK (anoinicioprocesso > 1980))
+OK
+po> INSERT INTO processo VALUES ('000182', 1970)
+ERRO: new row for relation "processo" violates check constraint "chkanoprocesso"
+po> ALTER TABLE processo DROP CHECK chkanoprocesso
+ERRO: syntax error at or near "CHECK"
+po> ALTER TABLE processo DROP CONSTRAINT chkanoprocesso
+OK
+po> INSERT INTO processo VALUES ('000182', 1970)
+OK (1 linha afetada)
+
+======================================================================
+SQLite 3.46: as mesmas ideias, com diferencas de dialeto
+======================================================================
+sq> CREATE TABLE departamento (coddep TEXT PRIMARY KEY, nome TEXT NOT NULL)
+OK
+sq> CREATE TABLE funcionario (id INTEGER PRIMARY KEY AUTOINCREMENT, coddep TEXT REFERENCES departamento(coddep), salario REAL CHECK (salario > 0))
+OK
+sq> INSERT INTO departamento VALUES ('10','TI')
+OK (1 linha afetada)
+sq> INSERT INTO funcionario (coddep, salario) VALUES ('10', 1000)
+OK (1 linha afetada)
+
+--- FK violada (PRAGMA foreign_keys = ON ativo nesta conexao)
+sq> INSERT INTO funcionario (coddep, salario) VALUES ('99', 1000)
+ERRO: FOREIGN KEY constraint failed
+
+--- CHECK violado
+sq> INSERT INTO funcionario (coddep, salario) VALUES ('10', -5)
+ERRO: CHECK constraint failed: salario > 0
+
+--- SQLite nao tem ALTER TABLE ... DROP CONSTRAINT: o comando nem e reconhecido
+sq> ALTER TABLE funcionario DROP CONSTRAINT chk
+ERRO: near "CONSTRAINT": syntax error
+
+--- tipagem dinamica do SQLite: coluna REAL aceita texto que nao vira numero
+sq> CREATE TABLE t (n INTEGER)
+OK
+sq> INSERT INTO t VALUES ('abc')
+OK (1 linha afetada)
+sq> SELECT n, typeof(n) FROM t
+n   | typeof(n)
+----+----------
+abc | text
+(1 linha)

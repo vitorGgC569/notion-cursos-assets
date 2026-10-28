@@ -1,0 +1,220 @@
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+NoSQL de documentos: JSONB no PostgreSQL (o modelo de documento do MongoDB, com SQL)
+======================================================================
+Esquema flexivel: cada documento tem campos diferentes (nota so existe em alguns, extra so em um).
+pg> SELECT id, d->>'nome' AS nome, d->'endereco'->>'cidade' AS cidade, (d->>'nota')::numeric AS nota FROM doc ORDER BY id
+id | nome | cidade   | nota
+---+------+----------+-----
+1  | Ana  | Goiania  | 8.5
+2  | Bia  | Anapolis | NULL
+3  | Caio | NULL     | 6
+(3 linhas)
+Consultas por conteudo: contem a tag ti; tem a chave nota:
+pg> SELECT d->>'nome' AS nome FROM doc WHERE d @> '{"tags":["ti"]}' ORDER BY id
+nome
+----
+Ana
+Caio
+(2 linhas)
+pg> SELECT d->>'nome' AS nome FROM doc WHERE d ? 'nota' ORDER BY id
+nome
+----
+Ana
+Caio
+(2 linhas)
+pg> CREATE INDEX idx_doc_gin ON doc USING GIN (d)
+OK
+pg> SELECT jsonb_pretty(d) FROM doc WHERE id = 1
+jsonb_pretty
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    "nome": "Ana",
+    "nota": 8.5,
+    "tags": [
+        "ti",
+        "bd"
+    ],
+    "endereco": {
+        "uf": "GO",
+        "cidade": "Goiania"
+    }
+}
+(1 linha)
+Atualizacao parcial de um campo dentro do documento:
+pg> UPDATE doc SET d = jsonb_set(d, '{endereco,cidade}', '"Aparecida"') WHERE id = 1
+OK (1 linha afetada)
+pg> SELECT d->'endereco' AS endereco FROM doc WHERE id = 1
+endereco
+-----------------------------------
+{'uf': 'GO', 'cidade': 'Aparecida'}
+(1 linha)
+
+======================================================================
+Chave-valor (modelo do Redis) com uma tabela, e expiracao (TTL)
+======================================================================
+pg> SELECT v FROM kv WHERE k = 'sessao:42' AND expira > now()
+v
+---
+ana
+(1 linha)
+pg> SELECT v FROM kv WHERE k = 'sessao:43' AND expira > now()
+v
+-
+(0 linhas)
+Acesso por chave e O(1) em hash (Redis) ou O(log n) em B-tree (PostgreSQL). O Redis nao foi executado aqui.
+
+======================================================================
+Familia de colunas (wide-column, modelo do Cassandra): linhas esparsas por particao, ordenadas por coluna de clusterizacao
+======================================================================
+pg> SELECT * FROM sensor WHERE sensor_id = 1 ORDER BY ts DESC
+sensor_id | ts  | temperatura | umidade
+----------+-----+-------------+--------
+1         | 102 | 21.5        | 58
+1         | 101 | 21.0        | NULL
+1         | 100 | 20.5        | 60
+(3 linhas)
+Consulta por particao (sensor_id) e intervalo na clusterizacao (ts) e o padrao de acesso do wide-column; o Cassandra nao foi executado aqui.
+
+======================================================================
+Grafos: relacionamentos como cidadao de primeira classe (CTE recursiva no lugar do Cypher)
+======================================================================
+pg> WITH RECURSIVE alcance(pessoa, saltos) AS (
+     SELECT para, 1 FROM segue WHERE de = 'ana'
+     UNION
+     SELECT s.para, a.saltos + 1 FROM alcance a JOIN segue s ON s.de = a.pessoa WHERE a.saltos < 3
+   )
+   SELECT pessoa, MIN(saltos) AS saltos FROM alcance GROUP BY pessoa ORDER BY saltos, pessoa
+pessoa | saltos
+-------+-------
+bia    | 1
+eva    | 1
+caio   | 2
+dora   | 2
+(4 linhas)
+Em um banco de grafos (Neo4j) isso seria MATCH (a {nome:"ana"})-[:SEGUE*1..3]->(p) RETURN p. Nao testado aqui.
+
+======================================================================
+Banco de dados vetorial: extensao pgvector no PostgreSQL (embeddings)
+======================================================================
+pg> CREATE EXTENSION IF NOT EXISTS vector
+OK
+pg> SELECT extversion AS versao_pgvector FROM pg_extension WHERE extname = 'vector'
+versao_pgvector
+---------------
+0.8.5
+(1 linha)
+Embeddings de 3 dimensoes inventados para o exemplo (modelos reais usam centenas ou milhares de dimensoes):
+Consulta: o vetor [0.88, 0.12, 0.02] (algo como "animal"). <=> e distancia de cosseno, <-> e distancia euclidiana:
+pg> SELECT texto, ROUND((emb <=> '[0.88,0.12,0.02]')::numeric, 4) AS dist_cosseno, ROUND((emb <-> '[0.88,0.12,0.02]')::numeric, 4) AS dist_euclid FROM trecho ORDER BY emb <=> '[0.88,0.12,0.02]' LIMIT 4
+texto            | dist_cosseno | dist_euclid
+-----------------+--------------+------------
+gato e cachorro  | 0.0006       | 0.0346
+felino domestico | 0.0014       | 0.0520
+fatura do cartao | 0.8893       | 1.2166
+contas a pagar   | 0.9501       | 1.2828
+(4 linhas)
+pg> CREATE INDEX idx_trecho_hnsw ON trecho USING hnsw (emb vector_cosine_ops)
+OK
+pg> EXPLAIN (COSTS OFF) SELECT texto FROM trecho ORDER BY emb <=> ... LIMIT 2
+   Limit
+     ->  Index Scan using idx_trecho_hnsw on trecho
+           Order By: (emb <=> '[0.88,0.12,0.02]'::vector)
+(enable_seqscan = off so para forcar o plano com indice na tabela minuscula; o indice HNSW e aproximado (ANN), troca exatidao por velocidade.)
+
+======================================================================
+Backup logico: pg_dump e pg_restore (copia consistente em um instante, com a base em uso)
+======================================================================
+pg_dump -Fc: codigo de saida 0, arquivo de backup com 12800 bytes
+pg_restore -l (trechos do sumario):
+2844; 0 16756 TABLE DATA public cliente postgres
+2838; 0 16385 TABLE DATA public doc postgres
+2839; 0 16395 TABLE DATA public kv postgres
+pg> CREATE DATABASE restaurado
+OK
+pg_restore: codigo de saida 0
+pg> SELECT COUNT(*) AS clientes_restaurados FROM cliente
+clientes_restaurados
+--------------------
+1000
+(1 linha)
+Desastre simulado: apagamos tudo na base original e restauramos de novo:
+pg> DELETE FROM cliente
+OK (1000 linhas afetadas)
+pg> SELECT COUNT(*) AS clientes_apos_o_desastre FROM cliente
+clientes_apos_o_desastre
+------------------------
+0
+(1 linha)
+pg> SELECT COUNT(*) AS clientes_na_copia_restaurada FROM cliente
+clientes_na_copia_restaurada
+----------------------------
+1000
+(1 linha)
+
+======================================================================
+Replicacao fisica em streaming: primario e standby (pg_basebackup)
+======================================================================
+pg> SHOW wal_level
+wal_level
+---------
+replica
+(1 linha)
+pg> SHOW max_wal_senders
+max_wal_senders
+---------------
+10
+(1 linha)
+pg_basebackup -R -X stream: codigo de saida 0
+Arquivos criados pelo -R no standby: postgresql.auto.conf, standby.signal
+pg_ctl start do standby: codigo de saida 0
+
+[standby] esta em recuperacao (somente leitura)?
+pg> SELECT pg_is_in_recovery() AS em_recuperacao
+em_recuperacao
+--------------
+True
+(1 linha)
+[primario] estado da replicacao:
+pg> SELECT state, sync_state FROM pg_stat_replication
+state     | sync_state
+----------+-----------
+streaming | async
+(1 linha)
+[primario] grava uma linha nova:
+pg> INSERT INTO pedido VALUES (9999, 'novo')
+OK (1 linha afetada)
+[standby] a linha ja chegou?
+pg> SELECT * FROM pedido WHERE id = 9999
+id   | nome
+-----+-----
+9999 | novo
+(1 linha)
+[standby] tentativa de escrita:
+pg> INSERT INTO pedido VALUES (10000, 'x')
+ERRO: cannot execute INSERT in a read-only transaction
+[standby] atraso de replay:
+pg> SELECT pg_last_wal_replay_lsn() IS NOT NULL AS recebendo_wal
+recebendo_wal
+-------------
+True
+(1 linha)
+
+Promocao (failover manual): o standby vira primario
+pg_ctl promote: codigo de saida 0
+pg> SELECT pg_is_in_recovery() AS em_recuperacao
+em_recuperacao
+--------------
+False
+(1 linha)
+pg> INSERT INTO pedido VALUES (10000, 'gravado no novo primario')
+OK (1 linha afetada)
+pg> SELECT COUNT(*) AS pedidos_no_novo_primario FROM pedido
+pedidos_no_novo_primario
+------------------------
+5
+(1 linha)
+
+Replicacao assincrona: o primario nao espera o standby confirmar, por isso pode haver perda de dados no failover. A sincrona (synchronous_commit) espera, com custo de latencia. RPO e RTO: veja a teoria.

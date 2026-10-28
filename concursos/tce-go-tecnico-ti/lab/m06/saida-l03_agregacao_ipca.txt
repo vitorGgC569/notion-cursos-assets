@@ -1,0 +1,289 @@
+
+======================================================================
+L3. Agregacao e as questoes da STN 2024 (FGV)
+======================================================================
+SQLite 3.46.1 (modulo sqlite3 do Python 3.13.5)
+PostgreSQL 18.4
+
+======================================================================
+SQLite
+======================================================================
+Tabela IPCA didatica (indice = variacao mensal em %, valores inventados): 24 linhas (2 anos x 12 meses). Primeiras linhas:
+sq> SELECT * FROM ipca ORDER BY ano, mes LIMIT 5
+ano  | mes | indice
+-----+-----+-------
+2022 | 1   | 0.5
+2022 | 2   | 0.25
+2022 | 3   | 0.75
+2022 | 4   | 1
+2022 | 5   | 0.75
+(5 linhas)
+
+Resultado esperado, calculado em Python (nao em SQL): Q56 = [(2022, 3, 0.5), (2022, 9, 0.5), (2022, 11, 0.5)] ; Q57 = [(2022, 11), (2022, 12), (2023, 1), (2023, 2)]
+
+--- STN 2024 Q56 (gabarito B): view v1 e o maior salto positivo, admitindo empates
+sq> create view v1 as
+   select ano, mes, salto from (
+   select y.ano, y.mes, y.indice anterior,
+   x.indice novo, y.indice - x.indice salto
+   from ipca x, ipca y
+   where
+   ((x.ano = y.ano and y.mes = x.mes + 1)
+   Or
+   (y.ano = x.ano + 1 and y.mes = 1 and x.mes = 12))
+   ) x
+OK
+sq> SELECT count(*) AS linhas_da_view FROM v1
+linhas_da_view
+--------------
+23
+(1 linha)
+
+[alternativa A]
+sq> select * from v1 where salto = max(salto)
+ERRO: misuse of aggregate function max()
+
+[alternativa B]
+sq> select ano, mes, salto from v1 where salto = (select max(salto) from v1) ORDER BY ano, mes
+ano  | mes | salto
+-----+-----+------
+2022 | 3   | 0.5
+2022 | 9   | 0.5
+2022 | 11  | 0.5
+(3 linhas)
+confere com o esperado: True
+
+[alternativa C]
+devolveu 23 linhas (a pergunta pede apenas o maior salto)
+
+[alternativa D]
+sq> select ano, mes, salto from v1 where salto = max(v1.salto)
+ERRO: misuse of aggregate function max()
+
+[alternativa E]
+devolveu 7 linhas (a pergunta pede apenas o maior salto)
+
+--- STN 2024 Q57 (gabarito B): para cada ano, o mes (ou meses) de maior indice
+(A prova usa "order by ano, mês" com acento; aqui escrevemos "mes", sem acento, como na tabela do laboratorio.)
+[alternativa A] 20 linhas; confere com o esperado: False
+[alternativa B] 4 linhas; confere com o esperado: True
+[alternativa C] 3 linhas; confere com o esperado: False
+[alternativa D] 24 linhas; confere com o esperado: False
+[alternativa E] 24 linhas; confere com o esperado: False
+
+sq> select ano, mes from ipca where not exists (select mes, ano from ipca x where x.ano = ipca.ano and x.indice > ipca.indice) order by ano, mes
+ano  | mes
+-----+----
+2022 | 11
+2022 | 12
+2023 | 1
+2023 | 2
+(4 linhas)
+
+--- STN 2024 Q58 (gabarito C): indice acumulado por ano; o que entra no lugar das reticencias
+[alternativa A] 0 linhas devolvidas
+[alternativa B] 24 linhas devolvidas
+[alternativa C] 2 linhas devolvidas
+[alternativa D] 24 linhas devolvidas
+[alternativa E] ERRO: near "select": syntax error
+
+[alternativa C, resultado, arredondado a 4 casas para caber na tela]
+sq> select ano, round(cast(indice as numeric), 4) as indice from (select Y.ano, (1+ m1.indice/100) * (1+ m2.indice/100) * (1+ m3.indice/100) * (1+ m4.indice/100) * (1+ m5.indice/100) * (1+ m6.indice/100) * (1+ m7.indice/100) * (1+ m8.indice/100) * (1+ m9.indice/100) * (1+ m10.indice/100) * (1+ m11.indice/100) * (1+ m12.indice/100) as indice from IPCA m1, IPCA m2, IPCA m3, IPCA m4, IPCA m5, IPCA m6, IPCA m7, IPCA m8, IPCA m9, IPCA m10, IPCA m11, IPCA m12, (select distinct ano from IPCA) Y where m12.mes =12 and m11.mes=11 and m10.mes=10 and m9.mes =9 and m8.mes =8 and m7.mes=7 and m6.mes =6 and m5.mes =5 and m4.mes=4 and m3.mes =3 and m2.mes =2 and m1.mes=1 and m12.ano = m11.ano and m11.ano = m10.ano and m10.ano = m9.ano and m9.ano = m8.ano and m8.ano = m7.ano and m7.ano = m6.ano and m6.ano = m5.ano and m5.ano = m4.ano and m4.ano = m3.ano and m3.ano = m2.ano and m2.ano = m1.ano and m1.ano = Y.ano) t order by 1
+ano  | indice
+-----+-------
+2022 | 1.0775
+2023 | 1.059
+(2 linhas)
+Atencao: SQLite e PostgreSQL devolvem numeros diferentes para este mesmo SQL (compare 2022 e 2023 nos dois blocos). Motivo no SQLite: a coluna NUMERIC guarda 1.0 como inteiro 1, e inteiro / inteiro e divisao inteira. No PostgreSQL, NUMERIC preserva as casas decimais. Em ambos, inteiro / inteiro tambem e divisao inteira:
+sq> SELECT 1/100 AS inteiro_por_inteiro, 1/100.0 AS inteiro_por_decimal
+inteiro_por_inteiro | inteiro_por_decimal
+--------------------+--------------------
+0                   | 0.01
+(1 linha)
+Em producao, force o tipo decimal (cast ou 100.0) para nao depender do dialeto.
+(O resultado de cada ano e o produto dos 12 fatores (1 + i/100); sem o DISTINCT, o mesmo produto se repete em 12 linhas por ano.)
+
+--- STN 2024 Q59 (gabarito C): recompor meses apagados com indice NULL
+[versao I] linhas antes: 20 ; depois: 20 ; linhas com indice NULL: 0 ; tabela completa (24 linhas): False
+[versao II] linhas antes: 20 ; depois: 24 ; linhas com indice NULL: 4 ; tabela completa (24 linhas): True
+[versao III] linhas antes: 20 ; depois: 20 ; linhas com indice NULL: 0 ; tabela completa (24 linhas): False
+Leitura: so a versao II recompoe os 4 meses apagados de 2022. A I e a III procuram, na propria tabela, linhas que nao existem na propria tabela: nao inserem nada.
+
+--- Nao veio da prova: GROUP BY, HAVING e funcoes de agregacao com NULL
+TRT-1 2014 Tecnico Q45 (gabarito D): custo medio por tipo de produto
+sq> SELECT Tipo, AVG(Custo) FROM Produto GROUP BY Tipo ORDER BY Tipo
+tipo      | AVG(Custo)
+----------+-----------
+info      | 65.0
+papelaria | 3.0
+(2 linhas)
+alternativa A (ORDER BY Tipo, sem GROUP BY):
+sq> SELECT Tipo, AVG(Custo) FROM Produto ORDER BY Tipo
+tipo      | AVG(Custo)
+----------+-----------
+papelaria | 27.8
+(1 linha)
+alternativa B (HAVING sem GROUP BY):
+sq> SELECT Tipo, AVG(Custo) FROM Produto HAVING Tipo LIKE ' '
+tipo | AVG(Custo)
+-----+-----------
+(0 linhas)
+alternativa C:
+sq> SELECT Tipo, AVG(Custo) FROM Produto WHERE Tipo IN GROUP
+ERRO: near "GROUP": syntax error
+alternativa E:
+sq> SELECT Tipo, AVG(Custo) FROM Produto WHERE ALL Tipo (Item)
+ERRO: near "ALL": syntax error
+
+COUNT(*) conta linhas; COUNT(custo) ignora NULL; AVG ignora NULL (media de 40 e 90 = 65, e nao de 3 valores):
+sq> SELECT tipo, COUNT(*) AS linhas, COUNT(custo) AS com_custo, AVG(custo) AS media, SUM(custo) AS soma FROM produto GROUP BY tipo ORDER BY tipo
+tipo      | linhas | com_custo | media | soma
+----------+--------+-----------+-------+-----
+info      | 3      | 2         | 65.0  | 130
+papelaria | 3      | 3         | 3.0   | 9
+(2 linhas)
+HAVING filtra grupos depois de agrupar; WHERE filtra linhas antes:
+sq> SELECT tipo, COUNT(*) AS n FROM produto WHERE custo IS NOT NULL GROUP BY tipo HAVING COUNT(*) >= 3 ORDER BY tipo
+tipo      | n
+----------+--
+papelaria | 3
+(1 linha)
+
+======================================================================
+PostgreSQL
+======================================================================
+Tabela IPCA didatica (indice = variacao mensal em %, valores inventados): 24 linhas (2 anos x 12 meses). Primeiras linhas:
+pg> SELECT * FROM ipca ORDER BY ano, mes LIMIT 5
+ano  | mes | indice
+-----+-----+-------
+2022 | 1   | 0.5
+2022 | 2   | 0.25
+2022 | 3   | 0.75
+2022 | 4   | 1.0
+2022 | 5   | 0.75
+(5 linhas)
+
+Resultado esperado, calculado em Python (nao em SQL): Q56 = [(2022, 3, 0.5), (2022, 9, 0.5), (2022, 11, 0.5)] ; Q57 = [(2022, 11), (2022, 12), (2023, 1), (2023, 2)]
+
+--- STN 2024 Q56 (gabarito B): view v1 e o maior salto positivo, admitindo empates
+pg> create view v1 as
+   select ano, mes, salto from (
+   select y.ano, y.mes, y.indice anterior,
+   x.indice novo, y.indice - x.indice salto
+   from ipca x, ipca y
+   where
+   ((x.ano = y.ano and y.mes = x.mes + 1)
+   Or
+   (y.ano = x.ano + 1 and y.mes = 1 and x.mes = 12))
+   ) x
+OK
+pg> SELECT count(*) AS linhas_da_view FROM v1
+linhas_da_view
+--------------
+23
+(1 linha)
+
+[alternativa A]
+pg> select * from v1 where salto = max(salto)
+ERRO: aggregate functions are not allowed in WHERE
+
+[alternativa B]
+pg> select ano, mes, salto from v1 where salto = (select max(salto) from v1) ORDER BY ano, mes
+ano  | mes | salto
+-----+-----+------
+2022 | 3   | 0.50
+2022 | 9   | 0.50
+2022 | 11  | 0.50
+(3 linhas)
+confere com o esperado: True
+
+[alternativa C]
+devolveu 23 linhas (a pergunta pede apenas o maior salto)
+
+[alternativa D]
+pg> select ano, mes, salto from v1 where salto = max(v1.salto)
+ERRO: aggregate functions are not allowed in WHERE
+
+[alternativa E]
+devolveu 7 linhas (a pergunta pede apenas o maior salto)
+
+--- STN 2024 Q57 (gabarito B): para cada ano, o mes (ou meses) de maior indice
+(A prova usa "order by ano, mês" com acento; aqui escrevemos "mes", sem acento, como na tabela do laboratorio.)
+[alternativa A] ERRO: column "x.mes" must appear in the GROUP BY clause or be used in an aggregate function
+[alternativa B] 4 linhas; confere com o esperado: True
+[alternativa C] 3 linhas; confere com o esperado: False
+[alternativa D] ERRO: column "x.ano" must appear in the GROUP BY clause or be used in an aggregate function
+[alternativa E] 24 linhas; confere com o esperado: False
+
+pg> select ano, mes from ipca where not exists (select mes, ano from ipca x where x.ano = ipca.ano and x.indice > ipca.indice) order by ano, mes
+ano  | mes
+-----+----
+2022 | 11
+2022 | 12
+2023 | 1
+2023 | 2
+(4 linhas)
+
+--- STN 2024 Q58 (gabarito C): indice acumulado por ano; o que entra no lugar das reticencias
+[alternativa A] 0 linhas devolvidas
+[alternativa B] 24 linhas devolvidas
+[alternativa C] 2 linhas devolvidas
+[alternativa D] 24 linhas devolvidas
+[alternativa E] ERRO: syntax error at or near "select"
+
+[alternativa C, resultado, arredondado a 4 casas para caber na tela]
+pg> select ano, round(cast(indice as numeric), 4) as indice from (select Y.ano, (1+ m1.indice/100) * (1+ m2.indice/100) * (1+ m3.indice/100) * (1+ m4.indice/100) * (1+ m5.indice/100) * (1+ m6.indice/100) * (1+ m7.indice/100) * (1+ m8.indice/100) * (1+ m9.indice/100) * (1+ m10.indice/100) * (1+ m11.indice/100) * (1+ m12.indice/100) as indice from IPCA m1, IPCA m2, IPCA m3, IPCA m4, IPCA m5, IPCA m6, IPCA m7, IPCA m8, IPCA m9, IPCA m10, IPCA m11, IPCA m12, (select distinct ano from IPCA) Y where m12.mes =12 and m11.mes=11 and m10.mes=10 and m9.mes =9 and m8.mes =8 and m7.mes=7 and m6.mes =6 and m5.mes =5 and m4.mes=4 and m3.mes =3 and m2.mes =2 and m1.mes=1 and m12.ano = m11.ano and m11.ano = m10.ano and m10.ano = m9.ano and m9.ano = m8.ano and m8.ano = m7.ano and m7.ano = m6.ano and m6.ano = m5.ano and m5.ano = m4.ano and m4.ano = m3.ano and m3.ano = m2.ano and m2.ano = m1.ano and m1.ano = Y.ano) t order by 1
+ano  | indice
+-----+-------
+2022 | 1.0883
+2023 | 1.0803
+(2 linhas)
+Atencao: SQLite e PostgreSQL devolvem numeros diferentes para este mesmo SQL (compare 2022 e 2023 nos dois blocos). Motivo no SQLite: a coluna NUMERIC guarda 1.0 como inteiro 1, e inteiro / inteiro e divisao inteira. No PostgreSQL, NUMERIC preserva as casas decimais. Em ambos, inteiro / inteiro tambem e divisao inteira:
+pg> SELECT 1/100 AS inteiro_por_inteiro, 1/100.0 AS inteiro_por_decimal
+inteiro_por_inteiro | inteiro_por_decimal
+--------------------+-----------------------
+0                   | 0.01000000000000000000
+(1 linha)
+Em producao, force o tipo decimal (cast ou 100.0) para nao depender do dialeto.
+(O resultado de cada ano e o produto dos 12 fatores (1 + i/100); sem o DISTINCT, o mesmo produto se repete em 12 linhas por ano.)
+
+--- STN 2024 Q59 (gabarito C): recompor meses apagados com indice NULL
+[versao I] linhas antes: 20 ; depois: 20 ; linhas com indice NULL: 0 ; tabela completa (24 linhas): False
+[versao II] linhas antes: 20 ; depois: 24 ; linhas com indice NULL: 4 ; tabela completa (24 linhas): True
+[versao III] linhas antes: 20 ; depois: 20 ; linhas com indice NULL: 0 ; tabela completa (24 linhas): False
+Leitura: so a versao II recompoe os 4 meses apagados de 2022. A I e a III procuram, na propria tabela, linhas que nao existem na propria tabela: nao inserem nada.
+
+--- Nao veio da prova: GROUP BY, HAVING e funcoes de agregacao com NULL
+TRT-1 2014 Tecnico Q45 (gabarito D): custo medio por tipo de produto
+pg> SELECT Tipo, AVG(Custo) FROM Produto GROUP BY Tipo ORDER BY Tipo
+tipo      | avg
+----------+--------------------
+info      | 65.0000000000000000
+papelaria | 3.0000000000000000
+(2 linhas)
+alternativa A (ORDER BY Tipo, sem GROUP BY):
+pg> SELECT Tipo, AVG(Custo) FROM Produto ORDER BY Tipo
+ERRO: column "produto.tipo" must appear in the GROUP BY clause or be used in an aggregate function
+alternativa B (HAVING sem GROUP BY):
+pg> SELECT Tipo, AVG(Custo) FROM Produto HAVING Tipo LIKE ' '
+ERRO: column "produto.tipo" must appear in the GROUP BY clause or be used in an aggregate function
+alternativa C:
+pg> SELECT Tipo, AVG(Custo) FROM Produto WHERE Tipo IN GROUP
+ERRO: syntax error at or near "GROUP"
+alternativa E:
+pg> SELECT Tipo, AVG(Custo) FROM Produto WHERE ALL Tipo (Item)
+ERRO: syntax error at or near "ALL"
+
+COUNT(*) conta linhas; COUNT(custo) ignora NULL; AVG ignora NULL (media de 40 e 90 = 65, e nao de 3 valores):
+pg> SELECT tipo, COUNT(*) AS linhas, COUNT(custo) AS com_custo, AVG(custo) AS media, SUM(custo) AS soma FROM produto GROUP BY tipo ORDER BY tipo
+tipo      | linhas | com_custo | media               | soma
+----------+--------+-----------+---------------------+-----
+info      | 3      | 2         | 65.0000000000000000 | 130
+papelaria | 3      | 3         | 3.0000000000000000  | 9
+(2 linhas)
+HAVING filtra grupos depois de agrupar; WHERE filtra linhas antes:
+pg> SELECT tipo, COUNT(*) AS n FROM produto WHERE custo IS NOT NULL GROUP BY tipo HAVING COUNT(*) >= 3 ORDER BY tipo
+tipo      | n
+----------+--
+papelaria | 3
+(1 linha)
