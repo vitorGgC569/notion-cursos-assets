@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Previsão da receita',label:'Aprovação da LOA',text:'<p>Aprovada a LOA, debita-se a <b>Previsão Inicial da Receita</b> (5.2.1.1) e credita-se a <b>Receita a Realizar</b> (6.2.1.1).</p>',scene:function(){return sc2('PASSO 1 DE 6',[['D 5.2.1.1','a','Previsão inicial']],[['C 6.2.1.1','m','Receita a realizar']],'Parte I do MCASP')}},
+{title:'2. Fato gerador',label:'Competência',text:'<p>Quando ocorre o fato gerador, a contabilidade reconhece o <b>crédito a receber</b> e uma <b>VPA</b>, mesmo sem arrecadar. É o regime de <b>competência</b>.</p>',scene:function(){return sc('PASSO 2 DE 6',[['Fato gerador','a'],['Crédito a receber','n'],['VPA','n']],'regime contábil')}},
+{title:'3. Arrecadação',label:'Receita realizada',text:'<p>Quando o contribuinte paga, debita-se a <b>Receita a Realizar</b> e credita-se a <b>Receita Realizada</b> (6.2.1.2). Aparece a <b>receita orçamentária</b>.</p>',scene:function(){return sc2('PASSO 3 DE 6',[['D 6.2.1.1','a','Receita a realizar']],[['C 6.2.1.2','m','Receita realizada']],'art. 35')}},
+{title:'4. Empenho',label:'Reserva da dotação',text:'<p>O <b>empenho</b> (art. 58) debita o <b>Crédito Disponível</b> e credita o <b>Crédito Empenhado a Liquidar</b>. Nasce a <b>despesa orçamentária</b>.</p>',scene:function(){return sc2('PASSO 4 DE 6',[['D 6.2.2.1.1','a','Crédito disponível']],[['C 6.2.2.1.3.01','m','Empenhado a liquidar']],'art. 58')}},
+{title:'5. Liquidação',label:'Direito do credor',text:'<p>A <b>liquidação</b> (art. 63) verifica o direito adquirido pelo credor. Passa-se de <b>empenhado a liquidar</b> para <b>liquidado a pagar</b>. Se o fato gerador veio antes, usa-se o <b>em liquidação</b>.</p>',scene:function(){return sc('PASSO 5 DE 6',[['A liquidar','a'],['Em liquidação','n'],['Liquidado a pagar','n']],'art. 63')}},
+{title:'6. Pagamento',label:'Saída do dinheiro',text:'<p>O <b>pagamento</b> (art. 62) só ocorre depois da regular liquidação: baixa o <b>liquidado a pagar</b> e credita o <b>Crédito Empenhado Pago</b> (6.2.2.1.3.04).</p>',scene:function(){return sc2('PASSO 6 DE 6',[['Liquidado a pagar','a','baixa']],[['Empenhado pago','m','6.2.2.1.3.04']],'art. 62')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pela execução: previsão da receita, fato gerador, arrecadação, empenho, liquidação e pagamento'});
+})();
