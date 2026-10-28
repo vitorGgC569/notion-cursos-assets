@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. O que conta',label:'Pessoal, de forma ampla',text:'<p>Ativos, <b>inativos e pensionistas</b>, com quaisquer espécies remuneratórias, mais <b>encargos sociais</b> e contribuições à previdência. A terceirização que substitui servidor entra como <b>outras despesas de pessoal</b>.</p>',scene:function(){return sc('PASSO 1 DE 6',[['Ativos','a'],['Inativos','n'],['Pensionistas','n']],'art. 18')}},
+{title:'2. A conta de 12 meses',label:'Mês e onze anteriores',text:'<p>Apura-se a despesa do <b>mês em referência</b> somada à dos <b>onze anteriores</b>, por <b>competência</b>, e compara-se com a <b>RCL</b> também dos 12 meses.</p>',scene:function(){return sc2('PASSO 2 DE 6',[['Despesa','a','12 meses']],[['RCL','m','12 meses']],'art. 18, § 2º')}},
+{title:'3. Limites por ente',label:'Percentuais da RCL',text:'<p><b>União 50%</b>, <b>Estados 60%</b>, <b>Municípios 60%</b>. A verificação é feita ao final de cada <b>quadrimestre</b>.</p>',scene:function(){return sc('PASSO 3 DE 6',[['União 50%','a'],['Estados 60%','n'],['Municípios 60%','n']],'art. 19')}},
+{title:'4. Repartição estadual',label:'3, 6, 49 e 2',text:'<p>Nos Estados: <b>Legislativo com o Tribunal de Contas 3%</b>, <b>Judiciário 6%</b>, <b>Executivo 49%</b>, <b>Ministério Público 2%</b>. Soma 60%.</p>',scene:function(){return sc('PASSO 4 DE 6',[['Leg. + TCE 3%','a'],['Judiciário 6%','n'],['Executivo 49%','n']],'art. 20, II')}},
+{title:'5. 90% e 95%',label:'Alerta e prudencial',text:'<p>Com <b>90%</b>, o Tribunal de Contas <b>alerta</b>. Acima de <b>95%</b>, o <b>limite prudencial</b> veda reajuste, criação de cargo, provimento e hora extra, com poucas exceções.</p>',scene:function(){return sc2('PASSO 5 DE 6',[['90%','a','alerta do TC']],[['95%','m','prudencial']],'arts. 22 e 59')}},
+{title:'6. Passou de 100%',label:'Dois quadrimestres',text:'<p>O excesso é eliminado em <b>dois quadrimestres</b>, <b>um terço</b> no primeiro. Se não der, ficam vedadas <b>transferências voluntárias</b>, garantias e novas operações de crédito.</p>',scene:function(){return sc2('PASSO 6 DE 6',[['2 quadrimestres','a','1/3 no primeiro']],[['Sanções','m','sem voluntárias']],'art. 23')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pela despesa com pessoal: conceito, apuração, limites, repartição estadual, alerta e prudencial, e excesso'});
+})();

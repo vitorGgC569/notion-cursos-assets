@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Dívida consolidada',label:'Mais de 12 meses',text:'<p>É o total das obrigações assumidas por lei, contrato, convênio ou operação de crédito, para amortização em <b>prazo superior a 12 meses</b>. Também entram os <b>precatórios não pagos</b> no orçamento em que foram incluídos.</p>',scene:function(){return sc('PASSO 1 DE 6',[['Consolidada','a'],['Mobiliária','n'],['Operação de crédito','n']],'art. 29')}},
+{title:'2. Limite do Senado',label:'Percentual da RCL',text:'<p>Os limites são fixados pelo <b>Senado</b>, em <b>percentual da RCL</b>, e valem como máximos. A apuração é feita ao final de cada <b>quadrimestre</b>.</p>',scene:function(){return sc2('PASSO 2 DE 6',[['Estados','a','2 x RCL']],[['Municípios','m','1,2 x RCL']],'art. 30; Res. 40/2001')}},
+{title:'3. Recondução',label:'Três quadrimestres',text:'<p>Passou do limite? Reduz-se o excedente em <b>pelo menos 25% no primeiro</b> dos <b>três quadrimestres</b> seguintes. Enquanto isso, fica <b>proibida a operação de crédito</b>.</p>',scene:function(){return sc2('PASSO 3 DE 6',[['3 quadrimestres','a','25% no primeiro']],[['Sem crédito','m','até reconduzir']],'art. 31')}},
+{title:'4. Contratar',label:'Requisitos do art. 32',text:'<p>Pede-se <b>autorização prévia</b> na LOA ou em lei, <b>parecer técnico e jurídico</b>, respeito aos limites e à <b>regra de ouro</b>. Em operação <b>externa</b>, o Senado autoriza.</p>',scene:function(){return sc('PASSO 4 DE 6',[['Autorização','a'],['Limites','n'],['Regra de ouro','n']],'art. 32')}},
+{title:'5. ARO',label:'Para caixa durante o ano',text:'<p>Só a partir do <b>10º dia</b> do exercício, liquidada até <b>10 de dezembro</b>, e <b>proibida</b> no último ano de mandato e enquanto houver ARO anterior.</p>',scene:function(){return sc2('PASSO 5 DE 6',[['Começa','a','10º dia']],[['Termina','m','10 de dezembro']],'art. 38')}},
+{title:'6. Fim de mandato',label:'Art. 42',text:'<p>Nos <b>dois últimos quadrimestres</b>, não se contrai obrigação que não possa ser paga dentro do mandato, nem deixa parcelas para o ano seguinte <b>sem caixa suficiente</b>.</p>',scene:function(){return sc2('PASSO 6 DE 6',[['Dois quadrimestres','a','finais do mandato']],[['Caixa','m','tem de cobrir']],'art. 42')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pela dívida e pelas operações de crédito: definição, limite, recondução, contratação, ARO e art. 42'});
+})();
