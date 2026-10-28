@@ -226,3 +226,6 @@ label.f{display:block;font:600 12px var(--sans);letter-spacing:.04em;text-transf
 .embedded .btn{padding:7px 12px}
 .src{font-size:12.5px;color:var(--muted);margin:4px 0 0}
 .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);margin-bottom:6px}
+blockquote.ctx{margin:10px 0 14px;padding:10px 16px;border-left:3px solid var(--accent,#14705a);background:var(--surface-2,rgba(20,112,90,.06));border-radius:0 8px 8px 0;font-size:15px;line-height:1.55}
+blockquote.ctx p{margin:6px 0}
+blockquote.ctx cite{display:block;font-size:12.5px;color:var(--muted);font-style:normal;margin:6px 0 2px}
