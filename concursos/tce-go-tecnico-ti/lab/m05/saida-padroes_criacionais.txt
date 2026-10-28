@@ -1,0 +1,6 @@
+Singleton: a is b -> True | b.valores -> {'modo': 'producao'}
+Factory Method: EditorPdf -> exportando em PDF
+Factory Method: EditorWeb -> exportando em HTML
+Abstract Factory (claro): ['janela clara', 'botao claro']
+Abstract Factory (escuro): ['janela escura', 'botao escuro']
+Builder: titulo=Auditoria 2026 | tabela(12 linhas) | rodape=TCE-GO

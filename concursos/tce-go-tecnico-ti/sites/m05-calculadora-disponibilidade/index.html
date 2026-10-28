@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Calculadora de disponibilidade · TCE-GO 2026 · Técnico de Controle Externo, TI</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#app">Ir para o conteúdo</a>
+<div class="wrap"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">TCE-GO 2026 · Técnico de Controle Externo, TI</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 5</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<p class="kicker">Módulo 5 · Engenharia de Software</p><h1>Calculadora de disponibilidade</h1><p class="lead">Informe MTBF e MTTR para obter a disponibilidade e a parada anual; informe a disponibilidade de três componentes para ver o efeito da composição em série e da redundância em paralelo.</p>
+<style>.cwrap label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}.cwrap input{font:16px var(--mono);padding:9px 12px;border:1px solid var(--line-2);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);width:100%;max-width:200px}
+.cwrap .row{display:flex;gap:12px;flex-wrap:wrap}.cwrap .row>div{flex:1;min-width:130px}.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.tbl th{color:var(--muted);font-weight:600;width:34%}
+.bn{color:var(--accent);font-weight:700}.muted{color:var(--muted);font-size:13px}.cwrap .btn{margin:10px 8px 0 0}</style>
+<div class="cwrap"><div class="row"><div><label for="mtbf">MTBF (horas entre falhas)</label><input id="mtbf" type="text" inputmode="decimal" value="720"></div><div><label for="mttr">MTTR (horas para reparar)</label><input id="mttr" type="text" inputmode="decimal" value="2"></div></div>
+<div class="row"><div><label for="sa">Componente A (disponibilidade, %)</label><input id="sa" type="text" inputmode="decimal" value="99.9"></div><div><label for="sb">Componente B (%)</label><input id="sb" type="text" inputmode="decimal" value="99.9"></div><div><label for="sc">Componente C (%)</label><input id="sc" type="text" inputmode="decimal" value="99.5"></div></div>
+<button class="btn" id="ex1" type="button">Exemplo: MTBF 720 h e MTTR 2 h</button><button class="btn" id="ex2" type="button">Exemplo: três componentes de 99%</button>
+<div id="outm" aria-live="polite"></div></div><div id="app" hidden></div>
+<div class="foot"><span>Módulo 5</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="../assets/app.js"></script><script type="application/json" id="data">{"id": "m05-calculadora-disponibilidade"}</script><script src="../assets/calc-disp.js"></script>
+<script>(function(){var f=document.getElementById('full');if(f){f.href=location.href.split('?')[0]}if(window.top===window.self&&f)f.style.display='none'})();</script>
+</body></html>

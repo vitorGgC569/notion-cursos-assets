@@ -1,0 +1,7 @@
+ANTES:
+gravando em disco -> [PDF] 60
+DEPOIS:
+gravando -> [PDF] 60
+gravando -> 10,20,30
+gravando -> {"dados": [10, 20, 30]}
+teste sem I/O real, a saida ficou em memoria: ['10,20,30']

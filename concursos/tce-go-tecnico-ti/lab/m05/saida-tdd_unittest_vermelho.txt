@@ -1,0 +1,53 @@
+test_quinze_dias_uteis (__main__.TestPrazo.test_quinze_dias_uteis) ... ERROR
+test_sexta_mais_um_dia_util_vai_para_segunda (__main__.TestPrazo.test_sexta_mais_um_dia_util_vai_para_segunda) ... ERROR
+test_um_dia_util_de_segunda_vai_para_terca (__main__.TestPrazo.test_um_dia_util_de_segunda_vai_para_terca) ... ERROR
+test_zero_dias_mantem_a_data (__main__.TestPrazo.test_zero_dias_mantem_a_data) ... ERROR
+
+======================================================================
+ERROR: test_quinze_dias_uteis (__main__.TestPrazo.test_quinze_dias_uteis)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tdd_unittest.py", line 33, in test_quinze_dias_uteis
+    self.assertEqual(IMPL(dt.date(2026, 11, 2), 15), dt.date(2026, 11, 23))
+                     ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "tdd_unittest.py", line 6, in prazo_final_v0
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_sexta_mais_um_dia_util_vai_para_segunda (__main__.TestPrazo.test_sexta_mais_um_dia_util_vai_para_segunda)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tdd_unittest.py", line 31, in test_sexta_mais_um_dia_util_vai_para_segunda
+    self.assertEqual(IMPL(dt.date(2026, 11, 6), 1), dt.date(2026, 11, 9))
+                     ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "tdd_unittest.py", line 6, in prazo_final_v0
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_um_dia_util_de_segunda_vai_para_terca (__main__.TestPrazo.test_um_dia_util_de_segunda_vai_para_terca)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tdd_unittest.py", line 29, in test_um_dia_util_de_segunda_vai_para_terca
+    self.assertEqual(IMPL(dt.date(2026, 11, 2), 1), dt.date(2026, 11, 3))
+                     ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "tdd_unittest.py", line 6, in prazo_final_v0
+    raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_zero_dias_mantem_a_data (__main__.TestPrazo.test_zero_dias_mantem_a_data)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tdd_unittest.py", line 35, in test_zero_dias_mantem_a_data
+    self.assertEqual(IMPL(dt.date(2026, 11, 2), 0), dt.date(2026, 11, 2))
+                     ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "tdd_unittest.py", line 6, in prazo_final_v0
+    raise NotImplementedError
+NotImplementedError
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+FAILED (errors=4)

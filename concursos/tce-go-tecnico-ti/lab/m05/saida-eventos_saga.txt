@@ -1,0 +1,17 @@
+publicando o mesmo evento duas vezes (entrega "pelo menos uma vez"):
+  estoque: baixou 2 caneta -> {'caneta': 3}
+  notificacao: pedido P-1 criado
+  estoque: evento P-1 ja processado, ignorado
+  notificacao: pedido P-1 criado
+
+saga 1 (tudo certo):
+  ok        reservar estoque
+  ok        cobrar
+  ok        emitir nota
+  resultado: True
+
+saga 2 (pagamento falha):
+  ok        reservar estoque
+  FALHOU    cobrar -> cartao recusado
+  compensou reservar estoque
+  resultado: False

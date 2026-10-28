@@ -1,0 +1,7 @@
+Decorator: cafe + leite + chantilly -> R$ 8.50
+Adapter: {'nome': 'Ana'}
+Strategy: economico -> 16
+Strategy: expresso -> 40
+Observer: ['painel=70', 'alarme=nao', 'painel=95', 'alarme=SIM']
+Command executado: 'Ola, TCE'
+Command apos desfazer: 'Ola, '

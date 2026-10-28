@@ -1,0 +1,17 @@
+Disponibilidade -> parada por ano
+  99.000% -> 3.65 dias
+  99.900% -> 8.76 horas
+  99.990% -> 52.56 minutos
+  99.999% -> 5.26 minutos
+
+MTBF = 720 h, MTTR = 2 h -> disponibilidade = 99.723%
+reduzindo o MTTR para 0,5 h -> 99.931%
+
+SLA composto
+  em serie (app, banco, rede): 99.301%  -> parada 2.55 dias/ano
+  dois servidores 99,9% em paralelo: 99.9999%  -> parada 0.53 minutos/ano
+
+Lei de Amdahl: speedup = 1 / ((1 - p) + p / n), p = fracao paralelizavel
+  p = 0.50: n=2: 1.33x, n=4: 1.60x, n=8: 1.78x, n=64: 1.97x | limite = 2.0x
+  p = 0.90: n=2: 1.82x, n=4: 3.08x, n=8: 4.71x, n=64: 8.77x | limite = 10.0x
+  p = 0.95: n=2: 1.90x, n=4: 3.48x, n=8: 5.93x, n=64: 15.42x | limite = 20.0x

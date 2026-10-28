@@ -1,0 +1,9 @@
+test_quinze_dias_uteis (__main__.TestPrazo.test_quinze_dias_uteis) ... ok
+test_sexta_mais_um_dia_util_vai_para_segunda (__main__.TestPrazo.test_sexta_mais_um_dia_util_vai_para_segunda) ... ok
+test_um_dia_util_de_segunda_vai_para_terca (__main__.TestPrazo.test_um_dia_util_de_segunda_vai_para_terca) ... ok
+test_zero_dias_mantem_a_data (__main__.TestPrazo.test_zero_dias_mantem_a_data) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK

@@ -1,0 +1,19 @@
+(function(){
+var K=window.K,X=K.X;
+function base(extra){return [X.zone('z',10,10,700,330,'Observer (comportamental)'),X.box('s',280,60,170,70,'Sensor','a','Subject: guarda o estado')].concat(extra||[])}
+var S=[
+{label:'0. O problema',title:'Vários objetos dependem do estado de um só',text:'<p>Um sensor de temperatura precisa avisar o painel e o alarme sempre que muda. Se o sensor chamar cada um diretamente, fica <b>acoplado</b> a todos. O <b>Observer</b> resolve com uma relação de um para muitos: o sujeito notifica quem se inscreveu, sem conhecê-los.</p>',
+ scene:function(){return base([X.box('p',60,220,170,60,'Painel','n'),X.box('a',480,220,170,60,'Alarme','n'),X.line('l1',320,132,170,218,'m',true),X.line('l2',410,132,540,218,'m',true),X.text('t',200,170,'acoplamento direto','t')])}},
+{label:'1. Interface',title:'O sujeito conhece só a interface Observer',text:'<p>Cada interessado implementa uma interface <b>Observer</b> com o método <code>atualizar()</code>. O sujeito guarda uma lista dessa interface e não sabe se é painel, alarme ou log. Isso reduz o acoplamento e permite incluir novos observadores sem alterar o sujeito.</p>',
+ scene:function(){return base([X.box('i',280,200,170,60,'«interface» Observer','n','atualizar(valor)'),X.line('l',365,132,365,198,'a',true),X.text('t',40,150,'o sujeito depende da\nabstração, não das classes','t')])}},
+{label:'2. Assinar',title:'Assinar: os observadores se registram',text:'<p>O painel e o alarme chamam <code>assinar()</code> no sensor. O sujeito apenas adiciona à lista. Também existe o inverso, <code>cancelar()</code>, para sair da lista.</p>',
+ scene:function(){return base([X.box('p',60,220,170,60,'Painel','n'),X.box('a',480,220,170,60,'Alarme','n'),X.line('l1',170,218,300,132,'a',true),X.line('l2',540,218,430,132,'a',true),X.text('t1',100,170,'assinar()','t'),X.text('t2',520,170,'assinar()','t'),X.pill('lista',250,150,'lista: [painel, alarme]','a',190)])}},
+{label:'3. Mudança de estado',title:'O estado muda: valor = 95',text:'<p>O sensor recebe uma nova leitura, <b>95</b>. Mudar o estado dispara a notificação. É o gatilho do padrão.</p>',
+ scene:function(){return [X.zone('z',10,10,700,330,'Observer (comportamental)'),X.box('s',280,60,170,70,'Sensor','d','valor = 95'),X.box('p',60,220,170,60,'Painel','n'),X.box('a',480,220,170,60,'Alarme','n')]}},
+{label:'4. Notificar',title:'Notificar: o sujeito chama atualizar() em cada um',text:'<p>O sujeito percorre a lista e chama <code>atualizar(95)</code> em cada observador. O painel exibe o valor; o alarme compara com o limite e dispara. Cada um reage do seu jeito, e o sensor não sabe o que eles fazem.</p>',
+ scene:function(){return [X.zone('z',10,10,700,330,'Observer (comportamental)'),X.box('s',280,60,170,70,'Sensor','a','valor = 95'),X.box('p',60,220,170,60,'Painel','a','exibe 95'),X.box('a',480,220,170,60,'Alarme','a','95 > 80: SIM'),X.line('l1',300,132,170,218,'a',true),X.line('l2',430,132,540,218,'a',true),X.text('t1',120,170,'atualizar(95)','t'),X.text('t2',500,170,'atualizar(95)','t')]}},
+{label:'5. Parentes',title:'Onde se vê o Observer e com o que não confundir',text:'<p>Aparece em interfaces gráficas (eventos), em publicação e assinatura de mensagens e em frameworks reativos. Na <b>arquitetura orientada a eventos</b> a ideia é a mesma, mas com um <b>broker</b> no meio. Não confunda com o <b>Mediator</b> (centraliza a comunicação) nem com o <b>Strategy</b> (troca algoritmos).</p>',
+ scene:function(){return [X.zone('z',10,10,700,330,'Comparando'),X.box('o',40,60,190,90,'Observer','a','um para muitos\nnotifica mudança de estado'),X.box('m',265,60,190,90,'Mediator','n','centraliza a\ncomunicação entre objetos'),X.box('st',490,60,190,90,'Strategy','n','troca o algoritmo\npor composição'),X.text('t',40,200,'Todos são padrões comportamentais da GoF (11 no total).','t')]}}
+];
+K.explain({w:720,h:350,steps:S,alt:'Animação do padrão Observer: assinar, mudar o estado e notificar'});
+})();
