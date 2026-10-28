@@ -1,0 +1,26 @@
+$ python l02_caminho_critico_pert.py
+== 1. CPM: passagem para frente e para tras ==
+ativ dur  ES  EF  LS  LF  folga critica
+   A   3   0   3   0   3     0  sim
+   B   4   3   7   3   7     0  sim
+   C   2   3   5   7   9     4  
+   D   5   7  12   7  12     0  sim
+   E   3   7  10   9  12     2  
+   F   4  12  16  12  16     0  sim
+   G   2  16  18  16  18     0  sim
+Caminho critico: A -> B -> D -> F -> G | duracao do projeto = 18 dias
+
+== 2. PERT: duracao esperada e desvio-padrao por atividade (o, m, p) ==
+A: te = (2 + 4*3 + 4)/6 = 3.000  sigma = 0.333
+B: te = (3 + 4*4 + 7)/6 = 4.333  sigma = 0.667
+C: te = (1 + 4*2 + 3)/6 = 2.000  sigma = 0.333
+D: te = (3 + 4*5 + 9)/6 = 5.333  sigma = 1.000
+E: te = (2 + 4*3 + 4)/6 = 3.000  sigma = 0.333
+F: te = (3 + 4*4 + 7)/6 = 4.333  sigma = 0.667
+G: te = (1 + 4*2 + 3)/6 = 2.000  sigma = 0.333
+Caminho critico (A,B,D,F,G): soma de te = 19.000 dias, variancia = 2.1111, sigma = 1.453
+
+== 3. Monte Carlo (triangular, 20.000 execucoes, semente 11) ==
+media = 19.99 dias | P50 = 19.92 | P80 = 21.56 | P95 = 23.15
+Probabilidade de terminar em ate 18 dias (o CPM com duracoes mais provaveis): 14.3%
+Moral: somar as duracoes mais provaveis do caminho critico subestima o prazo, porque ha caminhos quase criticos e riscos nas duas pontas.

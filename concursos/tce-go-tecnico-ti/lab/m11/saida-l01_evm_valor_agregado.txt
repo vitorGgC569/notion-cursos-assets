@@ -1,0 +1,26 @@
+$ python l01_evm_valor_agregado.py
+== 1. Valores basicos (fim do mes 3) ==
+BAC = 500,000.00  PV = 270,000.00  EV = 213,000.00  AC = 255,000.00
+CV = EV - AC = -42,000.00   SV = EV - PV = -57,000.00
+CPI = EV/AC = 0.8353   SPI = EV/PV = 0.7889
+CPI < 1: gasta mais do que entrega. SPI < 1: atrasado em relacao ao cronograma.
+
+== 2. Previsoes (tres formas de EAC) ==
+EAC (desvio atipico)  = AC + (BAC-EV)         = 542,000.00
+EAC (desvio tipico)   = BAC/CPI                = 598,591.55
+EAC (CPI e SPI)       = AC + (BAC-EV)/(CPI*SPI) = 690,538.58
+ETC = EAC - AC = 343,591.55   VAC = BAC - EAC = -98,591.55  (negativo = estouro)
+
+== 3. TCPI: que desempenho de custo e preciso daqui para frente? ==
+TCPI para fechar no BAC = (BAC-EV)/(BAC-AC) = 1.1714
+TCPI para fechar no EAC = (BAC-EV)/(EAC-AC) = 0.8353
+
+== 4. Conferencia de identidades ==
+TCPI(EAC tipico) = CPI atual: 0.8353 = 0.8353  -> OK (a previsao tipica supoe manter o desempenho atual)
+
+== 5. Por entrega ==
+Levantamento de requisitos   EV=   60,000 PV=   60,000 AC=  66,000 CPI=0.909
+Arquitetura e prototipo      EV=   81,000 PV=   90,000 AC=  99,000 CPI=0.818
+Desenvolvimento modulo A     EV=   60,000 PV=   90,000 AC=  72,000 CPI=0.833
+Desenvolvimento modulo B     EV=   12,000 PV=   30,000 AC=  18,000 CPI=0.667
+Testes e implantacao         EV=        0 PV=        0 AC=       0 CPI=nan

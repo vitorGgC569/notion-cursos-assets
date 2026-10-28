@@ -1,0 +1,19 @@
+$ python l06_kanban_scrum.py
+== 1. Simulacao de um quadro Kanban (400 dias, entrada media 1,0 item/dia, capacidade de saida media 1,1 item/dia) ==
+concluidos = 421 | vazao = 1.052 itens/dia | lead time medio = 14.82 dias | WIP medio = 16.07
+Lei de Little: L = lambda x W = 1.052 x 14.82 = 15.60  (WIP medio medido = 16.07)
+A igualdade vale aproximadamente: itens ainda na fila no ultimo dia nao entram no lead time medido.
+
+== 2. Percentis de lead time (para prometer prazo) ==
+P50 = 16 dias | P85 = 20 dias | P95 = 22 dias | maximo = 26 dias
+
+== 3. Efeito de limitar o WIP: mesma vazao, menos espera (formula de Little) ==
+WIP = 20 com vazao 1.05/dia -> lead time medio =   19.0 dias
+WIP = 10 com vazao 1.05/dia -> lead time medio =    9.5 dias
+WIP =  5 com vazao 1.05/dia -> lead time medio =    4.8 dias
+WIP =  3 com vazao 1.05/dia -> lead time medio =    2.9 dias
+
+== 4. Scrum: velocidade e previsao ==
+velocidade das 6 sprints = [21, 18, 24, 20, 23, 19] | media = 20.83 | desvio-padrao = 2.11
+backlog restante = 150 pontos -> sprints previstas = 7.20 (otimista 6.54, pessimista 8.01)
+Previsao em intervalo, nao em numero unico: velocidade e historico, nao meta.

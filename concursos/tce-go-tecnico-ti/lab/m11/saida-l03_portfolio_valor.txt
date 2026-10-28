@@ -1,0 +1,26 @@
+$ python l03_portfolio_valor.py
+== 1. Indicadores por projeto (taxa de desconto 10%) ==
+projeto                                   VPL     TIR  payback  ROI 5a
+Modernizar sistema de processos       217,987   29.1%    2.53a 105.0%
+Painel de auditoria (BI)              140,540   29.3%    2.55a 108.0%
+Migracao para nuvem                   257,963   24.6%    2.83a  91.7%
+Atualizar rede interna                 14,725   11.8%    3.67a  40.0%
+Portal da transparencia v2             57,843   15.4%    3.57a  60.0%
+Servico de assinatura digital          56,316   26.3%    2.70a  95.8%
+Treinamento em seguranca               24,633   20.7%    3.00a  75.0%
+Intranet nova                         -61,592      <0    nunca  -7.5%
+
+== 2. Selecao sob orcamento de R$ 1.000.000: maximizar o VPL total ==
+Melhor combinacao por VPL: Modernizar sistema de processos; Migracao para nuvem
+VPL total = 475,950 | custo = 1,000,000
+
+== 3. Ranking por nota estrategica x indice de lucratividade (VPL/custo) ==
+1. Modernizar sistema de processos    nota=9 IL=0.545 escore=4.905
+2. Painel de auditoria (BI)           nota=8 IL=0.562 escore=4.497
+3. Servico de assinatura digital      nota=7 IL=0.469 escore=3.285
+4. Migracao para nuvem                nota=7 IL=0.430 escore=3.010
+5. Treinamento em seguranca           nota=5 IL=0.308 escore=1.540
+6. Portal da transparencia v2         nota=8 IL=0.165 escore=1.322
+7. Atualizar rede interna             nota=6 IL=0.049 escore=0.294
+8. Intranet nova                      nota=3 IL=-0.308 escore=-0.924
+Observacao: o ranking pelo escore nao e o mesmo da selecao por VPL; governanca de portfolio exige criterios explicitos e aprovados.

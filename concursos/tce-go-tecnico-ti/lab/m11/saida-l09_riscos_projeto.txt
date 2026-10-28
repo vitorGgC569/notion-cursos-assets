@@ -1,0 +1,23 @@
+$ python l09_riscos_projeto.py
+== 1. Registro de riscos e matriz 3 x 3 (probabilidade x impacto) ==
+R2 P=0.50 (alta) I=  -60,000 (medio) escore=6 | Mudanca de requisitos pela alta gestao | mitigar: controle integrado de mudancas
+R3 P=0.20 (media) I= -150,000 (alto) escore=6 | Vulnerabilidade critica descoberta antes da implantacao | transferir/mitigar: pentest e seguro cibernetico
+R4 P=0.15 (media) I= -120,000 (alto) escore=6 | Equipe-chave sai do projeto | mitigar: documentacao e dupla de conhecimento
+R1 P=0.30 (media) I=  -80,000 (medio) escore=4 | Fornecedor atrasa a entrega de licencas | mitigar: clausula de multa e segundo fornecedor
+R5 P=0.25 (media) I=   70,000 (medio) escore=4 | Reuso de componente de outro orgao reduz o custo | explorar: priorizar a busca por componentes
+R6 P=0.05 (baixa) I=  -30,000 (baixo) escore=1 | Greve de transporte atrasa a homologacao | aceitar: sem acao, monitorar
+
+== 2. Valor monetario esperado (VME = probabilidade x impacto) ==
+R1: 0.30 x   -80,000 =    -24,000
+R2: 0.50 x   -60,000 =    -30,000
+R3: 0.20 x  -150,000 =    -30,000
+R4: 0.15 x  -120,000 =    -18,000
+R5: 0.25 x    70,000 =     17,500
+R6: 0.05 x   -30,000 =     -1,500
+Soma das ameacas = -103,500 | soma das oportunidades = 17,500 | saldo = -86,000
+Reserva de contingencia (riscos identificados) = |soma das ameacas| = 103,500 | reserva gerencial cobre os riscos nao identificados
+
+== 3. Monte Carlo do custo dos riscos (30.000 execucoes, semente 3) ==
+media = -86,341 | P50 = -60,000 | P80 = -150,000 | P90 = -210,000  (valores negativos = perda)
+Probabilidade de perda total maior que a reserva de 103,500: 37.8%
+A reserva pelo VME cobre so a media; para um nivel de confianca de 80% ou 90% a reserva precisa ser maior.

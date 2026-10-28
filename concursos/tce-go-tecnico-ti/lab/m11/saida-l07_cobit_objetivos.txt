@@ -1,0 +1,35 @@
+$ python l07_cobit_objetivos.py
+== 1. Estrutura do nucleo do COBIT 2019 ==
+EDM: Avaliar, Dirigir e Monitorar (governanca) -> 5 objetivos (EDM01 a EDM05)
+APO: Alinhar, Planejar e Organizar -> 14 objetivos (APO01 a APO14)
+BAI: Construir, Adquirir e Implementar -> 11 objetivos (BAI01 a BAI11)
+DSS: Entregar, Servir e Suportar -> 6 objetivos (DSS01 a DSS06)
+MEA: Monitorar, Avaliar e Analisar -> 4 objetivos (MEA01 a MEA04)
+Total = 40 objetivos; governanca = 5, gestao = 35
+
+== 2. Exemplos de codigos ==
+EDM03 = Otimizacao de riscos
+APO12 = Riscos
+BAI06 = Mudancas de TI
+DSS02 = Requisicoes de servico e incidentes
+DSS03 = Problemas
+MEA01 = Desempenho e conformidade
+
+== 3. Niveis de capacidade (0 a 5) ==
+nivel 0: incompleto
+nivel 1: executado
+nivel 2: gerenciado
+nivel 3: estabelecido
+nivel 4: previsivel
+nivel 5: otimizado
+
+== 4. Priorizacao DIDATICA de objetivos por fatores de projeto (nao e o kit oficial da ISACA) ==
+APO02 Estrategia                         pontuacao = 9
+APO12 Riscos                             pontuacao = 9
+APO13 Seguranca                          pontuacao = 9
+DSS05 Servicos de seguranca              pontuacao = 9
+MEA03 Conformidade com requisitos externos pontuacao = 9
+BAI01 Programas                          pontuacao = 8
+APO04 Inovacao                           pontuacao = 6
+APO09 Acordos de servico                 pontuacao = 6
+Fatores de projeto reais: sao 11 (estrategia, metas, perfil de risco, questoes de I&T, ameacas, conformidade, papel da TI, fornecimento, metodos, adocao de tecnologia, porte).

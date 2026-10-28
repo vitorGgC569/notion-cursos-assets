@@ -1,0 +1,41 @@
+$ python l05_itsm_sqlite.py
+== 1. Matriz de prioridade (impacto x urgencia; 1 = alto) e meta de resolucao ==
+impacto 1 x urgencia 1 -> P1 (meta 60 min)
+impacto 1 x urgencia 2 -> P1 (meta 60 min)
+impacto 1 x urgencia 3 -> P2 (meta 240 min)
+impacto 2 x urgencia 1 -> P1 (meta 60 min)
+impacto 2 x urgencia 2 -> P2 (meta 240 min)
+impacto 2 x urgencia 3 -> P3 (meta 480 min)
+impacto 3 x urgencia 1 -> P2 (meta 240 min)
+impacto 3 x urgencia 2 -> P3 (meta 480 min)
+impacto 3 x urgencia 3 -> P4 (meta 1440 min)
+
+== 2. Incidentes por prioridade: volume, MTTR e violacao do SLA ==
+P1:  8 incidentes | MTTR =   211.9 min | violaram o SLA: 8 (100%)
+P2: 15 incidentes | MTTR =   218.1 min | violaram o SLA: 6 (40%)
+P3:  9 incidentes | MTTR =   524.1 min | violaram o SLA: 4 (44%)
+P4:  8 incidentes | MTTR =   240.6 min | violaram o SLA: 0 (0%)
+Total: 40 incidentes, 18 fora do SLA (45%); MTTR geral = 290.2 min
+
+== 3. Candidatos a problema: CI com 3 ou mais incidentes (consulta SQL) ==
+db-prod      incidentes=14  MTTR=185.0 min
+srv-app-01   incidentes=7  MTTR=389.3 min
+fw-borda     incidentes=6  MTTR=350.7 min
+srv-mail     incidentes=5  MTTR=213.6 min
+sw-core      incidentes=4  MTTR=673.8 min
+vpn-gw       incidentes=3  MTTR=101.3 min
+
+== 4. Incidentes ligados a problemas conhecidos ==
+Lentidao recorrente do sistema de processos | causa raiz: indice ausente no banco | incidentes: 15
+Quedas do VPN | causa raiz: firmware com falha de memoria | incidentes: 1
+
+== 5. Mudancas (change enablement): taxa de sucesso por tipo e incidentes causados ==
+emergencia  total= 6 sucesso= 6 (100%) causaram incidente=0
+normal      total=29 sucesso=23 (79%) causaram incidente=3
+padrao      total=25 sucesso=25 (100%) causaram incidente=0
+
+== 6. Impacto de um CI no servico (CMDB): quais servicos dependem de cada CI ==
+Acesso a internet      <- fw-borda, sw-core
+Acesso remoto          <- vpn-gw
+E-mail                 <- srv-mail
+Sistema de processos   <- srv-app-01, srv-app-02, db-prod

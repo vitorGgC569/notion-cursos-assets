@@ -1,0 +1,30 @@
+$ python l04_sla_disponibilidade.py
+== 1. Disponibilidade -> tempo de parada por ano ==
+   99.0% ->   87.600 h/ano =    5256.0 min/ano =   438.0 min/mes
+   99.5% ->   43.800 h/ano =    2628.0 min/ano =   219.0 min/mes
+   99.9% ->    8.760 h/ano =     525.6 min/ano =    43.8 min/mes
+  99.95% ->    4.380 h/ano =     262.8 min/ano =    21.9 min/mes
+  99.99% ->    0.876 h/ano =      52.6 min/ano =     4.4 min/mes
+ 99.999% ->    0.088 h/ano =       5.3 min/ano =     0.4 min/mes
+
+== 2. Composicao: serie x paralelo ==
+3 componentes de 99,9% em SERIE    = 99.7003%
+2 componentes de 99,0% em PARALELO = 99.9900%
+Arquitetura: balanceador 99,95% -> [2 servidores 99,5% em paralelo] -> banco 99,9% = 99.8476%
+Parada esperada: 13.35 h/ano
+
+== 3. Verificacao por enumeracao de estados (2 servidores 99,5%) ==
+P(pelo menos um funcionando) por enumeracao = 99.9975%  (formula: 99.9975%)
+
+== 4. Orcamento de erro de um SLO de 99,9% em 30 dias ==
+Minutos no mes = 43200; orcamento de erro = 43.20 min
+  incidentes somaram    10 min -> consumo  23.1% -> dentro do orcamento
+  incidentes somaram    30 min -> consumo  69.4% -> dentro do orcamento
+  incidentes somaram  43.2 min -> consumo 100.0% -> SLO violado
+  incidentes somaram    60 min -> consumo 138.9% -> SLO violado
+
+== 5. Credito de SLA (tabela contratual hipotetica) ==
+  medido  99.95% -> credito   0% = R$ 0.00 de R$ 80,000.00
+  medido   99.5% -> credito  10% = R$ 8,000.00 de R$ 80,000.00
+  medido   97.0% -> credito  25% = R$ 20,000.00 de R$ 80,000.00
+  medido   90.0% -> credito 100% = R$ 80,000.00 de R$ 80,000.00

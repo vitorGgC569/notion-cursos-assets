@@ -1,0 +1,47 @@
+$ python l08_contratacao_tic.py
+== 1. Estimativa de valor (art. 23): parametros combinados ==
+painel de precos (mediana)       R$ 118,000.00
+contratacao similar (1 ano)      R$ 124,500.00
+midia especializada              R$ 131,000.00
+fornecedor A                     R$ 135,000.00
+fornecedor B                     R$ 128,000.00
+fornecedor C                     R$ 142,000.00
+menor = 118,000.00 | mediana = 129,500.00 | media = 129,750.00 | maior = 142,000.00
+O art. 23 manda definir o valor pelo MELHOR preco aferido; a metodologia deve ser justificada no processo, e as cotacoes diretas (minimo de 3 fornecedores, com justificativa) tem validade de ate 6 meses.
+
+== 2. Modalidade e criterio de julgamento (regras dos arts. 6, 28, 29, 32, 33 e 36) ==
+- Notebooks e licencas de uso padronizadas
+    modalidade: pregao (art. 6, XLI e art. 29)
+    criterio: menor preco ou maior desconto
+- Sustentacao de sistemas sob medida (servico especial de TIC)
+    modalidade: concorrencia (art. 6, XXXVIII)
+    criterio: tecnica e preco (art. 36, par. 1, III) quando o ETP demonstrar a relevancia da qualidade tecnica
+- Solucao de IA ainda sem especificacao fechada, com inovacao tecnologica
+    modalidade: dialogo competitivo (art. 32), se justificado
+    criterio: definido ao fim do dialogo
+- Consultoria predominantemente intelectual
+    modalidade: concorrencia (art. 6, XXXVIII)
+    criterio: menor preco, melhor tecnica, tecnica e preco, maior retorno economico ou maior desconto
+
+== 3. Tecnica e preco (art. 36, par. 2: ate 70% de peso para a proposta tecnica) ==
+peso tecnico = 70%, peso preco = 30%
+  Empresa X: nota tecnica 90, nota de preco 66.67 -> nota final 83.00
+  Empresa Y: nota tecnica 80, nota de preco 83.33 -> nota final 81.00
+  Empresa Z: nota tecnica 70, nota de preco 100.00 -> nota final 79.00
+  vencedora: Empresa X
+peso tecnico = 50%, peso preco = 50%
+  Empresa X: nota tecnica 90, nota de preco 66.67 -> nota final 78.33
+  Empresa Y: nota tecnica 80, nota de preco 83.33 -> nota final 81.67
+  Empresa Z: nota tecnica 70, nota de preco 100.00 -> nota final 85.00
+  vencedora: Empresa Z
+
+== 4. Fases da licitacao (art. 17) e documentos da fase preparatoria (art. 18) ==
+1. preparatoria
+2. divulgacao do edital
+3. apresentacao de propostas e lances
+4. julgamento
+5. habilitacao
+6. recursal
+7. homologacao
+Fase preparatoria: ETP -> termo de referencia -> orcamento estimado -> edital e minuta de contrato -> analise de riscos (art. 18).
+Fases da IN SGD/ME 94/2022 (SISP, Executivo federal): planejamento da contratacao, selecao do fornecedor e gestao do contrato, com gerenciamento de riscos em paralelo.

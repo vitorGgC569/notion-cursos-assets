@@ -1,0 +1,15 @@
+$ python l10_conferencia.py
+OK  CPI = EV/AC: 0.835294 == 0.835294
+OK  EAC tipico = AC + ETC com ETC=(BAC-EV)/CPI: 598592 == 598592
+OK  TCPI(EAC tipico) = CPI: 0.835294 == 0.835294
+OK  te de (3,5,9) = 32/6: 5.33333 == 5.33333
+OK  paralelo 99,5% x2: 0.999975 == 0.999975
+OK  paralelo 99% x3: 0.999999 == 0.999999
+OK  serie 99,9% x3: 0.997003 == 0.997003
+OK  VPL na TIR = 0: 1.16415e-10 == 0
+OK  Little: L = lambda W com fila D/D/1 (L medido pelo tempo ocupado): 0.75 == 0.75
+OK  regra de modalidade (art. 29): 3 casos
+OK  COBIT 2019: total de objetivos: 40 == 40
+OK  orcamento de erro de 99,9% em 30 dias (min): 43.2 == 43.2
+
+14 conferencias passaram.
