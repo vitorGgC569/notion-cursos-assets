@@ -1,0 +1,36 @@
+$ python l07_mcp.py
+--- 1. descoberta (tools/list) ---
+ferramenta: buscar_norma | descricao: Busca trechos da norma interna TI-07 (somente leitura). | parametros: ['consulta', 'k']
+ferramenta: contar_trechos | descricao: Calcula quantos trechos um documento gera ao ser fatiado para RAG. | parametros: ['palavras', 'tamanho', 'sobreposicao']
+
+--- 2. chamada (tools/call) ---
+buscar_norma -> [S08] Norma TI-07, art. 8. Cada execução de um agente tem limite de 6 passos. Ao atingir o limite, o agente de
+contar_trechos(1000,120,20) -> 10 | isError = False
+
+--- 3. erro de ferramenta inexistente / argumento invalido ---
+Tool 'apagar_tudo' failed: 'Unknown tool: apagar_tudo'
+apagar_tudo -> isError = True | Unknown tool: apagar_tudo
+Tool 'contar_trechos' rejected arguments: ['palavras']
+contar_trechos -> isError = True | Error executing tool contar_trechos: 1 validation error for contar_trechosArguments
+palavr
+
+--- 4. recursos e prompts ---
+modelos de recurso: ['norma://ti-07/{secao}']
+recurso S08 -> Norma TI-07, art. 8. Cada execução de um agente tem limite de 6 passos. Ao ating
+prompts: ['revisar_pr']
+prompt -> Revise o pull request abaixo seguindo a norma TI-07 (revisão humana, testes, cobertura mín
+
+--- 5. a mesma conversa em JSON-RPC cru, linha a linha, por stdio ---
+CLIENTE -> {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "cru", "version": "0"}}}
+SERVIDOR-> {"jsonrpc":"2.0","id":1,"result":{"capabilities":{"prompts":{"listChanged":false},"resources":{"listChanged":false,"subscribe":false},"tools":{"listChanged":false}},"protocolVersion":"2025-06-18","serverInfo":{"name":"normas-ti","
+CLIENTE -> {"jsonrpc": "2.0", "method": "notifications/initialized"}
+CLIENTE -> {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}
+SERVIDOR-> {"jsonrpc":"2.0","id":2,"result":{"tools":[{"description":"Busca trechos da norma interna TI-07 (somente leitura).","inputSchema":{"properties":{"consulta":{"title":"Consulta","type":"string"},"k":{"default":1,"title":"K","type":"
+CLIENTE -> {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "contar_trechos", "arguments": {"palavras": 3000, "tamanho": 120, "sobreposicao": 20}}}
+SERVIDOR-> {"jsonrpc":"2.0","id":3,"result":{"content":[{"text":"30","type":"text"}],"isError":false,"structuredContent":{"result":30}}}
+
+--- 6. a revisão 2026-07-28: sem initialize; server/discover e metadados em cada requisição ---
+CLIENTE -> {"jsonrpc": "2.0", "id": 1, "method": "server/discover", "params": {"_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "cru", "version": "0"}, "io.modelcontextprotocol/clientCapabilities": {}}}}
+SERVIDOR-> {"jsonrpc":"2.0","id":1,"result":{"cacheScope":"private","capabilities":{"prompts":{"listChanged":true},"resources":{"listChanged":true,"subscribe":true},"tools":{"listChanged":true}},"resultType":"complete","supportedVersions":["
+CLIENTE -> {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "contar_trechos", "arguments": {"palavras": 3000, "tamanho": 120, "sobreposicao": 20}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientInfo": {"name": "cru", "version": "0"}, "io.
+SERVIDOR-> {"jsonrpc":"2.0","id":2,"result":{"content":[{"text":"30","type":"text"}],"isError":false,"resultType":"complete","structuredContent":{"result":30},"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"normas-ti","version":""}}}}

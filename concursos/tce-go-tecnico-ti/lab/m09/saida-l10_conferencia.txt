@@ -1,0 +1,19 @@
+$ python l10_conferencia.py
+
+trechos   python=[10, 30, 11, 1]
+          js    =[10, 30, 11, 1] -> IGUAIS
+contexto  python=[75000, 480]
+          js    =[75000, 480] -> IGUAIS
+cos       python=[0.974632, 0.0, 0.8]
+          js    =[0.974632, 0, 0.8] -> IGUAIS
+prec      python=[[0.6666666666666666, 0.6666666666666666, 1.0], [0.0, 0.0, 0.3333333333333333]]
+          js    =[[0.6666666666666666, 0.6666666666666666, 1], [0, 0, 0.3333333333333333]] -> IGUAIS
+passk     python=[0.4, 0.7, 0.916667, 0.0, 1.0]
+          js    =[0.4, 0.7, 0.916667, 0, 1] -> IGUAIS
+agente    python=[7500, 5900, 6500]
+          js    =[7500, 5900, 6500] -> IGUAIS
+
+--- caso TJ-RJ (chunk_size=5000, k=15) ---
+chunk_size=5000 caracteres, k=15 -> ate 75000 caracteres recuperados (~ 18750 tokens a 4 car/token)
+com janela de 4096 tokens o prompt NAO cabe: erro de contexto; reduzir k ou chunk_size
+chunk_overlap=0: sem sobreposicao, uma resposta que atravessa a fronteira de dois trechos pode ser cortada

@@ -1,0 +1,21 @@
+$ python l04_embeddings.py
+modelo: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | dimensao: 384 | vetores: 12
+
+--- 1. cosseno: numpy x formula manual ---
+cos(numpy)  = 0.699164
+cos(manual) = 0.699164
+
+--- 2. ranking denso, BM25 e hibrido (RRF, k=60) ---
+BM25 (lexical)       acerto@1=10/10 acerto@3=10/10 MRR=1.000
+denso (embeddings)   acerto@1=10/10 acerto@3=10/10 MRR=1.000
+hibrido RRF          acerto@1=10/10 acerto@3=10/10 MRR=1.000
+
+--- 3. consulta parafraseada (sem palavras em comum com o texto) ---
+Quem pode usar o programa de apoio ao código sem pedir permissão?
+   gabarito=S01 denso=S07 bm25=S07
+Quanto tempo posso levar para comunicar um problema com a IA?
+   gabarito=S05 denso=S05 bm25=S12
+O robô pode mandar mensagem eletrônica sozinho?
+   gabarito=S07 denso=S07 bm25=S02
+Quantas etapas o robô autônomo pode executar de uma vez?
+   gabarito=S08 denso=S08 bm25=S02

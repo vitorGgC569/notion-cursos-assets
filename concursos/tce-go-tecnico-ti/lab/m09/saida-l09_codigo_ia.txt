@@ -1,0 +1,29 @@
+$ python l09_codigo_ia.py
+soma_pares           tokens_saida= 27 -> passou
+eh_palindromo        tokens_saida= 29 -> falhou: SyntaxError: invalid syntax
+maior_diferenca      tokens_saida= 43 -> falhou: ValueError: Lista deve conter pelo menos dois elementos
+contar_vogais        tokens_saida= 51 -> passou
+fatorial             tokens_saida= 35 -> passou
+fizzbuzz             tokens_saida= 64 -> passou
+remover_duplicados   tokens_saida= 17 -> falhou: AssertionError
+media_ponderada      tokens_saida= 67 -> falhou: AssertionError
+
+pass@1 (1 amostra por tarefa, temperatura 0): 4/8 = 50%
+
+--- laço de correção: devolver a mensagem do teste ao modelo e tentar de novo (1 retentativa) ---
+eh_palindromo        1a tentativa: falhou: SyntaxError: invalid syntax      | 2a tentativa: passou
+maior_diferenca      1a tentativa: falhou: ValueError: Lista deve conter pe | 2a tentativa: falhou: ValueError: Lista deve conter pe
+remover_duplicados   1a tentativa: falhou: AssertionError                   | 2a tentativa: falhou: AssertionError
+media_ponderada      1a tentativa: falhou: AssertionError                   | 2a tentativa: falhou: AssertionError
+com 1 retentativa guiada pelo teste: 5/8 = 62% (de 4/8 na primeira)
+
+--- estimador pass@k (n amostras, c corretas) ---
+n= 5 c=2 k=1 -> pass@k = 0.4000
+n= 5 c=2 k=2 -> pass@k = 0.7000
+n=10 c=3 k=1 -> pass@k = 0.3000
+n=10 c=3 k=5 -> pass@k = 0.9167
+n= 5 c=0 k=3 -> pass@k = 0.0000
+n= 5 c=4 k=2 -> pass@k = 1.0000
+
+--- o teste automatizado como porteiro ---
+codigo plausivel e errado: falhou: AssertionError

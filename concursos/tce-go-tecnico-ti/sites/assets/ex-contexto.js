@@ -1,0 +1,17 @@
+(function(){
+var K=window.K,X=K.X;
+function b(i,x,y,w,h,t,c,s){return X.box(i,x,y,w,h,t,c,s)}
+var S=[
+{label:'0. Tokens',title:'O modelo não lê palavras: lê tokens',text:'<p>O texto é quebrado em <b>tokens</b>. No laboratório 1: uma frase em português de 56 caracteres gerou 15 tokens (3,73 caracteres por token); em inglês, 12; um código de 2 linhas, 12; uma sequência de números e data, 29 tokens para 29 caracteres.</p>',cmd:'portugues  caracteres= 56 palavras=10 tokens=15 chars/token=3.73',out:'numeros    caracteres= 29 palavras= 3 tokens=29 chars/token=1.00',
+ scene:function(){return [X.zone('z',10,10,700,330,'Tokenização'),b('t',30,70,640,60,'"O assistente deve registrar o incidente em até 48 horas."','n'),b('k',30,170,640,70,'15 tokens (3,73 caracteres por token)','a','números e código gastam mais tokens por caractere')]}},
+{label:'1. Janela',title:'A janela de contexto é finita',text:'<p>Entrada <b>e</b> saída dividem a janela. O modelo do laboratório tem 4096 tokens; um texto de 5000 palavras gerou 5002 tokens e o pedido foi recusado com erro de contexto.</p>',cmd:'texto de 5000 palavras -> 5002 tokens; janela = 4096',out:'erro: ValueError Requested tokens (5034) exceed context window of 4096',
+ scene:function(){return [X.zone('z',10,10,700,330,'Janela'),b('w',30,90,400,70,'janela de 4096 tokens','a'),b('p',30,190,640,70,'prompt de 5002 tokens (não cabe)','d','erro de contexto'),X.text('t',450,130,'limite','t','start')]}},
+{label:'2. Orçamento',title:'Conta de orçamento da janela',text:'<p>Janela de 8000 tokens: sistema 500 + histórico 2500 + 3 trechos × 900 = 5700 na entrada. Sobram <b>2300</b> para a resposta. Em RAG, aumentar k enche a janela (no laboratório: 151 tokens médios com k=1 e 299 com k=3).</p>',
+ scene:function(){return [X.zone('z',10,10,700,330,'8000 tokens'),b('a',30,100,60,60,'500','n','sistema'),b('b',90,100,250,60,'2500','n','histórico'),b('c',340,100,270,60,'3 × 900 = 2700','a','trechos'),b('d',610,100,60,60,'2300','d','resposta'),X.text('t',40,220,'8000 − (500 + 2500 + 2700) = 2300','b','start')]}},
+{label:'3. Temperatura',title:'Parâmetros de geração',text:'<p>Temperatura 0: a mesma resposta nas 3 execuções do laboratório. Temperatura 1,3: 4 sementes, 4 respostas diferentes. Para respostas reproduzíveis (testes, extração), use temperatura baixa; para criatividade, mais alta.</p>',cmd:'temperatura 0.0, 3 execucoes: ["CodeGuardian" x3] | identicas: True',out:'temperatura 1.3, sementes 1-4: 4 respostas | distintas: 4',
+ scene:function(){return [X.zone('z',10,10,700,330,'Amostragem'),b('a',40,90,300,100,'temperatura 0','a','sempre o token mais provável'),b('b',380,90,290,100,'temperatura alta','n','mais variação, mais risco'),X.text('t',40,250,'top-p e top-k limitam os candidatos; a semente reproduz a amostragem.','t','start')]}},
+{label:'4. Custo de agente',title:'O histórico reenviado cresce',text:'<p>Em um agente, cada passo reenvia o histórico: total = N·S + A·N(N−1)/2. Com S=400, A=250 e N=5: 2000 + 2500 = <b>4500</b> tokens de entrada. O custo é quadrático em N, daí o limite de passos.</p>',
+ scene:function(){return [X.zone('z',10,10,700,330,'Custo'),b('1',30,200,90,50,'S','n'),b('2',130,160,90,90,'S+A','n'),b('3',230,120,90,130,'S+2A','n'),b('4',330,80,90,170,'S+3A','n'),b('5',430,40,90,210,'S+4A','a'),X.text('t',540,150,'soma = 4500','b','start')]}},
+];
+K.explain({w:720,h:350,steps:S,alt:'Animação de tokens, janela de contexto, temperatura e custo de um agente'});
+})();

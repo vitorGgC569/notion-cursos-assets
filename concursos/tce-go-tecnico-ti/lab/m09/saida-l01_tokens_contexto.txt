@@ -1,0 +1,19 @@
+$ python l01_tokens_contexto.py
+modelo: qwen2.5-1.5b-instruct-q4_k_m.gguf | janela n_ctx = 4096
+
+--- 1. tokens por tipo de texto ---
+portugues  caracteres= 56 palavras=10 tokens=15 chars/token=3.73
+ingles     caracteres= 52 palavras= 9 tokens=12 chars/token=4.33
+codigo     caracteres= 33 palavras= 7 tokens=12 chars/token=2.75
+numeros    caracteres= 29 palavras= 3 tokens=29 chars/token=1.00
+
+--- 2. estouro da janela de contexto ---
+texto de 5000 palavras -> 5002 tokens; janela = 4096
+erro: ValueError Requested tokens (5034) exceed context window of 4096
+
+--- 3. temperatura e determinismo ---
+temperatura 0.0, 3 execucoes: ['"CodeGuardian"', '"CodeGuardian"', '"CodeGuardian"'] | identicas: True
+temperatura 1.3, sementes 1-4: ['CodifyX', '"BitRevisor"', '"Codex Voyager"', 'CodeGuardian2000'] | distintas: 4
+
+--- 4. uso reportado pela API ---
+resposta: 'Ok.' | usage: {'prompt_tokens': 35, 'completion_tokens': 2, 'total_tokens': 37}

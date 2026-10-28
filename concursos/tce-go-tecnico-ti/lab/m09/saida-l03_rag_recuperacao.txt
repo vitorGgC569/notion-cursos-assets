@@ -1,0 +1,31 @@
+$ python l03_rag_recuperacao.py
+corpus: 12 secoes, 479 palavras no total
+
+--- 1. numero de trechos: formula x codigo ---
+N= 1000 tamanho=120 sobreposicao=20 -> codigo= 10 formula= 10
+N= 3000 tamanho=120 sobreposicao=20 -> codigo= 30 formula= 30
+N=  500 tamanho=100 sobreposicao= 0 -> codigo=  5 formula=  5
+N=   95 tamanho=100 sobreposicao=10 -> codigo=  1 formula=  1
+
+--- 2. indice por secao e consulta ---
+P: Qual é o assistente de código aprovado pelo Tribunal?
+   gabarito=S01 top3=[('S01', 8.19), ('S02', 2.48), ('S09', 1.69)]
+P: Qual é o limite de contexto configurado no Atlas?
+   gabarito=S02 top3=[('S02', 6.3), ('S08', 2.26), ('S09', 1.35)]
+P: Quantos revisores são exigidos quando a mudança toca autenticação?
+   gabarito=S03 top3=[('S03', 7.92), ('S01', 0.0), ('S02', 0.0)]
+P: Qual é a cobertura mínima de testes para aceitar um pull request?
+   gabarito=S04 top3=[('S04', 14.67), ('S01', 0.0), ('S02', 0.0)]
+
+--- 3. metricas por k (10 perguntas, 1 secao relevante cada) ---
+k=1: precisao@k=1.000 revocacao@k=1.000 MRR=1.000
+k=2: precisao@k=0.500 revocacao@k=1.000 MRR=1.000
+k=3: precisao@k=0.333 revocacao@k=1.000 MRR=1.000
+k=5: precisao@k=0.200 revocacao@k=1.000 MRR=1.000
+
+--- 4. tamanho do trecho: trechos maiores diluem o sinal? ---
+tamanho= 20 sobreposicao= 0 trechos= 24 acerto@2=6/10 palavras de contexto medias=40
+tamanho= 40 sobreposicao= 5 trechos= 14 acerto@2=8/10 palavras de contexto medias=78
+tamanho= 80 sobreposicao=10 trechos=  7 acerto@2=9/10 palavras de contexto medias=154
+tamanho=160 sobreposicao=20 trechos=  4 acerto@2=10/10 palavras de contexto medias=280
+tamanho=320 sobreposicao=40 trechos=  2 acerto@2=10/10 palavras de contexto medias=519

@@ -1,0 +1,31 @@
+$ python l02_prompts.py
+[sem papel e sem formato (parser tolerante: acha a categoria no texto)] acertos: 6/12 = 50%
+   erro: ('Como faço para trocar minha senha da r', 'duvida', 'requisicao')
+   erro: ('Solicito a instalação do LibreOffice n', 'requisicao', 'incidente')
+   erro: ('Qual é o prazo para abrir um chamado d', 'duvida', 'incidente')
+   erro: ('O e-mail institucional não está envian', 'incidente', 'requisicao')
+   erro: ('Existe um manual da VPN?', 'duvida', 'incidente')
+   erro: ('Onde encontro o formulário de solicita', 'duvida', 'incidente')
+[zero-shot com instrução e formato] acertos: 5/12 = 42%
+   erro: ('Preciso de acesso à pasta da diretoria', 'requisicao', 'duvida')
+   erro: ('Como faço para trocar minha senha da r', 'duvida', 'requisicao')
+   erro: ('Solicito a instalação do LibreOffice n', 'requisicao', 'duvida')
+   erro: ('Qual é o prazo para abrir um chamado d', 'duvida', 'incidente')
+   erro: ('O e-mail institucional não está envian', 'incidente', 'duvida')
+   erro: ('Não consigo entrar no sistema, aparece', 'incidente', 'duvida')
+   erro: ('Onde encontro o formulário de solicita', 'duvida', 'requisicao')
+[few-shot (3 exemplos)] acertos: 8/12 = 67%
+   erro: ('Preciso de acesso à pasta da diretoria', 'requisicao', 'incidente')
+   erro: ('Como faço para trocar minha senha da r', 'duvida', 'incidente')
+   erro: ('Qual é o prazo para abrir um chamado d', 'duvida', 'incidente')
+   erro: ('Onde encontro o formulário de solicita', 'duvida', 'requisicao')
+
+--- raciocínio passo a passo (problemas aritméticos) ---
+[direto (responda só com o número)] acertos: 2/6
+   -> Uma equipe revisa 14 pull requests por dia duran | esperado 79 | obtido 151 | tokens 126
+   -> Um repositório tem 120 arquivos; 25% são testes. | esperado 30 | obtido 0 | tokens 200
+   -> Um agente gasta 450 tokens por passo e executa 6 | esperado 2700 | obtido 2700 | tokens 169
+   -> Um prompt tem 1200 tokens e cada resposta 300. E | esperado 6000 | obtido 1200 | tokens 121
+   -> Um índice tem 480 trechos e cada consulta devolv | esperado 100 | obtido 100 | tokens 116
+   -> Se 3 revisores analisam 12 mudanças em 2 dias, q | esperado 2 | obtido 6 | tokens 111
+[passo a passo] acertos: 2/6 | terminaram com 'Resposta:': 6/6

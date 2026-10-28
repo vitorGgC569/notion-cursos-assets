@@ -1,0 +1,62 @@
+$ python l05_rag_llm.py
+P: Qual é o assistente de código aprovado pelo Tribunal?
+  esperado contém: 'atlas'
+  sem RAG : 'O assistente de código aprovado pelo Tribunal é o Code Review.'
+  RAG k=1 : 'O assistente de código aprovado pelo Tribunal Exemplo é o Atlas.'
+  RAG k=3 : 'O assistente de código aprovado pelo Tribunal Exemplo é o Atlas.'
+P: Qual é o limite de contexto configurado no Atlas?
+  esperado contém: '8000'
+  sem RAG : 'O limite de contexto configurado no Atlas é de 10.000.'
+  RAG k=1 : 'O limite de contexto configurado no Atlas é de 8000 tokens por requisição.'
+  RAG k=3 : 'O limite de contexto configurado no Atlas é de 8000 tokens por requisição.'
+P: Quantos revisores são exigidos quando a mudança toca autenticação?
+  esperado contém: '2'
+  sem RAG : 'Quando a mudança envolve autenticação, é recomendável ter no mínimo 2 revisores.'
+  RAG k=1 : '2 revisores.'
+  RAG k=3 : '2 revisores.'
+P: Qual é a cobertura mínima de testes para aceitar um pull request?
+  esperado contém: '75'
+  sem RAG : 'A cobertura mínima de testes para aceitar um pull request varia dependendo do projeto e or'
+  RAG k=1 : 'A cobertura mínima de testes para aceitar um pull request é de 75 por cento.'
+  RAG k=3 : '75 por cento.'
+P: Em quantas horas um incidente de IA deve ser registrado?
+  esperado contém: '48'
+  sem RAG : 'Um incidente de IA deve ser registrado em menos de 24 horas.'
+  RAG k=1 : 'Um incidente de IA deve ser registrado no sistema de chamados em até 48 horas.'
+  RAG k=3 : 'Incidentes envolvendo IA devem ser registrados no sistema de chamados em até 48 horas.'
+P: Quantas palavras tem cada trecho na busca em documentos?
+  esperado contém: '120'
+  sem RAG : 'Eu não tenho acesso a informações específicas sobre o número exato de palavras em cada tre'
+  RAG k=1 : 'Cada trecho tem 120 palavras.'
+  RAG k=3 : 'Cada trecho tem 120 palavras.'
+P: Qual ferramenta do agente exige aprovação humana a cada uso?
+  esperado contém: 'enviar_email'
+  sem RAG : 'O agente não especifica uma ferramenta que exija aprovação humana a cada uso.'
+  RAG k=1 : 'A ferramenta que exige aprovação humana a cada uso é enviar_email.'
+  RAG k=3 : 'A ferramenta enviar_email exige aprovação humana a cada uso.'
+P: Qual é o limite de passos por execução de um agente?
+  esperado contém: '6'
+  sem RAG : 'O limite de passos por execução de um agente é de 1000.'
+  RAG k=1 : 'O limite de passos por execução de um agente é de 6.'
+  RAG k=3 : 'O limite de passos por execução de um agente é de 6.'
+P: Qual é o único servidor MCP aprovado hoje?
+  esperado contém: 'mcp-processos'
+  sem RAG : 'O único servidor MCP aprovado hoje é o Azure Virtual Machine.'
+  RAG k=1 : 'O único servidor MCP aprovado hoje é o mcp-processos.'
+  RAG k=3 : 'O único servidor MCP aprovado hoje é o mcp-processos.'
+P: Quantas horas tem o treinamento obrigatório de IA?
+  esperado contém: '4'
+  sem RAG : 'O treinamento obrigatório de IA dura aproximadamente 8 horas.'
+  RAG k=1 : 'O treinamento obrigatório sobre uso seguro de IA tem carga de 4 horas.'
+  RAG k=3 : 'O treinamento obrigatório sobre uso seguro de IA tem carga de 4 horas.'
+
+acertos (resposta contém o valor esperado):
+  sem recuperacao : 1/10
+  RAG k=1         : 10/10 | tokens de entrada medios = 151
+  RAG k=3         : 10/10 | tokens de entrada medios = 299
+
+--- pergunta sem resposta no corpus (abstencao) ---
+P: Qual é a cor do prédio do Tribunal?
+  RAG k=3: 'Não encontrei essa informação.'
+P: Quantas ferramentas MCP o Atlas oferece em 2027?
+  RAG k=3: 'Não encontrei essa informação.'
