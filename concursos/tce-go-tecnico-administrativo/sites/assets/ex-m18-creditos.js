@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Por que existem',label:'Orçamento que não bastou',text:'<p>Crédito adicional é a <b>autorização de despesa</b> que não foi computada ou ficou <b>insuficiente</b> na LOA (art. 40). É o remédio para ajustar o orçamento durante o ano.</p>',scene:function(){return sc('PASSO 1 DE 6',[['LOA','n'],['Adicional','a'],['Despesa nova','n']],'art. 40')}},
+{title:'2. Suplementar',label:'Reforça o que existe',text:'<p>Serve para <b>reforçar uma dotação</b> que já existe e se mostrou insuficiente. Autorizado por lei, que pode estar na própria LOA, e aberto por decreto.</p>',scene:function(){return sc2('PASSO 2 DE 6',[['Suplementar','a','reforço']],[['Dotação','m','já existe']],'art. 41, I')}},
+{title:'3. Especial',label:'Cria dotação nova',text:'<p>Para despesa que <b>não tem dotação específica</b>. Exige <b>lei específica</b> e abertura por decreto.</p>',scene:function(){return sc2('PASSO 3 DE 6',[['Especial','a','dotação nova']],[['Lei','m','específica']],'art. 41, II')}},
+{title:'4. Extraordinário',label:'Urgência e imprevisibilidade',text:'<p>Para guerra, comoção intestina ou calamidade. Aberto por <b>decreto</b> do Executivo, que dá <b>imediato conhecimento</b> ao Legislativo.</p>',scene:function(){return sc2('PASSO 4 DE 6',[['Extraordinário','a','urgência']],[['Decreto','m','avisa o Legislativo']],'art. 44')}},
+{title:'5. As quatro fontes',label:'Sem recurso, sem crédito',text:'<p>Superávit financeiro, <b>excesso de arrecadação</b>, <b>anulação</b> de dotações e <b>operações de crédito</b>. O ato precisa indicar a importância, a espécie e a classificação.</p>',scene:function(){return sc('PASSO 5 DE 6',[['Superávit','a'],['Excesso','n'],['Anulação','n']],'art. 43, § 1º')}},
+{title:'6. Vigência',label:'No exercício',text:'<p>Em regra, o crédito vale <b>no exercício</b> em que foi aberto. Especiais e extraordinários autorizados nos <b>últimos quatro meses</b> podem ser reabertos e incorporados ao ano seguinte.</p>',scene:function(){return sc2('PASSO 6 DE 6',[['Regra','a','só no exercício']],[['Exceção','m','últimos 4 meses']],'CF, 167, § 2º')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pelos créditos adicionais: conceito, suplementar, especial, extraordinário, fontes e vigência'});
+})();
