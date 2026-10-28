@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Canetas e preço',label:'Direta',text:'<p>5 canetas custam <b>R$ 12</b>. Quanto custam 8? Mais canetas, <b>mais</b> preço: as grandezas são <b>diretas</b>. A conta é em cruz: 12 × 8 ÷ 5 = <b>R$ 19,20</b>.</p>',scene:function(){return sc('SITUAÇÃO 1',[['Canetas sobem','n'],['→','n'],['Preço sobe','a','direta']],'12 × 8 ÷ 5 = 19,20')}},
+{title:'2. Operários e dias',label:'Inversa',text:'<p>6 operários terminam a obra em <b>10 dias</b>. Com 15 operários? Mais gente, <b>menos</b> dias: as grandezas são <b>inversas</b>. A conta é 6 × 10 ÷ 15 = <b>4 dias</b>.</p>',scene:function(){return sc('SITUAÇÃO 2',[['Operários sobem','n'],['→','n'],['Dias descem','m','inversa']],'6 × 10 ÷ 15 = 4')}},
+{title:'3. Velocidade e tempo',label:'Inversa',text:'<p>A 60 km/h, um percurso leva <b>4 horas</b>. A 80 km/h? Mais velocidade, <b>menos</b> tempo: <b>inversa</b>. A conta é 60 × 4 ÷ 80 = <b>3 horas</b>.</p>',scene:function(){return sc('SITUAÇÃO 3',[['Velocidade sobe','n'],['→','n'],['Tempo desce','m','inversa']],'60 × 4 ÷ 80 = 3')}},
+{title:'4. Carne e preço',label:'Direta',text:'<p>3 kg de carne custam <b>R$ 90</b>. E 5 kg? Mais quilos, <b>mais</b> preço: <b>direta</b>. A conta é 90 × 5 ÷ 3 = <b>R$ 150</b>.</p>',scene:function(){return sc('SITUAÇÃO 4',[['Quilos sobem','n'],['→','n'],['Preço sobe','a','direta']],'90 × 5 ÷ 3 = 150')}},
+{title:'5. Pedreiros e prazo',label:'Inversa',text:'<p>12 pedreiros fazem a obra em <b>20 dias</b>. Com 8 pedreiros? Menos gente, <b>mais</b> dias: <b>inversa</b>. A conta é 12 × 20 ÷ 8 = <b>30 dias</b>.</p>',scene:function(){return sc('SITUAÇÃO 5',[['Pedreiros descem','n'],['→','n'],['Dias sobem','m','inversa']],'12 × 20 ÷ 8 = 30')}},
+{title:'Resumo',label:'Resumo',text:'<p>Pergunte: se uma grandeza <b>sobe</b>, a outra <b>sobe</b> (direta, conta em cruz) ou <b>desce</b> (inversa, inverte uma razão)? Na composta, compare <b>uma grandeza por vez</b> com a incógnita e multiplique as razões.</p>',scene:function(){return sc2('COMO DECIDIR',[['Sobe e sobe','a','direta'],['→','n'],['em cruz','d']],[['Sobe e desce','m','inversa'],['→','n'],['inverte','d']],'composta: multiplique as razões')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Cinco situações de regra de três: canetas e preço, operários e dias, velocidade e tempo, carne e preço, pedreiros e prazo, com a relação direta ou inversa e a conta de cada uma'});
+})();

@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Acréscimo de 20%',label:'Fator 1,20',text:'<p>Um acréscimo de 20% é o todo (1) mais 0,20, ou seja, multiplicar por <b>1,20</b>. Um preço de 100 vira <b>120</b>.</p>',scene:function(){return sc('ACRÉSCIMO',[['100','n'],['×','n'],['1,20','a','fator'],['=','n'],['120','d']],'1 + 0,20 = 1,20')}},
+{title:'2. Desconto de 15%',label:'Fator 0,85',text:'<p>Um desconto de 15% é o todo (1) menos 0,15, ou seja, multiplicar por <b>0,85</b>. Um preço de 200 vira <b>170</b>.</p>',scene:function(){return sc('DESCONTO',[['200','n'],['×','n'],['0,85','m','fator'],['=','n'],['170','d']],'1 − 0,15 = 0,85')}},
+{title:'3. Mais 20% e depois menos 20%',label:'Sucessivos',text:'<p>Os fatores se <b>multiplicam</b>: 1,20 × 0,80 = <b>0,96</b>. O preço <b>não volta</b> ao início: houve queda de <b>4%</b>, porque o desconto incide sobre um valor maior.</p>',scene:function(){return sc('SUCESSIVOS',[['100','n'],['× 1,20','a'],['× 0,80','m'],['=','n'],['96','d']],'queda de 4%, não zera')}},
+{title:'4. Dois descontos de 10%',label:'Sucessivos',text:'<p>0,90 × 0,90 = <b>0,81</b>. O preço fica em 81% do original: o desconto total é de <b>19%</b>, não de 20%.</p>',scene:function(){return sc('DOIS DESCONTOS',[['100','n'],['× 0,90','m'],['× 0,90','m'],['=','n'],['81','d']],'desconto total de 19%')}},
+{title:'5. Achar o preço original',label:'Operação inversa',text:'<p>Depois de um desconto de 20%, o produto custa <b>R$ 360</b>. O preço atual é 80% do original, então o original é 360 ÷ 0,80 = <b>R$ 450</b>.</p>',scene:function(){return sc('PREÇO ORIGINAL',[['360','n','pago'],['÷','n'],['0,80','m','fator'],['=','n'],['450','d']],'divide pelo fator para voltar')}},
+{title:'Resumo',label:'Resumo',text:'<p><b>Acréscimo</b> de p%: multiplique por 1 + p/100. <b>Desconto</b> de p%: por 1 − p/100. <b>Sucessivos</b>: multiplique os fatores. Para <b>voltar</b> ao valor original, divida pelo fator.</p>',scene:function(){return sc2('FATORES',[['Acréscimo','a','× (1 + p)'],['Desconto','m','× (1 − p)']],[['Sucessivos','n','multiplica'],['Voltar','d','divide']],'nunca some os percentuais')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Porcentagem pelo fator multiplicativo: acréscimo de 20 por cento, desconto de 15 por cento, aumento e desconto sucessivos, dois descontos de 10 por cento e como achar o preço original'});
+})();
