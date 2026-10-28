@@ -57,7 +57,7 @@ K.exercises=function(cfg){
   }
   function card(q){
     var st=S[q.n]||{}, c=K.el('article',{class:'card q'+(st.g==='ok'?' done-ok':st.g==='bad'?' done-bad':''),id:'ex-'+q.n,'data-lvl':q.lvl});
-    var lv={facil:['Fácil','ok'],medio:['Médio','warn'],dificil:['Difícil','bad']}[q.lvl]||[q.lvlLabel,''];
+    var lv={facil:['Fácil',''],medio:['Médio',''],dificil:['Difícil','']}[q.lvl]||[q.lvlLabel,''];
     c.innerHTML='<div class="head"><span class="num">Exercício '+q.n+'</span><span class="pill '+lv[1]+'">'+lv[0]+'</span><span class="spacer"></span>'+(st.g==='ok'?'<span class="pill ok">Acertei</span>':st.g==='bad'?'<span class="pill bad">Revisar</span>':'')+'</div>'+
       '<div class="stmt">'+q.q+'</div>'+
       '<label class="f" for="a'+q.n+'">Sua resposta</label>'+

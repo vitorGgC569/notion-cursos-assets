@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Conversão e unidades · M1 · Curso de Kubernetes</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#app">Ir para o conteúdo</a>
+<div class="wrap wide"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">Curso de Kubernetes</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 1</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<main id="app"><p class="kicker">Módulo 1 · Fundamentos de Computação</p><h1>Conversor de bases e treino de unidades</h1><p class="lead">Digite um número em qualquer base e veja as outras. Depois treine conversões entre decimal, binário e hexadecimal, tamanhos em bytes (Mi e M) e códigos de saída de processos.</p>
+<div class="card"><h2 style="margin:0 0 6px;font-size:20px">Conversor</h2><div class="split" style="grid-template-columns:repeat(3,1fr);gap:10px"><div><label class="f" for="vd">Decimal</label><input class="txt" id="vd" inputmode="numeric" style="width:100%"></div><div><label class="f" for="vb">Binário</label><input class="txt" id="vb" style="width:100%"></div><div><label class="f" for="vh">Hexadecimal</label><input class="txt" id="vh" style="width:100%"></div></div><div id="vo" style="margin-top:12px" aria-live="polite"></div></div>
+<div class="card" style="margin-top:14px"><h2 style="margin:0 0 6px;font-size:20px">Treino: 10 questões</h2><div id="quiz"></div></div></main>
+<div class="foot"><span>Fundamentos de Computação</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="../assets/app.js"></script><script type="application/json" id="data">{"id": "m1-conversao"}</script><script src="../assets/convert.js"></script><script>K.convert()</script>
+<script>(function(){var f=document.getElementById('full');if(f){f.href=location.href}if(window.top===window.self&&f)f.style.display='none'})();</script>
+</body></html>
