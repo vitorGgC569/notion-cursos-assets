@@ -1,0 +1,13 @@
+Vou ___ escola.                          SIM: "vou" pede a e "escola" é feminina e aceita artigo: a + a = à (teste do masculino: ao + palavra masculina)
+Refiro-me ___ questão do edital.         SIM: "refiro-me" pede a e "questão" é feminina e aceita artigo: a + a = à (teste do masculino: ao + palavra masculina)
+Chegou ___ pé.                           NÃO: palavra masculina ("pé" leva o, não a): sem artigo feminino, sem crase
+Ela começou ___ falar.                   NÃO: antes de verbo no infinitivo só há preposição
+Entregou o ofício ___ ele.               NÃO: pronome pessoal/tratamento não aceita artigo
+Fui ___ Brasília.                        NÃO: nome de lugar sem artigo (volto de Brasília), logo só a preposição
+Fui ___ Bahia.                           SIM: nome de lugar com artigo (volto da Bahia): a + a = à
+Vi ___ diretoria ontem.                  NÃO (a conferir): "vi" não está na lista de verbos que pedem a; sem preposição não há crase
+A sessão começa ___ 8 horas.             SIM: hora determinada (às 8 horas)
+Dirigiu-se ___ secretaria.               SIM: "dirigiu-se" pede a e "secretaria" é feminina e aceita artigo: a + a = à (teste do masculino: ao + palavra masculina)
+Voltou ___ casa.                         NÃO (cuidado): "casa" sozinha, no sentido de lar, não aceita artigo (voltou a casa); com adjunto há crase (voltou à casa de praia)
+Voltou ___ casa de praia.                NÃO (cuidado): "casa" sozinha, no sentido de lar, não aceita artigo (voltou a casa); com adjunto há crase (voltou à casa de praia)
+Respondeu ___ cidadão.                   NÃO: palavra masculina ("cidadão" leva o, não a): sem artigo feminino, sem crase

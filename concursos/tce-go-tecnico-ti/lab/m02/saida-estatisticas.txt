@@ -1,0 +1,14 @@
+Períodos: 5
+  período 1: 10 palavras, 0 vírgulas, 0 ponto e vírgula
+  período 2: 16 palavras, 2 vírgulas, 0 ponto e vírgula
+  período 3: 18 palavras, 2 vírgulas, 0 ponto e vírgula
+  período 4:  7 palavras, 1 vírgulas, 0 ponto e vírgula
+  período 5: 13 palavras, 4 vírgulas, 1 ponto e vírgula
+Média: 12.8 palavras por período (maior: 18)
+Conectivos por tipo:
+  adição     1  e=1
+  oposição   2  contudo=1, embora=1
+  causa      1  porque=1
+  tempo      1  quando=1
+  conclusão  1  portanto=1
+  finalidade 0  

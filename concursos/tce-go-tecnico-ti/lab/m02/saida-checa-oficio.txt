@@ -1,0 +1,24 @@
+== OFÍCIO CORRETO
+[ok]   Identificação: tipo em maiúsculas, Nº, número/ano/siglas  -> OFÍCIO Nº 45/2026/GAB/DTI
+[ok]   Local e data: cidade, dia sem zero (1º só no dia 1), mês minúsculo, ponto final  -> Goiânia, 2 de novembro de 2026.
+[ok]   Local: sem sigla da UF depois da cidade  -> Goiânia, 2 de novembro de 2026.
+[ok]   Assunto: termina em ponto final  -> Assunto: Solicitação de acesso ao sistema.
+[ok]   Assunto: curto (o Manual sugere de 4 a 5 palavras)  -> 5 palavras
+[ok]   Vocativo: forma de tratamento seguida de vírgula  -> Senhor Diretor,
+[ok]   Sem Digníssimo/Ilustríssimo (abolidos)
+[ok]   Fecho: apenas Respeitosamente, ou Atenciosamente,  -> Respeitosamente,
+[ok]   Assinatura: nome em maiúsculas (sem negrito)  -> MARIA SOUZA
+[ok]   Texto: evita Tenho a honra de / Cumpre-me informar que
+   10/10 regras atendidas
+== OFÍCIO COM ERROS
+[ERRO] Identificação: tipo em maiúsculas, Nº, número/ano/siglas  -> Ofício 45/26
+[ERRO] Local e data: cidade, dia sem zero (1º só no dia 1), mês minúsculo, ponto final  -> Goiânia, GO, 02 de Novembro de 2026
+[ERRO] Local: sem sigla da UF depois da cidade  -> Goiânia, GO, 02 de Novembro de 2026
+[ERRO] Assunto: termina em ponto final  -> Assunto: Pedido
+[ERRO] Assunto: curto (o Manual sugere de 4 a 5 palavras)  -> 1 palavras
+[ERRO] Vocativo: forma de tratamento seguida de vírgula  -> não encontrado
+[ERRO] Sem Digníssimo/Ilustríssimo (abolidos)
+[ERRO] Fecho: apenas Respeitosamente, ou Atenciosamente,  -> outro fecho ou ausente
+[ERRO] Assinatura: nome em maiúsculas (sem negrito)  -> Maria Souza
+[ERRO] Texto: evita Tenho a honra de / Cumpre-me informar que
+   0/10 regras atendidas
