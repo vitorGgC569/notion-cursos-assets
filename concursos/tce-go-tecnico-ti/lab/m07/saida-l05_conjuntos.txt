@@ -1,0 +1,26 @@
+--- 1. Operações com conjuntos do Python
+A união B = [1, 2, 3, 4, 5, 6, 7, 8] ; A inter B = [4, 5, 6] ; A - B = [1, 2, 3] ; complemento de A = [7, 8, 9, 10]
+n(A uniao B) = n(A) + n(B) - n(A inter B): 8 = 6 + 5 - 3
+Leis de De Morgan para conjuntos: True True
+
+--- 2. Inclusão-exclusão com três conjuntos, conferida por enumeração
+n(AuBuC) por contagem = 83 ; pela fórmula = 83
+n(AuBuC) por contagem = 88 ; pela fórmula = 88
+n(AuBuC) por contagem = 92 ; pela fórmula = 92
+
+--- 3. TRT-5 2022, questão 12 (futebol e tênis)
+gostam de pelo menos um = 17 ; não gostam de nenhum = 8
+[OK] TRT-5 2022 (T20) questão 12: calculado D, gabarito oficial D. 
+
+--- 4. TRT-22 2022, questão 20 (massa e carne, todos gostam de ao menos um)
+Gostam dos dois = 17 (45 + 52 - 80)
+[OK] TRT-22 2022 (K11) questão 20: calculado B, gabarito oficial B. 
+
+--- 5. TRT-23 2022, questão 14 (indústrias com no máximo 2 insumos)
+Total de usos de insumo: 16 + 9 + 8 = 33
+Soluções (nenhuma, só um, dois insumos): [(0, 27, 3), (1, 25, 4), (2, 23, 5), (3, 21, 6), (4, 19, 7), (5, 17, 8), (6, 15, 9), (7, 13, 10), (8, 11, 11), (9, 9, 12), (10, 7, 13), (11, 5, 14), (12, 3, 15), (13, 1, 16)]
+Com todas as 30 indústrias usando ao menos um insumo (n0 = 0): [(0, 27, 3)]
+[OK] TRT-23 2022 (T18) questão 14: calculado A, gabarito oficial A. o gabarito pressupõe que toda indústria usa pelo menos um insumo (n0 = 0)
+
+--- 6. Contar sem Venn: o complemento
+Quantos números de 1 a 100 não são múltiplos de 2 nem de 3: 33 = 100 - (50 + 33 - 16)

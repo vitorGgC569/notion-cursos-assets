@@ -1,0 +1,74 @@
+--- 1. Os conectivos
+
+Negação de p (não p): vale o contrário de p
+ p  q | resultado
+ V  V |   F
+ V  F |   F
+ F  V |   V
+ F  F |   V
+
+Conjunção p e q (verdadeira só se as duas são)
+ p  q | resultado
+ V  V |   V
+ V  F |   F
+ F  V |   F
+ F  F |   F
+
+Disjunção p ou q (falsa só se as duas são falsas)
+ p  q | resultado
+ V  V |   V
+ V  F |   V
+ F  V |   V
+ F  F |   F
+
+Disjunção exclusiva "ou p, ou q" (verdadeira se diferentes)
+ p  q | resultado
+ V  V |   F
+ V  F |   V
+ F  V |   V
+ F  F |   F
+
+Condicional se p então q (falsa só em V seguido de F)
+ p  q | resultado
+ V  V |   V
+ V  F |   F
+ F  V |   V
+ F  F |   V
+
+Bicondicional p se e somente se q (iguais)
+ p  q | resultado
+ V  V |   V
+ V  F |   F
+ F  V |   F
+ F  F |   V
+
+--- 2. Classificação
+p ou não p          : tautologia
+p e não p           : contradição
+p -> (p ou q)       : tautologia
+p -> q              : contingência
+(p e (p -> q)) -> q : tautologia (modus ponens como fórmula)
+
+--- 3. Equivalências e negações (conferidas nas quatro linhas)
+equivalentes     p -> q  =  não p ou q
+equivalentes     p -> q  =  não q -> não p (contrapositiva)
+equivalentes     não(p e q)  =  não p ou não q (De Morgan)
+equivalentes     não(p ou q)  =  não p e não q (De Morgan)
+equivalentes     não(p -> q)  =  p e não q
+equivalentes     p <-> q  =  (p -> q) e (q -> p)
+equivalentes     "ou p, ou q"  =  não(p <-> q)
+
+Falácias: p -> q NÃO equivale à recíproca nem à inversa
+p -> q  vs  q -> p        : False
+p -> q  vs  não p -> não q: False
+
+--- 4. TRT-14 2022, questão 15: negação de (p -> q)
+Alternativas equivalentes a não(p -> q) nas 8 linhas: ['C']
+[OK] TRT-14 2022 (F06) questão 15: calculado C, gabarito oficial C. não(p -> q) equivale a p e não q: "há 2 feriados ou 5 domingos, e pode haver carnaval"
+
+--- 5. Número de linhas e da soma de linhas verdadeiras
+1 proposições simples: 2 linhas
+2 proposições simples: 4 linhas
+3 proposições simples: 8 linhas
+4 proposições simples: 16 linhas
+5 proposições simples: 32 linhas

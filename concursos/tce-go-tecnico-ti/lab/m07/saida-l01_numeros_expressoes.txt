@@ -1,0 +1,38 @@
+--- 1. Ponto flutuante contra fração exata
+0,1 + 0,2 com float : 0.30000000000000004 (não é exatamente 0,3)
+0,1 + 0,2 com Fraction: 3/10 (exato)
+1/2 + 1/3 + 1/7 = 41/42 ; o que falta para 1 = 1/42
+
+--- 2. Ordem das operações e sinais
+2 + 3 * 4 ** 2 = 50   (potência, depois produto, depois soma)
+-3 ** 2 = -9   e  (-3) ** 2 = 9
+(2 + 3) * 4 ** 2 = 80
+Divisão inteira e resto com negativos: -7 // 2 = -4 , -7 % 2 = 1 , divmod(7,2) = (3, 1)
+Verificação 7 = 2*3 + 1: True
+Racionais: 3/4 = 0,75 = 3/4 = 0.75 ; dízima 1/3 = 0.3333333333 (Fraction mantém 1/3)
+
+--- 3. TCE-GO 2009, questão 23: a * b = a + b + a.b
+12 * 5 = 77 ; 2 * 77 = 233 ; atalho (a+1)(b+1)-1 = 233
+[OK] TCE-GO 2009 (N14) questão 23: calculado D, gabarito oficial D. 
+
+--- 4. TCE-GO 2009, questão 22: o quadrado de 33...34
+n=1: 4^2 = 16 (segue a regra: n uns, n-1 cincos, um seis)
+n=2: 34^2 = 1156 (segue a regra: n uns, n-1 cincos, um seis)
+n=3: 334^2 = 111556 (segue a regra: n uns, n-1 cincos, um seis)
+n=4: 3334^2 = 11115556 (segue a regra: n uns, n-1 cincos, um seis)
+n=5: 33334^2 = 1111155556 (segue a regra: n uns, n-1 cincos, um seis)
+n=6: 333334^2 = 111111555556 (segue a regra: n uns, n-1 cincos, um seis)
+n=7: 3333334^2 = 11111115555556 (segue a regra: n uns, n-1 cincos, um seis)
+n=8: 33333334^2 = 1111111155555556 (segue a regra: n uns, n-1 cincos, um seis)
+n=9: 333333334^2 = 111111111555555556 (segue a regra: n uns, n-1 cincos, um seis)
+333333334^2 = 111111111555555556 ; soma dos algarismos = 55
+Faixa em que a soma está: 50 e 75
+[OK] TCE-GO 2009 (N14) questão 22: calculado C, gabarito oficial C. a soma dos algarismos é 9 * 1 + 8 * 5 + 6 = 55
+
+--- 5. TRT-22 2022, questão 18: x e 2x com soma igual ao dobro do produto
+x = 3/4  maior número = 3/2 (busca em frações com denominador até 12)
+[OK] TRT-22 2022 (K11) questão 18: calculado C, gabarito oficial C. 
+
+--- 6. TRT-4 2022, questão 17: frações do terreno
+Daniel ficou com 1/42 do terreno; terreno inteiro = 21000 m²
+[OK] TRT-4 2022 (T17) questão 17: calculado A, gabarito oficial A. 

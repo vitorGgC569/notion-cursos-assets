@@ -1,0 +1,63 @@
+--- 1. Formas de argumento (validade por tabela-verdade)
+Modus ponens   (p->q, p |- q)      : True
+Modus tollens  (p->q, ~q |- ~p)    : True
+Silogismo hipotético (p->q,q->r |- p->r): True
+Silogismo disjuntivo (p ou q, ~p |- q): True
+Falácia: afirmar o consequente (p->q, q |- p): False
+Falácia: negar o antecedente (p->q, ~p |- ~q): False
+
+--- 2. TRT-4 2022, questão 16 (viaja, feira, férias, dia útil)
+   3 modelo(s) possível(is); alternativas verdadeiras em todos: ['E']
+[OK] TRT-4 2022 (T17) questão 16: calculado E, gabarito oficial E. 
+
+--- 3. TRT-1 2014, questão 25 (jantar, ônibus, convite, chefe)
+   6 modelo(s) possível(is); alternativas verdadeiras em todos: ['B']
+[OK] TRT-1 2014 (C03) questão 25: calculado B, gabarito oficial B. 
+
+--- 4. TRT-1 2014, questão 29 (Manuel, Edileuza, João, Ricardo)
+   1 modelo(s) possível(is); alternativas verdadeiras em todos: ['E']
+[OK] TRT-1 2014 (C03) questão 29: calculado E, gabarito oficial E. 
+
+--- 5. TRT-1 2014, questão 30 (caí, escorreguei, tropecei, deitei)
+   1 modelo(s) possível(is); alternativas verdadeiras em todos: ['A']
+[OK] TRT-1 2014 (C03) questão 30: calculado A, gabarito oficial A. 
+
+--- 6. TRT-2 2014, questão 20 (as cinco irmãs)
+   3 modelo(s) possível(is); alternativas verdadeiras em todos: ['E']
+[OK] TRT-2 2014 (M13) questão 20: calculado E, gabarito oficial E. 
+
+--- 7. TRT-14 2022, questão 13 (Alex, Beto, Caio: honestos H ou mentirosos M)
+combinações coerentes com as duas falas: ['(H, M, H)', '(M, H, M)']
+Um honesto repete o mesmo ano; só um mentiroso muda de resposta. Paula só concluiu depois da 2ª resposta, logo Caio é mentiroso:
+combinação final: ['(M, H, M)']
+[OK] TRT-14 2022 (F06) questão 13: calculado A, gabarito oficial A. 
+
+--- 8. TCE-GO 2009, questão 20 (Corina mente de quarta a sexta)
+dias de verdade que servem: []
+leitura oficial (quem mente erra as duas partes): ['quarta']
+negação lógica estrita de "A e B" (basta uma parte falsa): ['quarta', 'quinta', 'sexta']
+[OK] TCE-GO 2009 (N14) questão 20: calculado B, gabarito oficial B. o gabarito só fecha com a leitura oficial
+
+--- 9. TCE-GO 2009, questão 24 (nomes, cidades e tarefas)
+soluções: 1
+  Alceste: Inhumas, conferir
+  Carmo: Anápolis, implementar
+  Germano: Catalão, manutenção
+  Irineu: Morrinhos, guardar
+  Mustafá: Goiânia, arquivar
+[OK] TCE-GO 2009 (N14) questão 24: calculado A, gabarito oficial A. 
+
+--- 10. TRT-4 2022, questão 18 (almoço de Leonardo, Marcelo e Nelson)
+modelos possíveis: 2
+   2 modelo(s) possível(is); alternativas verdadeiras em todos: ['C']
+[OK] TRT-4 2022 (T17) questão 18: calculado C, gabarito oficial C. 
+
+--- 11. TRT-23 2022, questão 11 (corretores: nascimento e férias)
+modelos (destinos diferentes): 1 -> ({'André': 'Bahia', 'Breno': 'Alagoas', 'Pedro': 'Paraíba'}, {'André': 'Bahia', 'Breno': 'Paraíba', 'Pedro': 'Alagoas'})
+   1 modelo(s) possível(is); alternativas verdadeiras em todos: ['D']
+[OK] TRT-23 2022 (T18) questão 11: calculado D, gabarito oficial D. 
+
+--- 12. TRT-22 2022, questão 17 (cursos e idades)
+modelos: 1 -> ({'Davi': 'Engenharia', 'Eduardo': 'Medicina', 'Felipe': 'Direito'}, {'Davi': 18, 'Eduardo': 20, 'Felipe': 22})
+   1 modelo(s) possível(is); alternativas verdadeiras em todos: ['E']
+[OK] TRT-22 2022 (K11) questão 17: calculado E, gabarito oficial E. 

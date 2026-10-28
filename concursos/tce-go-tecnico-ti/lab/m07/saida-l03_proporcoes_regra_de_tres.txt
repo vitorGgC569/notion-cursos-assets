@@ -1,0 +1,41 @@
+--- 1. Regra de três simples, direta e inversa
+Direta: 3 kg custam 18; 5 kg custam 30
+Inversa: 6 pessoas fazem em 10 dias; 15 pessoas fazem em 4 dias (pessoas x dias = constante)
+Composta pela unidade de trabalho: 6 pessoas, 5 dias, 2 h/dia = 60 pessoa-horas
+
+--- 2. Divisão proporcional
+1200 em partes proporcionais a 25, 40, 35: [300.0, 480.0, 420.0]
+1200 em partes proporcionais a 5, 15, 20: [150.0, 450.0, 600.0]
+
+--- 3. TRT-22 2022, questão 19 (gorjetas)
+Alberto pela idade: 300.0 ; pelo tempo de serviço: 150.0 ; deixou de ganhar: 150.0
+[OK] TRT-22 2022 (K11) questão 19: calculado D, gabarito oficial D. 
+
+--- 4. TRT-14 2022, questão 11 (frações da herança)
+mais novo 1749.0 ; mais velho 583.0 ; cada um dos 5 demais 466.4 ; diferença velho - André = 116.6
+[OK] TRT-14 2022 (F06) questão 11: calculado B, gabarito oficial B. 
+
+--- 5. TRT-14 2022, questão 12 (razão entre livros)
+k = 232 ; inglês depois = 378 ; português depois = 1680 ; total = 2058 ; razão = 9/40
+[OK] TRT-14 2022 (F06) questão 12: calculado E, gabarito oficial E. 
+
+--- 6. TRT-5 2022, questão 14 (salário de Ana e Marcos)
+Salário de Marcos: [12000]
+[OK] TRT-5 2022 (T20) questão 14: calculado E, gabarito oficial E. 
+
+--- 7. TRT-5 2022, questão 13 e TRT-2 2018, questão 13 (pessoa-horas)
+TRT-5: faltam 20 pessoa-horas; 1 pessoa, 4 h/dia -> 5 dias
+[OK] TRT-5 2022 (T20) questão 13: calculado B, gabarito oficial B. 
+TRT-2: total 3000 ; feito 600 ; resta 2400 ; dias restantes 16 ; total de dias 21
+[OK] TRT-2 2018 (TJ05) questão 13: calculado D, gabarito oficial D. 
+
+--- 8. TRT-4 2022, questão 20 (impressoras com tempo igual)
+tempo 9 min; apostilas por impressora [45, 36, 81]
+[OK] TRT-4 2022 (T17) questão 20: calculado B, gabarito oficial B. 
+
+--- 9. TRT-1 2014, questão 28 (relógios)
+A diferença cresce 15 s por hora; 90 s -> 6 horas
+[OK] TRT-1 2014 (C03) questão 28: calculado A, gabarito oficial A. 
+
+--- 10. Grandezas: produto ou razão constante
+Velocidade x tempo (inversa): 60 km/h x 2 h = 120 ; 80 km/h x 1,5 h = 120.0 (produto constante, mesma distância)

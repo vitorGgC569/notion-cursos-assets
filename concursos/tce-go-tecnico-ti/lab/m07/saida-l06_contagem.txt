@@ -1,0 +1,40 @@
+--- 1. Princípio multiplicativo
+3 camisas, 4 calças, 2 sapatos: 24 combinações; por enumeração: 24
+Senhas de 3 dígitos (0 a 9) com repetição: 1000 ; sem repetição (arranjo): 720 = 720
+
+--- 2. Permutações
+Anagramas de BANCO: 120 = 120
+Anagramas de ARARA (repetições, 3 A e 2 R): 5!/(3!2!) = 10 = 10
+Mesa redonda com 5 pessoas (permutação circular): 24 ; pela enumeração (fixando a primeira): 24
+
+--- 3. Combinações e arranjos
+Comissões de 3 em 8 pessoas: 56 = 56
+Arranjos A(8,3) = C(8,3)*3! = 336 = 336
+Combinações com repetição de 3 sabores em 5 bolas: C(7,5) = 21 = 21
+Ordem importa? Presidente e vice entre 8: 56 ; dois representantes: 28
+
+--- 4. "Pelo menos um" pelo complemento
+Sorteios de 3 dígitos com pelo menos um 7: 271 = 271
+
+--- 5. Princípio da casa dos pombos: em 13 pessoas, ao menos 2 fazem aniversário no mesmo mês
+
+--- 6. TCE-GO 2009, questão 17 (árvore genealógica de Dona Marieta)
+filhos 10 ; netos 21 ; bisnetos 85 ; tataranetos 152 ; total 268
+[OK] TCE-GO 2009 (N14) questão 17: calculado C, gabarito oficial C. 
+
+--- 7. TRT-2 2014, questão 16 (classes por ano, arredondando para cima)
+classes por ano: [5, 4, 4, 4, 4, 3, 3, 3, 3] ; total 33
+[OK] TRT-2 2014 (M13) questão 16: calculado C, gabarito oficial C. 
+
+--- 8. TRT-2 2014, questão 17 (caminho mínimo em malha 10 x 10)
+lados percorridos = 20 ; distância = 4000 m
+busca em largura: canto ao centro 10 e centro ao canto oposto 10
+[OK] TRT-2 2014 (M13) questão 17: calculado D, gabarito oficial D. 
+
+--- 9. TRT-2 2014, questão 18 (algarismos dos ímpares de 1 a 349)
+quantidade de ímpares 175 ; algarismos escritos 470
+[OK] TRT-2 2014 (M13) questão 18: calculado C, gabarito oficial C. 
+
+--- 10. TRT-23 2022, questão 15 (assentos do teatro)
+fileiras mínimas 10 ; assentos por fileira mínimos 6 ; total 60
+[OK] TRT-23 2022 (T18) questão 15: calculado C, gabarito oficial C. 

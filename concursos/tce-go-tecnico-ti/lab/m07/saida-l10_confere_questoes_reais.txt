@@ -1,0 +1,25 @@
+l01_numeros_expressoes.py: ok
+l02_multiplos_divisores.py: ok
+l03_proporcoes_regra_de_tres.py: ok
+l04_porcentagem_medias.py: ok
+l05_conjuntos.py: ok
+l06_contagem.py: ok
+l07_tabelas_verdade.py: ok
+l08_argumentos_e_puzzles.py: ok
+l09_quantificadores_sequencias.py: ok
+
+Questões reais no banco: 51 | conferidas por código: 51 | sem conferência: []
+Divergências com o gabarito oficial: []
+
+Por prova:
+  TCE-GO 2009 (N14): 8 questões, 8 conferidas
+  TRT-14 2022 (F06): 5 questões, 5 conferidas
+  TRT-5 2022 (T20): 5 questões, 5 conferidas
+  TRT-22 2022 (K11): 5 questões, 5 conferidas
+  TRT-23 2022 (T18): 5 questões, 5 conferidas
+  TRT-4 2022 (T17): 5 questões, 5 conferidas
+  TRT-2 2018 (TJ05): 3 questões, 3 conferidas
+  TRT-1 2014 (C03): 10 questões, 10 conferidas
+  TRT-2 2014 (M13): 5 questões, 5 conferidas
+
+Distribuição das letras do gabarito: {'A': 12, 'B': 7, 'C': 13, 'D': 11, 'E': 8}

@@ -1,0 +1,27 @@
+Gerador em Python: 16 modelos, 3 níveis, mesma semente gera a mesma questão do site.
+{
+ "texto": "A média aritmética de 7 números é 10. Retirando-se um deles, a média dos 6 restantes passa a ser 8. O número retirado é",
+ "opcoes": [
+  "8",
+  "10",
+  "14",
+  "22",
+  "29"
+ ],
+ "certa": 3,
+ "passos": [
+  "Trabalhe com somas. Soma dos 7: 7 · 10 = 70.",
+  "Soma dos 6 restantes: 6 · 8 = 48.",
+  "Número retirado: 70 − 48 = 22."
+ ],
+ "tema": "Médias",
+ "id": "med",
+ "nivel": 2,
+ "seed": 5
+}
+
+Geradas 6.000 questões (2.000 por nível). Todas passaram nas conferências por enumeração embutidas em cada modelo.
+Questões com alternativas repetidas ou sem resposta: 0
+Distribuição por modelo: {'med': 379, 'pcs': 394, 'conj': 399, 'cont': 353, 'r3c': 358, 'linhas': 355, 'neg': 389, 'r3d': 409, 'pa': 357, 'cal': 379, 'frac': 343, 'mdc': 351, 'prop': 385, 'pvar': 388, 'mmc': 367, 'r3i': 394}
+Comparação com o gerador do site (JavaScript, gravado em l12_golden_js.json): 600 questões, 0 diferenças.
+Amostra de 120 questões gravada em l12_gerador_questoes-amostra.json

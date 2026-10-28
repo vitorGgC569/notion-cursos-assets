@@ -1,0 +1,64 @@
+--- 1. Negação de quantificadores em um universo finito
+não(todo x é par)      = True   existe x que não é par = True
+não(existe x > 3)      = False  todo x é <= 3         = False
+"Todo A é B" é falso quando basta UM A que não é B; "algum A é B" não implica "todo A é B".
+
+--- 2. TCE-GO 2009, questão 21 (cobras, répteis e venenosos)
+modelos testados: 1214
+   1214 modelo(s) possível(is); alternativas verdadeiras em todos: ['E']
+[OK] TCE-GO 2009 (N14) questão 21: calculado E, gabarito oficial E. 
+
+--- 3. TRT-1 2014, questão 26 (técnicos, coordenadores e chefes)
+(coordenadores, chefes de trabalhos especiais) possíveis: [(3, 2)]
+reunião = chefes + técnicos que não coordenam = 2 + 5 = 7
+[OK] TRT-1 2014 (C03) questão 26: calculado E, gabarito oficial E. 
+
+--- 4. TRT-1 2014, questão 27 (categorias J, K, L e M)
+modelos de 3 elementos compatíveis: 72
+A "não está em M" (sempre?) False | B "pode estar em M e L" False | C "pode estar em L e não em M" True | D "pode não ser J" False (todos são J) | E "está em L" (sempre?) False
+[OK] TRT-1 2014 (C03) questão 27: calculado C, gabarito oficial C. 
+
+--- 5. Sequências: gerar e conferir
+TCE-GO 2009, questão 18 (soma das posições das letras, alfabeto de 26 letras)
+  ABH 11 (dado 11 )
+  DBX 30 (dado 30 )
+  MAR 32 (dado 32 )
+  KIT 40 (dado 40 )
+  CYN 42 (dado 42 )
+  PAZ = 43
+[OK] TCE-GO 2009 (N14) questão 18: calculado D, gabarito oficial D. 
+TCE-GO 2009, questão 19 (cada termo repete; os pares diminuem 7, 8, 9, ...)
+  [120, 120, 113, 113, 105, 105, 96, 96, 86, 86] ...
+  14º = 63 ; 15º = 50 ; soma = 113 (ímpar)
+  alternativas verdadeiras: ['A']
+[OK] TCE-GO 2009 (N14) questão 19: calculado A, gabarito oficial A. 
+TRT-14 2022, questão 14 (sequência mista; ímpares: +3; pares: dois fios 8,9,10 e 5,6,7)
+  primeiros 12: [4, 8, 7, 5, 10, 9, 13, 6, 16, 10, 19, 7] (dado: 4,8,7,5,10,9,13,6,16,10,19,7)
+  99º = 151 ; 100º = 29 ; diferença = 122
+[OK] TRT-14 2022 (F06) questão 14: calculado D, gabarito oficial D. 
+TRT-1 2014, questão 21 (2; 5; 4; 7; 6; 9; ...)
+  primeiros 11: [2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12]
+  112º = 115
+[OK] TRT-1 2014 (C03) questão 21: calculado C, gabarito oficial C. 
+
+--- 6. TRT-1 2014, questão 23 (fila; a primeira pessoa recua 1, 2, 3 e 4 posições)
+  1 recuo(s): BACDE
+  2 recuo(s): ACBDE
+  3 recuo(s): CBDAE
+  4 recuo(s): BDAEC
+[OK] TRT-1 2014 (C03) questão 23: calculado B, gabarito oficial B. 
+
+--- 7. TRT-1 2014, questão 24 (idades)
+  idades todas diferentes: 3582 modelos; soma mínima 97, soma máxima 150
+  idades podendo repetir: 4395 modelos; soma mínima 96, soma máxima 152
+   3582 modelo(s) possível(is); alternativas verdadeiras em todos: ['D']
+[OK] TRT-1 2014 (C03) questão 24: calculado D, gabarito oficial D. com idades diferentes; se Alberto e Cleuza puderem ter a mesma idade, a soma chega a 152
+
+--- 8. TRT-2 2014, questão 19 (senha crescente)
+  senhas possíveis: [(3, 4, 7, 8)]
+[OK] TRT-2 2014 (M13) questão 19: calculado A, gabarito oficial A. 
+
+--- 9. TRT-22 2022, questão 16 (quadriculado 2 x 2 com 1, 2, 3, 4)
+  quadriculados (a b / c d): [(1, 2, 4, 3)]
+  soma da 1ª coluna = 5
+[OK] TRT-22 2022 (K11) questão 16: calculado A, gabarito oficial A. 

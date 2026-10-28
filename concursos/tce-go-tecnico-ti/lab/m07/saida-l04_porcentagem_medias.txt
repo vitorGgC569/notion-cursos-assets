@@ -1,0 +1,39 @@
+--- 1. Fator multiplicativo
+aumento de 10% multiplica por 1.1; desconto de 10% multiplica por 0.9
+aumento de 20% multiplica por 1.2; desconto de 20% multiplica por 0.8
+aumento de 130% multiplica por 2.3; desconto de 0% multiplica por -
+
+--- 2. Sucessivos: +20% e depois -20% não volta ao valor inicial
+fator = 24/25 = 0.96 ; variação final = -4.0 %
+Dois descontos de 10% valem 19.0 % de desconto, e não 20%
+Valor de 200 com +30% e depois -10%: 234.0
+
+--- 3. Pontos percentuais e porcentagem de porcentagem
+De 40% para 50% são 10 pontos percentuais e uma alta de 25.0 %
+20% de 30% de 500 = 30
+
+--- 4. TRT-2 2018, questão 11 (salários e acréscimo de 130%)
+Bárbara = 4200 ; Arthur = 1800 ; soma = 6000 ; conferência: 1800*2,3+60 = 4200
+[OK] TRT-2 2018 (TJ05) questão 11: calculado A, gabarito oficial A. 
+
+--- 5. TRT-2 2018, questão 12 (tabela 2 x 2 com total 100)
+mulheres jovens 6 ; homens jovens 14 ; homens com 40 anos ou mais 56 %
+[OK] TRT-2 2018 (TJ05) questão 12: calculado C, gabarito oficial C. 
+
+--- 6. TRT-23 2022, questão 12 (perda de 4 bolinhas reduz a 90%)
+total antes = [40]
+[OK] TRT-23 2022 (T18) questão 12: calculado A, gabarito oficial A. 
+
+--- 7. Médias
+dados [4, 8, 8, 10, 15] aritmética 9 mediana 8 moda [8]
+ponderada de 6 (peso 2) e 9 (peso 3): 7.8
+geométrica de 2 e 8: 4.0 ; harmônica de 60 e 40 km/h (mesma distância): 48.0 km/h (e não 50)
+A média aritmética não é a velocidade média se os trechos têm a mesma distância: 120 km a 60 e 120 km a 40 levam 5.0 h, média 48.0
+
+--- 8. TRT-5 2022, questão 11 (média por partes)
+Pontos nas 6 primeiras = 39 ; faltam 32 ; média nas 4 últimas = 8.0
+[OK] TRT-5 2022 (T20) questão 11: calculado C, gabarito oficial C. 
+
+--- 9. TRT-23 2022, questão 13 (média estritamente menor que 15)
+soma dos quatro = 57 ; idades inteiras que mantêm a média < 15: 1 a 17
+[OK] TRT-23 2022 (T18) questão 13: calculado A, gabarito oficial A. 

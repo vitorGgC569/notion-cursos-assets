@@ -1,0 +1,27 @@
+Questão  1: valor calculado = 12                            resposta no simulado: 12.
+Questão  2: valor calculado = 5/4                           resposta no simulado: 5/4.
+Questão  3: valor calculado = 16                            resposta no simulado: 16 vezes.
+Questão  4: valor calculado = 12                            resposta no simulado: 12.
+Questão  5: valor calculado = 1000                          resposta no simulado: 1.000,00.
+Questão  6: valor calculado = 6000                          resposta no simulado: 6.000 peças.
+Questão  7: valor calculado = 16                            resposta no simulado: 16 dias.
+Questão  8: valor calculado = 240                           resposta no simulado: 240,00.
+Questão  9: valor calculado = 35/2                          resposta no simulado: 17,5%.
+Questão 10: valor calculado = 35                            resposta no simulado: 35.
+Questão 11: valor calculado = 20                            resposta no simulado: 20.
+Questão 12: valor calculado = 39/5                          resposta no simulado: 7,8.
+Questão 13: valor calculado = 25                            resposta no simulado: 25.
+Questão 14: valor calculado = 60                            resposta no simulado: 60.
+Questão 15: valor calculado = 80                            resposta no simulado: 80.
+Questão 16: valor calculado = 10080                         resposta no simulado: 10.080.
+Questão 17: valor calculado = chove e não cancelado         resposta no simulado: chove e o evento não é cancelado.
+Questão 18: valor calculado = ¬p ∧ ¬q                       resposta no simulado: ¬p ∧ ¬q.
+Questão 19: valor calculado = (p ∧ q) → p                   resposta no simulado: (p ∧ q) → p.
+Questão 20: valor calculado = Marta não estudou             resposta no simulado: Marta não estudou.
+Questão 21: valor calculado = existe servidor que não é pontual  resposta no simulado: existe servidor desse órgão que não é pontual.
+Questão 22: valor calculado = apenas Bia                    resposta no simulado: apenas Bia.
+Questão 23: valor calculado = 120                           resposta no simulado: 120.
+Questão 24: valor calculado = 5.0                           resposta no simulado: 5.
+Questão 25: valor calculado = quinta                        resposta no simulado: quinta-feira.
+
+As 25 respostas conferem com o simulado.

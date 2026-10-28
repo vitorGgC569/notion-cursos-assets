@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Calculadora de tabelas-verdade · TCE-GO 2026 · Técnico de Controle Externo, TI</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#app">Ir para o conteúdo</a>
+<div class="wrap"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">TCE-GO 2026 · Técnico de Controle Externo, TI</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 7</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<p class="kicker">Módulo 7 · Matemática e Raciocínio Lógico</p><h1>Calculadora de tabelas-verdade</h1><p class="lead">Digite uma fórmula com até cinco proposições simples. A página monta a tabela-verdade completa, com as colunas intermediárias, classifica a fórmula (tautologia, contradição ou contingência) e, se você informar uma segunda fórmula, diz se são equivalentes.</p>
+<style>.cwrap label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}.cwrap input{font:15px var(--mono);padding:9px 12px;border:1px solid var(--line-2);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);width:100%;max-width:520px}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}.tbl th{color:var(--muted);font-weight:600}
+.bn{color:var(--accent);font-weight:700}.muted{color:var(--muted);font-size:13px}.cwrap .btn{margin:0}</style>
+<div class="cwrap"><label for="fa">Fórmula (use p, q, r, s, t e os conectivos ~, ^, v, -&gt;, &lt;-&gt;, xor)</label><input id="fa" type="text" value="(p ^ q) -&gt; ~r" autocomplete="off" spellcheck="false">
+<label for="fb">Segunda fórmula, para comparar (opcional)</label><input id="fb" type="text" value="" autocomplete="off" spellcheck="false">
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px"><button class="btn" id="ex1" type="button">Contingência: (p ^ q) -&gt; ~r</button><button class="btn" id="ex2" type="button">Contrapositiva: p -&gt; q e ~q -&gt; ~p</button><button class="btn" id="ex3" type="button">Negação da condicional</button><button class="btn" id="ex4" type="button">Recíproca: p -&gt; q e q -&gt; p</button><button class="btn" id="ex5" type="button">De Morgan</button><button class="btn" id="ex6" type="button">Tautologia: p v ~p</button></div>
+<div id="outm" aria-live="polite"></div></div><div id="app" hidden></div>
+<div class="foot"><span>Módulo 7</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="../assets/app.js"></script><script type="application/json" id="data">{"id": "m07-tabela-verdade"}</script><script src="../assets/calc-tv.js"></script>
+<script>(function(){var f=document.getElementById('full');if(f){f.href=location.href.split('?')[0]}if(window.top===window.self&&f)f.style.display='none'})();</script>
+</body></html>
