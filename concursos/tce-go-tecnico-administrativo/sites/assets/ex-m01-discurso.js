@@ -1,0 +1,14 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y){var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(34,Math.round(t[0].length*7.6+24));N.push(X.box('t'+i,x,y,w,42,t[0],t[1]||'n',t[2]));x+=w+8});return N}
+function sc(tipo,tokens,note){var N=[X.text('hd',16,34,tipo,'b')];N=N.concat(row(tokens,60));if(note)N.push(X.text('nt',16,146,note,'t'));return N}
+var S=[
+{title:'Discurso direto',label:'Direto',text:'<p>A fala da personagem aparece <b>como foi dita</b>, com dois-pontos e travessão (ou aspas). O verbo <i>avisou</i> é um verbo de elocução.</p>',scene:function(){return sc('DISCURSO DIRETO',[['O chefe avisou'],[':'],['— Vocês'],['precisam'],['entregar o parecer'],['hoje.']],'Reproduz a fala com travessão')}},
+{title:'1. A pontuação some, entra o “que”',label:'Pontuação',text:'<p>Saem os dois-pontos e o travessão. Entra a conjunção integrante <b>que</b> (para perguntas de sim ou não, usa-se <b>se</b>).</p>',scene:function(){return sc('PASSO 1: PONTUAÇÃO',[['O chefe avisou'],['que','a'],['vocês'],['precisam'],['entregar o parecer'],['hoje.']],'dois-pontos e travessão viram a conjunção')}},
+{title:'2. A pessoa muda',label:'Pessoa',text:'<p>Quem fala agora é o narrador, que conta a fala de outra pessoa. <b>Vocês</b> (2ª pessoa) vira <b>eles</b> (3ª pessoa).</p>',scene:function(){return sc('PASSO 2: PESSOA',[['O chefe avisou'],['que'],['eles','a'],['precisam'],['entregar o parecer'],['hoje.']],'vocês passa a eles')}},
+{title:'3. O tempo verbal recua',label:'Tempo',text:'<p>Como o verbo de elocução está no passado, o verbo da fala recua: <b>precisam</b> vira <b>precisavam</b>. O futuro do presente vira futuro do pretérito (<i>entregarei</i> vira <i>entregaria</i>).</p>',scene:function(){return sc('PASSO 3: TEMPO VERBAL',[['O chefe avisou'],['que'],['eles'],['precisavam','a'],['entregar o parecer'],['hoje.']],'presente vira pretérito imperfeito')}},
+{title:'4. O advérbio se ajusta',label:'Advérbio',text:'<p>Hoje, amanhã, ontem, aqui e este deixam de fazer sentido no relato. Viram <b>naquele dia</b>, <b>no dia seguinte</b>, <b>na véspera</b>, <b>ali</b> e <b>aquele</b>.</p>',scene:function(){return sc('PASSO 4: ADVÉRBIO',[['O chefe avisou'],['que'],['eles'],['precisavam'],['entregar o parecer'],['naquele dia.','a']],'hoje vira naquele dia')}},
+{title:'Discurso indireto pronto',label:'Pronto',text:'<p>Resultado: <i>O chefe avisou que eles precisavam entregar o parecer naquele dia.</i> E o <b>indireto livre</b>? É quando o narrador conta sem “que” nem travessão e a voz da personagem escapa: <i>O chefe olhou o parecer. Precisavam entregá-lo naquele dia, não dava para adiar.</i></p>',scene:function(){return sc('DISCURSO INDIRETO',[['O chefe avisou','d'],['que','d'],['eles','d'],['precisavam','d'],['entregar o parecer','d'],['naquele dia.','d']],'o narrador conta a fala com as suas palavras')}}
+];
+K.explain({w:720,h:180,steps:S,alt:'Transformação do discurso direto em indireto'});
+})();
