@@ -3,6 +3,10 @@
 'use strict';
 var K={};
 window.K=K;
+/* modo embed (iframe do Notion): layout compacto + link para tela cheia */
+K.embedded=false;try{K.embedded=window.self!==window.top}catch(e){K.embedded=true}
+if(K.embedded)document.documentElement.classList.add('embedded');
+document.addEventListener('DOMContentLoaded',function(){var f=document.getElementById('full');if(f){f.href=location.href.split('#')[0];f.textContent='Abrir em tela cheia ↗'}});
 K.$=function(s,r){return (r||document).querySelector(s)};
 K.$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
 K.el=function(tag,attrs,html){var e=document.createElement(tag);if(attrs)for(var k in attrs){if(k==='class')e.className=attrs[k];else e.setAttribute(k,attrs[k])}if(html!=null)e.innerHTML=html;return e};
@@ -88,13 +92,31 @@ K.exercises=function(cfg){
   function rerender(n){
     var old=K.$('#ex-'+n),q=D.items.filter(function(x){return x.n===n})[0],nw=card(q);old.parentNode.replaceChild(nw,old);K.copyButtons(nw);renderStats();applyFilter();
   }
+  var pi=0, pager=null;
+  function applyPager(){
+    if(!K.embedded||!pager)return;
+    var vis=K.$$('.q:not(.hidden)');
+    if(pi>=vis.length)pi=Math.max(0,vis.length-1);
+    K.$$('.q').forEach(function(c){c.classList.remove('pg-hide')});
+    vis.forEach(function(c,i){c.classList.toggle('pg-hide',i!==pi)});
+    K.$('#pg-pos').textContent=vis.length?('Exercício '+(pi+1)+' de '+vis.length):'Nenhum exercício neste filtro';
+    K.$('#pg-prev').disabled=pi<=0;K.$('#pg-next').disabled=pi>=vis.length-1;
+  }
   function applyFilter(){
     K.$$('.q').forEach(function(c){c.classList.toggle('hidden',filter!=='todos'&&c.getAttribute('data-lvl')!==filter&&!(filter==='rever'&&c.classList.contains('done-bad')))});
+    applyPager();
   }
   var list=K.$('#list');
+  if(K.embedded){
+    pager=K.el('div',{class:'pager'},'<button class="btn sm" id="pg-prev" type="button">Anterior</button><span id="pg-pos"></span><button class="btn sm primary" id="pg-next" type="button">Próximo</button>');
+    var sc=list.previousElementSibling;if(sc&&sc.classList.contains('card'))list.parentNode.appendChild(sc);
+    list.parentNode.insertBefore(pager,list);
+    K.$('#pg-prev').onclick=function(){pi--;applyPager()};
+    K.$('#pg-next').onclick=function(){pi++;applyPager()};
+  }
   D.items.forEach(function(q){list.appendChild(card(q))});
-  K.copyButtons(list);renderStats();
-  K.$$('.tab').forEach(function(t){t.addEventListener('click',function(){filter=t.getAttribute('data-f');K.$$('.tab').forEach(function(x){x.setAttribute('aria-pressed',x===t)});applyFilter()})});
+  K.copyButtons(list);renderStats();applyPager();
+  K.$$('.tab').forEach(function(t){t.addEventListener('click',function(){filter=t.getAttribute('data-f');pi=0;K.$$('.tab').forEach(function(x){x.setAttribute('aria-pressed',x===t)});applyFilter()})});
   K.$('#reset').addEventListener('click',function(){if(confirm('Apagar suas respostas e marcações deste conjunto de exercícios?')){S={};K.store.del(key);list.innerHTML='';D.items.forEach(function(q){list.appendChild(card(q))});K.copyButtons(list);renderStats();applyFilter()}});
 };
 

@@ -202,3 +202,25 @@ label.f{display:block;font:600 12px var(--sans);letter-spacing:.04em;text-transf
 .tr-act .progress{height:4px}
 .tr-res{font-size:13.5px;color:var(--ink-2);margin:10px 0 0}
 @media (max-width:640px){.tr-h{grid-template-columns:28px 1fr}.tr-mod .mp{display:none}.tr-mod .bd{padding-left:16px}}
+
+/* ===== modo embed (iframe estreito do Notion): compacto, uma coisa por vez ===== */
+.pg-hide{display:none!important}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0;font-size:13.5px;color:var(--muted)}
+.pager #pg-pos{font-weight:600;color:var(--ink)}
+.embedded .wrap{padding:10px 14px 18px;max-width:none}
+.embedded .topbar{margin-bottom:8px;font-size:12px}
+.embedded .crumbs .sep,.embedded .crumbs a,.embedded .crumbs span:last-child{display:none}
+.embedded .kicker{display:none}
+.embedded h1{font-size:19px;margin:0 0 6px}
+.embedded .lead{display:none}
+.embedded h2{font-size:17px}
+.embedded .foot{display:none}
+.embedded .card{padding:12px 14px;box-shadow:none}
+.embedded .stats{gap:10px;font-size:12px;margin-top:6px}
+.embedded .tabs{margin:8px 0 4px}
+.embedded .tab{padding:4px 9px;font-size:12.5px}
+.embedded .stmt{font-size:15px}
+.embedded .ans{min-height:56px}
+.embedded .nav button{width:26px;height:26px;font-size:12px}
+.embedded .opt{padding:8px 10px}
+.embedded .btn{padding:7px 12px}
