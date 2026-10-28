@@ -1,0 +1,13 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y){var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26));N.push(X.box('t'+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+var S=[
+{title:'1. Voz ativa',label:'Ativa',text:'<p>Na voz ativa o sujeito pratica a ação: <i>O Tribunal aprovou as contas</i>. <b>O Tribunal</b> é o agente, <b>aprovou</b> está no pretérito perfeito e <b>as contas</b> é o objeto direto.</p>',scene:function(){return sc('VOZ ATIVA',[['O Tribunal','a','sujeito agente'],['aprovou','n','pretérito perfeito'],['as contas','n','objeto direto']],'o sujeito faz a ação')}},
+{title:'2. O objeto vira sujeito',label:'Passiva',text:'<p>Para a passiva, o objeto direto sobe e <b>vira sujeito paciente</b>: <i>As contas ...</i>. O antigo sujeito vira agente da passiva, com <i>por</i> ou <i>pelo(a)</i>.</p>',scene:function(){return sc('PASSIVA: TROQUE OS PAPÉIS',[['As contas','a','sujeito paciente'],['...','n'],['pelo Tribunal','a','agente da passiva']],'o sujeito sofre a ação')}},
+{title:'3. Mesmo tempo, com ser',label:'Auxiliar',text:'<p>O verbo vira <b>ser + particípio</b>, e o auxiliar assume o tempo do verbo original. Pretérito perfeito de <i>aprovou</i> vira <b>foram aprovadas</b>, concordando com <i>as contas</i>.</p>',scene:function(){return sc('PASSIVA ANALÍTICA',[['As contas','n'],['foram aprovadas','a','ser no mesmo tempo + particípio'],['pelo Tribunal','n']],'o particípio concorda com o sujeito')}},
+{title:'4. Passiva sintética',label:'Sintética',text:'<p>Outra forma de dizer: tire o agente e use o <b>se apassivador</b>. <i>Aprovaram-se as contas.</i> O verbo concorda com o sujeito (<i>as contas</i>), por isso vai ao plural.</p>',scene:function(){return sc('PASSIVA SINTÉTICA',[['Aprovaram','a'],['-se','a','se apassivador'],['as contas','n','sujeito paciente']],'sem agente, com se')}},
+{title:'Resumo',label:'Resumo',text:'<p>Ativa (<i>O Tribunal aprovou as contas</i>), analítica (<i>As contas foram aprovadas pelo Tribunal</i>) e sintética (<i>Aprovaram-se as contas</i>) dizem a mesma coisa. Na prova, confira três coisas: o tempo, a concordância com o novo sujeito e o agente da passiva.</p>',scene:function(){return sc('RESUMO',[['ativa','d'],['analítica','d'],['sintética','d']],'tempo, concordância e agente')}}
+];
+K.explain({w:720,h:200,steps:S,alt:'Voz ativa, passiva analítica e passiva sintética da frase O Tribunal aprovou as contas'});
+})();
