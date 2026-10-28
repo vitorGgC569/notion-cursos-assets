@@ -6,6 +6,7 @@ function frac(a){
   try{
     if(a.type==='ex'){if(S){for(var k in S){if(S[k]&&(S[k].g==='ok'||S[k].g==='bad'))n++}}return Math.min(1,n/t)}
     if(a.type==='quiz'){var b=K.store.get(base+':best',null);return b?1:0}
+    if(a.type==='cards'){var kk=S&&S.known?Object.keys(S.known).filter(function(x){return S.known[x]}).length:0;return Math.min(1,kk/t)}
     if(a.type==='lab'){return S?Math.min(1,Object.keys(S).length/t):0}
     if(a.type==='term'||a.type==='editor'){return S&&S.done?Math.min(1,Object.keys(S.done).length/t):0}
     if(a.type==='score'){return S&&S.best?Math.min(1,S.best/t):0}
