@@ -1,0 +1,18 @@
+(function(){
+var K=window.K,X=K.X;
+function base(){return [X.zone('z1',8,8,330,170,'Rede 192.168.10.0/26'),X.zone('z2',382,8,330,170,'Rede 10.0.5.0/24'),
+ X.box('A',24,50,110,52,'Host A','n','192.168.10.37\nMAC aa:01'),X.box('SW',170,60,60,34,'switch','m'),X.box('R',270,40,100,74,'Roteador','n','eth0 192.168.10.1\neth1 10.0.5.1'),X.box('B',580,50,116,52,'Host B','n','10.0.5.20\nMAC bb:02'),
+ X.line('l1',134,76,170,76,'m'),X.line('l2',230,76,270,76,'m'),X.line('l3',370,76,580,76,'m')]}
+function pkt(x,y,t,s){return [X.box('pkt',x,y,200,56,t,'a',s)]}
+var S=[
+{cmd:'ping 10.0.5.20',title:'O host A quer falar com 10.0.5.20',text:'<p>A conhece o próprio IP, a máscara (<code>/26</code>) e o <b>gateway padrão</b> (<code>192.168.10.1</code>). Só não sabe em que rede está o destino.</p>',scene:function(){return base().concat([X.text('t',24,230,'IP 192.168.10.37   máscara 255.255.255.192   gateway 192.168.10.1','t')])}},
+{cmd:'10.0.5.20 E 255.255.255.192',title:'Decisão: mesma rede ou não?',text:'<p>A aplica a própria máscara ao destino: <code>10.0.5.20 E /26</code> = <code>10.0.5.0</code>, diferente da sua rede <code>192.168.10.0</code>. Conclusão: o destino é <b>remoto</b>; o pacote vai ao gateway, não direto ao destino.</p>',scene:function(){return base().concat([X.box('cmp',24,205,440,56,'10.0.5.0  ≠  192.168.10.0','a','destino fora da rede local')])}},
+{cmd:'ARP: quem tem 192.168.10.1?',title:'Descobrir o MAC do gateway',text:'<p>Dentro da rede local, quem entrega é o <b>MAC</b>, não o IP. A manda um ARP em broadcast perguntando quem é <code>192.168.10.1</code>. O switch repassa para todas as portas.</p>',scene:function(){return base().concat([X.box('pkt',140,128,120,36,'ARP broadcast','a')])}},
+{cmd:'ARP: sou eu, MAC cc:01',title:'O roteador responde',text:'<p>O roteador responde com o seu MAC (<code>cc:01</code>). A guarda essa associação na tabela ARP, para não perguntar de novo.</p>',scene:function(){return base().concat([X.box('pkt',160,128,120,36,'ARP: cc:01','a')])}},
+{cmd:'quadro A → roteador',title:'O pacote sai de A',text:'<p>O pacote IP mantém <b>origem 192.168.10.37</b> e <b>destino 10.0.5.20</b> até o fim. Já o quadro Ethernet ao redor dele usa o MAC do <b>roteador</b> como destino, porque é o próximo salto.</p>',scene:function(){return base().concat(pkt(120,190,'IP 192.168.10.37 → 10.0.5.20','MAC destino cc:01 · TTL 64'))}},
+{cmd:'tabela de rotas do roteador',title:'O roteador decide a saída',text:'<p>O roteador lê o IP de destino e consulta a tabela de rotas: <code>10.0.5.0/24</code> está na interface <code>eth1</code>. Ele <b>diminui o TTL</b> em 1 (64 → 63) e remonta o quadro com novos MACs. O IP não muda.</p>',scene:function(){return base().concat(pkt(260,190,'IP 192.168.10.37 → 10.0.5.20','TTL 63 · sai por eth1'),[X.text('rt',24,265,'10.0.5.0/24  via eth1      192.168.10.0/26  via eth0      0.0.0.0/0  via ISP','t')])}},
+{cmd:'quadro roteador → B',title:'Entrega ao destino',text:'<p>Agora o roteador está na mesma rede que B. Ele resolve o MAC de B (ARP) e entrega o quadro com <b>MAC destino bb:02</b>. B vê seu próprio IP no destino e aceita o pacote.</p>',scene:function(){return base().concat(pkt(440,190,'IP 192.168.10.37 → 10.0.5.20','MAC destino bb:02 · TTL 63'))}},
+{cmd:'resposta (echo reply)',title:'A volta faz o caminho inverso',text:'<p>B repete o raciocínio: o destino <code>192.168.10.37</code> está fora de <code>10.0.5.0/24</code>, então envia ao seu gateway <code>10.0.5.1</code>. Se o gateway de B estivesse errado, A mandaria e <b>nunca receberia</b> resposta.</p>',scene:function(){return base().concat(pkt(260,190,'IP 10.0.5.20 → 192.168.10.37','resposta do ping · TTL 63'))}}
+];
+K.explain({w:720,h:290,steps:S,alt:'Caminho de um pacote entre duas redes'});
+})();
