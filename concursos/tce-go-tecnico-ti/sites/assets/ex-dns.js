@@ -1,0 +1,19 @@
+(function(){
+var K=window.K,X=K.X;
+function base(){return [X.box('c',20,130,120,56,'Cliente','n','resolvedor stub'),X.box('r',230,130,140,56,'Resolvedor\nrecursivo','n','da rede ou do provedor')]}
+var S=[
+{label:'0. Pergunta',title:'O cliente quer o endereço de www.tce.go.gov.br',text:'<p>O navegador precisa de um endereço IP para abrir a conexão. Quem faz a pergunta é o <b>resolvedor stub</b> do sistema operacional, que sabe apenas a quem perguntar (o servidor DNS configurado, em geral entregue pelo DHCP).</p>',
+ scene:function(){return base().concat([X.line('l1',140,150,230,150,'a',true),X.text('t',20,60,'Pergunta: www.tce.go.gov.br tipo A?','t'),X.text('t2',20,86,'Porta 53, UDP (TCP em respostas grandes e transferência de zona)','t')])}},
+{label:'1. Cache',title:'Antes de sair, o cliente olha o cache e o arquivo hosts',text:'<p>A ordem de consulta no cliente: <b>cache local</b>, arquivo <code>hosts</code> (<code>/etc/hosts</code> no Linux e <code>C:\\Windows\\System32\\drivers\\etc\\hosts</code> no Windows) e só então o servidor DNS. Cada resposta dura o tempo do <b>TTL</b> definido pela zona.</p>',
+ scene:function(){return base().concat([X.box('k',20,40,120,56,'cache local','a','TTL ainda válido?'),X.box('h',160,40,120,56,'arquivo hosts','n','mapeamento fixo'),X.text('t',20,230,'Se achar, responde sem sair da máquina.','t')])}},
+{label:'2. Recursiva',title:'Consulta recursiva: "resolva isto para mim"',text:'<p>O cliente envia uma <b>consulta recursiva</b> (bit RD=1) ao resolvedor. Ele assume a tarefa de descobrir a resposta completa e, se tiver a resposta em cache, entrega na hora. Se não tiver, faz <b>consultas iterativas</b> a outros servidores.</p>',
+ scene:function(){return base().concat([X.line('l1',140,150,230,150,'a',true),X.text('t',20,60,'Cliente → resolvedor: consulta recursiva','t'),X.box('cache',230,230,140,40,'cache do resolvedor','m','vazio nesta consulta')])}},
+{label:'3. Raiz',title:'Consulta iterativa 1: servidores raiz',text:'<p>O resolvedor pergunta a um dos servidores <b>raiz</b> (zona "."). Eles não sabem o endereço, mas respondem com uma <b>referência</b> (registros NS) para os servidores do <b>TLD</b> .br.</p>',
+ scene:function(){return base().concat([X.box('raiz',470,50,200,56,'Servidor raiz','a','zona .'),X.line('l1',370,140,470,100,'a',true),X.line('l2',470,90,370,134,'',true),X.text('t',400,220,'Resposta: "peça aos servidores de .br"','t')])}},
+{label:'4. Delegações',title:'Consulta iterativa 2: .br e as zonas abaixo',text:'<p>O resolvedor pergunta ao servidor de <b>.br</b>, que o encaminha ao da zona seguinte, e assim por diante, seguindo as delegações até a zona que contém o nome. Cada servidor só indica <b>quem é o próximo</b> (NS), e o resolvedor guarda cada referência em cache.</p>',
+ scene:function(){return base().concat([X.box('tld',470,30,200,50,'Servidor de .br','a','TLD'),X.box('z2',470,100,200,50,'zonas intermediárias','a','delegações (NS)'),X.line('l1',370,140,470,60,'a',true),X.line('l2',370,150,470,125,'a',true),X.text('t',400,220,'Referências em cache: próxima vez, pula etapas','t')])}},
+{label:'5. Autoritativo',title:'O servidor autoritativo responde com o registro',text:'<p>O servidor <b>autoritativo</b> da zona tem os dados originais e responde com o registro: <b>www.tce.go.gov.br A 203.0.113.10</b> (endereço de documentação, só para ilustrar), com <b>TTL</b> (ex.: 300 s). O resolvedor guarda em cache e repassa ao cliente.</p>',
+ scene:function(){return base().concat([X.box('aut',470,130,200,56,'Servidor autoritativo','a','zona tce.go.gov.br'),X.line('l1',370,150,470,150,'a',true),X.line('l2',140,170,230,170,'a',true),X.text('t',20,60,'www.tce.go.gov.br  A  203.0.113.10  TTL 300','t'),X.text('t2',20,230,'Tipos: A (IPv4), AAAA (IPv6), CNAME (apelido), MX (e-mail), NS, PTR (reverso), TXT','t')])}}
+];
+K.explain({w:720,h:300,steps:S,alt:'Animação da resolução recursiva de um nome DNS'});
+})();

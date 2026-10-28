@@ -1,0 +1,32 @@
+Original  : 2804:aaaa:0000:00ab:0000:0000:0000:1111
+Expandido : 2804:aaaa:0000:00ab:0000:0000:0000:1111
+Compacto  : 2804:aaaa:0:ab::1111
+Tipo      : unicast global (2000::/3)
+
+Original  : fe80::1
+Expandido : fe80:0000:0000:0000:0000:0000:0000:0001
+Compacto  : fe80::1
+Tipo      : link-local (fe80::/10)
+
+Original  : ::1
+Expandido : 0000:0000:0000:0000:0000:0000:0000:0001
+Compacto  : ::1
+Tipo      : loopback (::1)
+
+Original  : ff02::1
+Expandido : ff02:0000:0000:0000:0000:0000:0000:0001
+Compacto  : ff02::1
+Tipo      : multicast (ff00::/8)
+
+Original  : fd00:0:0:1::10
+Expandido : fd00:0000:0000:0001:0000:0000:0000:0010
+Compacto  : fd00:0:0:1::10
+Tipo      : unique local (fc00::/7), equivale ao IPv4 privado
+
+Original  : 2001:db8::
+Expandido : 2001:0db8:0000:0000:0000:0000:0000:0000
+Compacto  : 2001:db8::
+Tipo      : unicast global (2000::/3)
+
+Uma sub-rede /64 tem 2^64 = 18.446.744.073.709.551.616 endereços
+Por isso o IPv6 não tem broadcast: usa multicast (ff02::1 = todos os nós do enlace).

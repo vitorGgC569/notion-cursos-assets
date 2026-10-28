@@ -1,0 +1,24 @@
+== Prática A: sub-rede de cada endereço ==
+10.20.30.77/27       máscara 255.255.255.224  rede 10.20.30.64  broadcast 10.20.30.95  hosts 10.20.30.65 a 10.20.30.94 (30)
+192.168.5.200/26     máscara 255.255.255.192  rede 192.168.5.192  broadcast 192.168.5.255  hosts 192.168.5.193 a 192.168.5.254 (62)
+172.16.45.9/20       máscara 255.255.240.0  rede 172.16.32.0  broadcast 172.16.47.255  hosts 172.16.32.1 a 172.16.47.254 (4094)
+200.10.10.130/25     máscara 255.255.255.128  rede 200.10.10.128  broadcast 200.10.10.255  hosts 200.10.10.129 a 200.10.10.254 (126)
+
+== Prática B: VLSM a partir de 192.168.10.0/24 (maior demanda primeiro) ==
+Administrativo  precisa 100 hosts -> /25 (128 endereços)  192.168.10.0/25  úteis 192.168.10.1 a 192.168.10.126
+Auditoria       precisa  50 hosts -> /26 (64 endereços)  192.168.10.128/26  úteis 192.168.10.129 a 192.168.10.190
+TI              precisa  25 hosts -> /27 (32 endereços)  192.168.10.192/27  úteis 192.168.10.193 a 192.168.10.222
+Enlace          precisa   2 hosts -> /30 (4 endereços)  192.168.10.224/30  úteis 192.168.10.225 a 192.168.10.226
+próximo endereço livre: 192.168.10.228
+
+== Prática C: IPv6 ==
+2001:0db8:0000:0000:0000:0000:0000:0001 -> 2001:db8::1
+2001:0db8:0000:00a0:0000:0000:0000:0001 -> 2001:db8:0:a0::1
+fe80:0000:0000:0000:0202:b3ff:fe1e:8329 -> fe80::202:b3ff:fe1e:8329
+
+== Prática D: RAID (4 discos de 2 TB) ==
+RAID 0 : 8 TB úteis, tolera 0 falhas garantidas
+RAID 1 : 2 TB úteis (espelho completo), sobrevive com 1 disco
+RAID 5 : 6 TB úteis, tolera 1 falha
+RAID 6 : 4 TB úteis, tolera 2 falhas
+RAID 10: 4 TB úteis, tolera 1 falha por espelho (até 2 se em espelhos diferentes)

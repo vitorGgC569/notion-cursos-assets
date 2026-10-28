@@ -1,0 +1,44 @@
+== 1. Verbo-Substantivo: descobrir comandos ==
+
+Name                CommandType
+----                -----------
+Get-ExecutionPolicy      Cmdlet
+
+
+ExecutionPolicy
+Force
+Scope
+
+== 2. Objetos, nao texto: criar arquivos e filtrar por propriedade ==
+
+Name     Length
+----     ------
+doc5.txt    501
+doc4.txt    401
+doc3.txt    301
+
+
+== 3. Agrupar e medir ==
+
+Count   : 5
+Sum     : 1505
+Average : 301
+Maximum : 501
+
+
+== 4. Saida estruturada (JSON) e tratamento de erro ==
+[
+  {
+    "Name": "doc1.txt",
+    "Length": 101
+  },
+  {
+    "Name": "doc2.txt",
+    "Length": 201
+  }
+]
+Erro capturado: ItemNotFoundException
+
+== 5. Funcao simples com parametro ==
+Tamanho da pasta de teste em MB: 0.0014
+(pasta temporária removida)

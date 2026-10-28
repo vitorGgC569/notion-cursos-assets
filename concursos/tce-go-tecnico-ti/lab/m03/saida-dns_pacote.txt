@@ -1,0 +1,15 @@
+Consulta (A) em hexadecimal, 35 bytes:
+  1a 2b 01 00 00 01 00 00 00 00 00 00 03 77 77 77 03 74 63 65 02 67 6f 03 67 6f 76 02 62 72 00 00 01 00 01
+ID=0x1A2B  QR=0  RD=1  RA=0  RCODE=0  perguntas=1 respostas=0
+  Pergunta : www.tce.go.gov.br tipo A
+
+Resposta (QR=1, RA=1) com um registro A:
+ID=0x1A2B  QR=1  RD=1  RA=1  RCODE=0  perguntas=1 respostas=1
+  Pergunta : www.tce.go.gov.br tipo A
+  Resposta : www.tce.go.gov.br A TTL=300s -> 203.0.113.10
+
+Consulta AAAA:
+ID=0x1A2B  QR=0  RD=1  RA=0  RCODE=0  perguntas=1 respostas=0
+  Pergunta : www.tce.go.gov.br tipo AAAA
+
+Os rótulos do nome viram [tamanho][bytes]:  b'\x03www\x03tce\x02go\x03gov\x02br\x00'

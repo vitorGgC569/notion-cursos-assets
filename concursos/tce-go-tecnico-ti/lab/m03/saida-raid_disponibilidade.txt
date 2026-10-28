@@ -1,0 +1,17 @@
+== 4 discos de 2 TB ==
+Nível    Útil (TB)  Tolera falha de                                        
+RAID 0   8          0 discos (qualquer falha perde tudo)                   
+RAID 1   2          3 disco(s) (espelhos)                                  
+RAID 5   6          1 disco                                                
+RAID 6   4          2 discos                                               
+RAID 10  4          1 por par (até n/2, se forem de pares diferentes)      
+
+== Disponibilidade (SLA) e tempo fora do ar por ano ==
+SLA             Por ano   Por mês (30d)
+99.0             87.6 h           7.2 h
+99.9              8.8 h        43.2 min
+99.99          52.6 min         4.3 min
+99.999          5.3 min            26 s
+
+Dois componentes em série (A e B precisam funcionar): 0,999 x 0,999 = 99.8001 %
+Dois componentes em paralelo (basta um): 1 - (0,001 x 0,001) = 99.9999 %

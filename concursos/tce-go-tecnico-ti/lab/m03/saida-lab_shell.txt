@@ -1,0 +1,40 @@
+== 1. Arquivos, inodes e links ==
+total 8
+578261 -rw-r--r-- 2 box box 23 Oct 28 13:14 link_duro.txt
+578262 lrwxrwxrwx 1 box box 13 Oct 28 13:14 link_simbolico.txt -> relatorio.txt
+578261 -rw-r--r-- 2 box box 23 Oct 28 13:14 relatorio.txt
+
+== 2. Permissões: chmod octal e simbólico ==
+-rw-r----- 640 relatorio.txt
+-rwx---r-- 704 relatorio.txt
+umask atual: 0022  -> arquivo novo nasce com 644
+
+== 3. Pipes e filtros (grep, sort, uniq, wc, cut) ==
+linhas com erro (4xx/5xx):
+GET /b 404
+GET /c 500
+GET /b 404
+contagem por status:
+      3 200
+      2 404
+      1 500
+total de linhas: 6
+
+== 4. Redirecionamento e códigos de saída ==
+ls falhou com código 2
+stderr guardado: ls: cannot access 'arquivo_que_nao_existe': No such file or directory
+
+== 5. Espaço e processos ==
+16K	.
+ Size Use%
+ 128G  62%
+    PID    PPID STAT COMMAND
+1155317 1155312 S    bash
+
+== 6. Um script com variável, teste e laço ==
+erros.txt tem conteúdo
+link_duro.txt tem conteúdo
+link_simbolico.txt tem conteúdo
+novo.txt está vazio
+relatorio.txt tem conteúdo
+(pasta temporária removida)

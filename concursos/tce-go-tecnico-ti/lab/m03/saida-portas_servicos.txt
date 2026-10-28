@@ -1,0 +1,24 @@
+Porta  Proto  Nome local    Serviço (curso)
+20     tcp    ftp-data      FTP dados
+21     tcp    ftp           FTP controle
+22     tcp    ssh           SSH
+23     tcp    telnet        Telnet
+25     tcp    smtp          SMTP
+53     udp    domain        DNS
+67     udp    bootps        DHCP servidor
+68     udp    bootpc        DHCP cliente
+80     tcp    http          HTTP
+110    tcp    pop3          POP3
+123    udp    ntp           NTP
+143    tcp    imap2         IMAP
+161    udp    snmp          SNMP
+389    tcp    ldap          LDAP
+443    tcp    https         HTTPS
+465    tcp    submissions   SMTPS
+587    tcp    submission    SMTP submissão
+636    tcp    ldaps         LDAPS
+993    tcp    imaps         IMAPS
+995    tcp    pop3s         POP3S
+3389   tcp    ms-wbt-server RDP
+
+Observação: a coluna 'Nome local' vem do arquivo /etc/services desta máquina. A coluna do curso é o que a prova espera.
