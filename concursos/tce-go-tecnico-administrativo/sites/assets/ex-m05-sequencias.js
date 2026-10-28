@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Diferença fixa',label:'Soma constante',text:'<p>Compare termos vizinhos. Em 5, 8, 11, 14 a diferença é sempre <b>3</b>, então o próximo termo é 14 + 3 = <b>17</b>.</p>',scene:function(){return sc('DIFERENÇA FIXA',[['5','n'],['8','n'],['11','n'],['14','n'],['17','d','+3']],'cada termo soma 3')}},
+{title:'2. Diferença que cresce',label:'Diferenças',text:'<p>Em 4, 7, 12, 19, 28 as diferenças são 3, 5, 7, 9: crescem de <b>2 em 2</b>. A próxima é 11, e o termo seguinte é 28 + 11 = <b>39</b>.</p>',scene:function(){return sc('DIFERENÇA QUE CRESCE',[['4','n'],['7','n'],['12','n'],['19','n'],['28','n'],['39','d','+11']],'diferenças: 3, 5, 7, 9, 11')}},
+{title:'3. Termos repetidos',label:'De dois em dois',text:'<p>Quando cada valor aparece duas vezes, olhe só os <b>valores novos</b>: 120, 113, 105, 96 caem 7, 8, 9... Conte as <b>posições</b> com cuidado.</p>',scene:function(){return sc('REPETIDOS',[['120','n'],['120','n'],['113','a'],['113','a'],['105','m'],['105','m']],'valores novos: −7, −8, −9, −10')}},
+{title:'4. Operações alternadas',label:'Duas leis',text:'<p>Em 3, 6, 5, 10, 9 alternam-se duas operações: <b>× 2</b> e <b>− 1</b>. Depois do 9 vem 18, depois 17, e depois <b>34</b>.</p>',scene:function(){return sc('ALTERNADAS',[['3','n'],['× 2','a'],['6','n'],['− 1','m'],['5','n'],['× 2','a'],['10','d']],'multiplica por 2, tira 1, e repete')}},
+{title:'5. Letras viram números',label:'Alfabeto de 26',text:'<p>Troque cada letra pela sua posição no alfabeto oficial (A = 1 até Z = 26). Em PAZ: <b>P = 16</b>, <b>A = 1</b>, <b>Z = 26</b>, e a soma é <b>43</b>.</p>',scene:function(){return sc('LETRAS',[['P','n','16'],['A','n','1'],['Z','n','26'],['=','n'],['43','d','soma']],'16 + 1 + 26 = 43')}},
+{title:'Resumo',label:'Resumo',text:'<p>Pergunte sempre: a diferença é <b>fixa</b>? <b>cresce</b>? há termos <b>repetidos</b> ou duas operações <b>alternadas</b>? E numere as posições antes de responder.</p>',scene:function(){return sc2('O QUE OLHAR',[['Diferença fixa','a'],['Diferença que cresce','a']],[['Termos repetidos','m'],['Operações alternadas','m']],'numere as posições antes de responder')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Quatro padrões de sequências: diferença fixa, diferença que cresce, termos repetidos, operações alternadas e letras convertidas em números do alfabeto'});
+})();

@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. A promessa',label:'Se p, então q',text:'<p>A condicional é uma <b>promessa</b>: "se chove, então o evento é cancelado". Ela só é <b>quebrada</b> quando chove (p verdadeira) e o evento <b>não</b> é cancelado (q falsa).</p>',scene:function(){return sc('CONDICIONAL',[['se p','n','chove'],['→','n'],['então q','n','evento cancelado']],'só falha quando p é verdade e q é falso')}},
+{title:'2. Contrapositiva',label:'Vale',text:'<p>Dita ao contrário e com as duas partes negadas: "se o evento <b>não</b> é cancelado, então <b>não</b> chove". É a <b>mesma informação</b>, então vale sempre.</p>',scene:function(){return sc('CONTRAPOSITIVA',[['se não q','a'],['→','n'],['então não p','a','vale']],'se não foi cancelado, não choveu')}},
+{title:'3. Recíproca',label:'Não vale',text:'<p>Trocar a ordem sem negar: "se o evento é cancelado, então chove". <b>Não vale</b>: ele pode ser cancelado por outro motivo, como falta de público.</p>',scene:function(){return sc('RECÍPROCA',[['se q','m'],['→','n'],['então p','m','não vale']],'o evento pode ser cancelado sem chuva')}},
+{title:'4. Inversa',label:'Não vale',text:'<p>Negar as duas partes sem trocar a ordem: "se <b>não</b> chove, então o evento <b>não</b> é cancelado". <b>Não vale</b>: a promessa só falou da chuva.</p>',scene:function(){return sc('INVERSA',[['se não p','m'],['→','n'],['então não q','m','não vale']],'sem chuva, nada foi prometido')}},
+{title:'5. Negação',label:'p e não q',text:'<p>Negar a condicional é <b>descrever a quebra da promessa</b>: chove <b>e</b> o evento <b>não</b> é cancelado. A negação não é outra condicional.</p>',scene:function(){return sc('NEGAÇÃO',[['p','a','chove'],['e','n'],['não q','m','não cancelou']],'é o único caso em que a promessa falha')}},
+{title:'Resumo',label:'Resumo',text:'<p>Da condicional <b>valem</b> a contrapositiva e "não p ou q". <b>Não valem</b> a recíproca e a inversa. A negação é <b>p e não q</b>.</p>',scene:function(){return sc2('O QUE VALE',[['Contrapositiva','a','vale'],['Não p ou q','a','vale']],[['Recíproca','m','não vale'],['Inversa','m','não vale']],'negação: p e não q')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Condicional se p então q: a contrapositiva e a forma não p ou q valem; a recíproca e a inversa não valem; a negação é p e não q, com o exemplo da chuva e do evento cancelado'});
+})();
