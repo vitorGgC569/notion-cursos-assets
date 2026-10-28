@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Elaboração',label:'Poder Executivo',text:'<p>Os Poderes e órgãos autônomos mandam <b>propostas parciais</b>. O órgão central de orçamento <b>revê e coordena</b>, e o chefe do Executivo envia o projeto ao Legislativo, com <b>mensagem</b> e tabelas explicativas.</p>',scene:function(){return sc('PASSO 1 DE 6',[['Elaboração','a'],['Apreciação','n'],['Execução','n']],'iniciativa do Executivo')}},
+{title:'2. Apreciação legislativa',label:'Comissão e plenário',text:'<p>Uma <b>comissão</b> recebe as emendas e dá parecer. Depois o <b>plenário</b> vota. As emendas precisam ser compatíveis com o PPA e a LDO e indicar recursos de <b>anulação de despesa</b>.</p>',scene:function(){return sc('PASSO 2 DE 6',[['Elaboração','n'],['Apreciação','a'],['Execução','n']],'art. 166')}},
+{title:'3. Sanção',label:'De volta ao Executivo',text:'<p>Aprovado, o projeto volta ao Executivo para <b>sanção</b> ou <b>veto</b> e publicação. A LOA sancionada passa a ser a lei do exercício.</p>',scene:function(){return sc2('PASSO 3 DE 6',[['Sanção','a','lei publicada']],[['Veto','m','total ou parcial']],'Executivo decide')}},
+{title:'4. Execução',label:'No exercício',text:'<p>Com a lei publicada, o Executivo faz a <b>programação financeira</b> e executa a despesa: empenho, liquidação e pagamento. Podem ser abertos <b>créditos adicionais</b>.</p>',scene:function(){return sc('PASSO 4 DE 6',[['Empenho','a'],['Liquidação','n'],['Pagamento','n']],'veremos no Módulo 18')}},
+{title:'5. Controle',label:'Interno e externo',text:'<p>O controle é <b>interno</b>, do próprio Executivo, e <b>externo</b>, do Legislativo com o <b>Tribunal de Contas</b>. O TCE emite <b>parecer prévio</b> sobre as contas do Chefe do Executivo.</p>',scene:function(){return sc2('PASSO 5 DE 6',[['Interno','a','Executivo']],[['Externo','m','Legislativo + TC']],'arts. 70 a 75')}},
+{title:'6. Avaliação e recomeço',label:'O ciclo é maior que o exercício',text:'<p>O <b>ciclo</b> começa antes do exercício, na elaboração, e termina depois, na avaliação. Por isso <b>ciclo orçamentário</b> e <b>exercício financeiro</b> são coisas diferentes.</p>',scene:function(){return sc2('PASSO 6 DE 6',[['Ciclo','a','mais longo']],[['Exercício','m','ano civil']],'não confundir')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pelo ciclo orçamentário: elaboração, apreciação legislativa, sanção, execução, controle e avaliação'});
+})();
