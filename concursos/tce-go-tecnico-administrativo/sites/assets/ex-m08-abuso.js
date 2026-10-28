@@ -1,0 +1,14 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y){var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box('t'+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+var S=[
+{title:'1. Abuso de poder',label:'Gênero',text:'<p>O <b>abuso de poder</b> é o gênero. Ele tem duas espécies: o <b>excesso de poder</b> e o <b>desvio de poder</b>, também chamado de desvio de finalidade.</p>',scene:function(){return sc('ABUSO DE PODER',[['Abuso de poder','a'],['→','n'],['Excesso','n'],['ou','n'],['Desvio','n']],'o gênero e as duas espécies')}},
+{title:'2. Excesso de poder',label:'Excesso',text:'<p>No <b>excesso</b>, o agente atua <b>fora da sua competência</b>, extrapolando os limites que a lei lhe deu.</p>',scene:function(){return sc('EXCESSO',[['Agente','n','sem competência'],['→','n'],['Excesso de poder','a','extrapola os limites']],'vício de competência')}},
+{title:'3. Desvio de poder',label:'Desvio',text:'<p>No <b>desvio</b>, o agente <b>tem competência</b>, mas usa o ato para um fim diferente do previsto em lei. É vício de <b>finalidade</b>.</p>',scene:function(){return sc('DESVIO',[['Agente','n','com competência'],['→','n'],['Fim diferente do legal','m'],['→','n'],['Desvio de finalidade','a']],'vício de finalidade')}},
+{title:'4. Exemplo de excesso',label:'Exemplo 1',text:'<p>Um fiscal aplica sanção que só o chefe do órgão podia aplicar. Ele <b>não tinha competência</b> para aquela penalidade: é excesso de poder.</p>',scene:function(){return sc('EXEMPLO DE EXCESSO',[['Fiscal aplica sanção do chefe','m'],['→','n'],['Excesso','a','sem competência']],'o ato foi além do que a lei permitia')}},
+{title:'5. Exemplo de desvio',label:'Exemplo 2',text:'<p>Um chefe remove um servidor para puni-lo por críticas, sem interesse do serviço. Ele tinha competência para remover, mas a finalidade da remoção é o interesse do serviço, e não a punição. É desvio de finalidade.</p>',scene:function(){return sc('EXEMPLO DE DESVIO',[['Remoção','n','para punir servidor'],['→','n'],['Desvio de finalidade','a','fim legal: interesse do serviço']],'competência existe, finalidade errada')}},
+{title:'Resumo',label:'Resumo',text:'<p>Pergunte: <i>tinha competência?</i> Se não, <b>excesso</b>. Se sim, mas o fim foi outro, <b>desvio</b>. Em ambos o ato é ilegal e pode ser anulado.</p>',scene:function(){return sc('RESUMO',[['Competência?','n'],['não: excesso','d'],['sim, fim errado: desvio','d']],'ato ilegal e anulável')}}
+];
+K.explain({w:720,h:200,steps:S,alt:'Excesso de poder e desvio de finalidade: a pergunta decisiva é se o agente tinha competência'});
+})();
