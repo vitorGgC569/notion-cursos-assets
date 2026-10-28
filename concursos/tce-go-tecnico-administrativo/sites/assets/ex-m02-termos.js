@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+var T=[['Os conselheiros','Os conselheiros'],['estavam','estavam'],['atentos','atentos'],['ao parecer','ao parecer']];
+function row(st,notes){var x=16,N=[];T.forEach(function(t,i){var w=Math.max(60,Math.round(t[0].length*8+26));N.push(X.box('t'+i,x,70,w,44,t[0],(st&&st[i])||'n',notes&&notes[i]||''));x+=w+10});return N}
+function sc(h,st,notes,nt){var N=[X.text('hd',16,34,h,'b')].concat(row(st,notes));if(nt)N.push(X.text('nt',16,160,nt,'t'));return N}
+var S=[
+{title:'1. Ache o verbo',label:'Verbo',text:'<p>A análise começa pelo verbo, porque ele organiza a oração. Em <i>Os conselheiros estavam atentos ao parecer</i>, o verbo é <b>estavam</b>.</p>',scene:function(){return sc('PASSO 1: O VERBO',['n','a','n','n'],['','verbo','',''],'procure a palavra que muda com o tempo e a pessoa')}},
+{title:'2. Pergunte: quem?',label:'Sujeito',text:'<p>Pergunte ao verbo <i>quem estavam?</i>. A resposta é <b>os conselheiros</b>: é o sujeito, e o verbo concorda com ele (plural).</p>',scene:function(){return sc('PASSO 2: O SUJEITO',['a','n','n','n'],['sujeito (simples)','','',''],'o verbo concorda com o sujeito')}},
+{title:'3. Que tipo de verbo é?',label:'Verbo',text:'<p><b>Estar</b> é verbo de ligação: ele não indica ação, só liga o sujeito a uma característica. Outros verbos de ligação: ser, parecer, ficar, permanecer, continuar.</p>',scene:function(){return sc('PASSO 3: VERBO DE LIGAÇÃO',['n','a','n','n'],['','liga','',''],'ser, estar, parecer, ficar, permanecer')}},
+{title:'4. O predicativo',label:'Predicativo',text:'<p>O que vem depois do verbo de ligação e diz como é o sujeito é o <b>predicativo do sujeito</b>. Aqui, <b>atentos</b>. Como o núcleo do predicado é o predicativo, o predicado é <b>nominal</b>.</p>',scene:function(){return sc('PASSO 4: O PREDICATIVO',['n','n','a','n'],['','','predicativo',''],'núcleo do predicado: o nome')}},
+{title:'5. Complemento nominal',label:'Complemento',text:'<p><b>Ao parecer</b> completa o sentido do nome <i>atentos</i> e vem com preposição: é <b>complemento nominal</b>. Não confunda com objeto indireto, que completa verbo, e com adjunto adnominal, que só caracteriza.</p>',scene:function(){return sc('PASSO 5: COMPLEMENTO NOMINAL',['n','n','n','a'],['','','','complemento nominal'],'completa um nome, com preposição')}},
+{title:'Análise pronta',label:'Pronto',text:'<p>Sujeito simples (<i>os conselheiros</i>) + verbo de ligação (<i>estavam</i>) + predicativo (<i>atentos</i>) + complemento nominal (<i>ao parecer</i>). Em prova, leia sempre o verbo primeiro: ele decide quem é sujeito e qual é o predicado.</p>',scene:function(){return sc('ANÁLISE COMPLETA',['d','d','d','d'],['sujeito','verbo de ligação','predicativo','compl. nominal'],'predicado nominal')}}
+];
+K.explain({w:720,h:200,steps:S,alt:'Análise sintática da oração Os conselheiros estavam atentos ao parecer'});
+})();
