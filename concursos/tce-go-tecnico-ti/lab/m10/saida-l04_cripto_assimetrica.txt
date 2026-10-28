@@ -1,0 +1,37 @@
+$ python l04_cripto_assimetrica.py
+== 1. RSA: tamanho do modulo (a chave pode superar 1024 bits) ==
+RSA-1024: modulo n com 1024 bits, expoente publico e = 65537, geracao 7 ms (varia)
+RSA-2048: modulo n com 2048 bits, expoente publico e = 65537, geracao 56 ms (varia)
+RSA-3072: modulo n com 3072 bits, expoente publico e = 65537, geracao 120 ms (varia)
+
+== 2. RSA-OAEP cifra com a PUBLICA; so a PRIVADA decifra (confidencialidade) ==
+cifrado tem 256 bytes (= tamanho do modulo)
+decifrado com a privada: True
+limite do RSA-2048 com OAEP-SHA256: 190 bytes por operacao
+mensagem de 300 bytes -> Encryption failed
+
+== 3. Assinatura: PRIVADA assina, PUBLICA verifica (autenticidade, integridade, nao repudio) ==
+assinatura RSA-PSS: 256 bytes
+verificacao do documento original: valida
+documento alterado em 1 byte: assinatura INVALIDA
+verificar com a chave publica de outra pessoa: INVALIDA
+
+== 4. Ed25519: assinatura curta, chaves de 32 bytes ==
+chave publica: 32 bytes | assinatura: 64 bytes
+verificacao ok
+
+== 5. ECDH (X25519): duas partes chegam ao MESMO segredo sem enviá-lo ==
+segredo de A == segredo de B ? True | tamanho: 32 bytes
+chave de sessao derivada (HKDF) com 256 bits
+
+== 6. Envelope hibrido: AES-GCM para os dados e RSA-OAEP para a chave ==
+dados de 1.000.000 bytes cifrados com AES-GCM em 0.9 ms; chave de 32 bytes cifrada com RSA em 256 bytes
+destinatario recupera a chave e os dados: True
+
+== 7. Numero de chaves para n pessoas ==
+     n   simetrica n(n-1)/2   assimetrica 2n
+     2                    1                4
+    10                   45               20
+    50                 1225              100
+   100                 4950              200
+  1000               499500             2000

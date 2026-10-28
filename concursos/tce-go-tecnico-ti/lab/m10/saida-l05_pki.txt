@@ -1,0 +1,73 @@
+$ bash l05_pki.sh
+diretorio temporario: /tmp/m10l5_GiJojt (apagado no fim)
+
+== 1. Autoridade certificadora (CA) propria: chave e certificado autoassinado ==
+  subject=C=BR, O=Curso TCE-GO TI, CN=CA Raiz do Curso
+  issuer=C=BR, O=Curso TCE-GO TI, CN=CA Raiz do Curso
+  X509v3 Basic Constraints: critical
+      CA:TRUE
+  X509v3 Key Usage: critical
+      Certificate Sign, CRL Sign
+  (subject == issuer: certificado autoassinado, raiz da cadeia)
+
+== 2. Certificado do servidor: CSR assinada pela CA, com SAN ==
+  Certificate request self-signature ok
+  subject=C=BR, O=Curso TCE-GO TI, CN=localhost
+  subject=C=BR, O=Curso TCE-GO TI, CN=localhost
+  issuer=C=BR, O=Curso TCE-GO TI, CN=CA Raiz do Curso
+  serial=40191D5C11E0D2576FB008B530F0628E671BB8EB
+  notBefore=Oct 28 21:56:15 2026 GMT
+  notAfter=Jan 26 21:56:15 2027 GMT
+  X509v3 Basic Constraints: 
+      CA:FALSE
+  X509v3 Extended Key Usage: 
+      TLS Web Server Authentication
+  X509v3 Subject Alternative Name: 
+      DNS:localhost, IP Address:127.0.0.1
+
+== 3. Validacao da cadeia ==
+$ openssl verify -CAfile ca.crt servidor.crt
+servidor.crt: OK
+$ openssl verify servidor.crt   (sem informar a CA)
+  C=BR, O=Curso TCE-GO TI, CN=localhost
+  error 20 at 0 depth lookup: unable to get local issuer certificate
+  error servidor.crt: verification failed
+
+== 4. Certificado vencido: verificacao numa data futura (-attime) ==
+$ openssl verify -attime <hoje + 200 dias> -CAfile ca.crt servidor.crt
+  C=BR, O=Curso TCE-GO TI, CN=localhost
+  error 10 at 0 depth lookup: certificate has expired
+  error servidor.crt: verification failed
+
+== 5. Adulteracao: trocar uma letra do nome (localhost -> mocalhost) quebra a assinatura da CA ==
+  subject=C=BR, O=Curso TCE-GO TI, CN=mocalhost
+  C=BR, O=Curso TCE-GO TI, CN=mocalhost
+  error 7 at 0 depth lookup: certificate signature failure
+  error adulterado.crt: verification failed
+  40474ECEC67F0000:error:030000EA:digital envelope routines:EVP_DigestVerifyFinal:provider signature failure:../crypto/evp/m_sigver.c:703:ECDSA digest_verify_final:
+  40474ECEC67F0000:error:06880006:asn1 encoding routines:ASN1_item_verify_ctx:EVP lib:../crypto/asn1/a_verify.c:219:
+
+== 6. Revogacao: CRL (lista de certificados revogados) ==
+$ openssl verify -CAfile ca.crt user.crt   (antes da revogacao)
+  user.crt: OK
+  Database updated
+  issuer=C=BR, O=Curso TCE-GO TI, CN=CA Raiz do Curso
+  lastUpdate=Oct 28 21:56:15 2026 GMT
+  nextUpdate=Nov  4 21:56:15 2026 GMT
+      Serial Number: 1000
+          Revocation Date: Oct 28 21:56:15 2026 GMT
+                  Key Compromise
+$ openssl verify -crl_check -CAfile ca_crl.pem user.crt   (depois da revogacao)
+  CN=servidor revogavel
+  error 23 at 0 depth lookup: certificate revoked
+  error user.crt: verification failed
+$ openssl verify -crl_check -CAfile ca_crl.pem servidor.crt   (certificado nao revogado)
+  servidor.crt: OK
+
+== 7. Handshake TLS real em 127.0.0.1 (Python, modulo ssl) ==
+servidor TLS local em 127.0.0.1:60883 (so nesta maquina)
+[1. cliente confia na CA do curso e o nome confere] OK: TLSv1.3, cifra TLS_AES_256_GCM_SHA384, servidor CN=localhost, emissor CN=CA Raiz do Curso, SAN=['localhost', '127.0.0.1']
+[1. cliente confia na CA do curso e o nome confere] mensagem recebida: ola do servidor TLS
+[2. cliente nao conhece a CA (so as CAs do sistema)] FALHOU: unable to get local issuer certificate (codigo 20)
+[3. CA correta, mas o nome pedido nao esta no certificado] FALHOU: Hostname mismatch, certificate is not valid for 'outro.exemplo.gov.br'. (codigo 62)
+diretorio temporario apagado

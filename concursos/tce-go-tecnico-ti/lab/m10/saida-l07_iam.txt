@@ -1,0 +1,30 @@
+$ python l07_iam.py
+== 1. RBAC (papeis) x ABAC (atributos) ==
+RBAC papel=auditor    acao=ler_processo  -> PERMITIDO
+RBAC papel=auditor    acao=aprovar       -> NEGADO
+RBAC papel=gestor     acao=aprovar       -> PERMITIDO
+RBAC papel=estagiario acao=ler_processo  -> NEGADO
+ABAC usuario={'lotacao': 'TCE-GO', 'nivel': 2, 'hora': 10} recurso={'orgao': 'TCE-GO', 'sigilo': 2} -> PERMITIDO
+ABAC usuario={'lotacao': 'TCE-GO', 'nivel': 1, 'hora': 10} recurso={'orgao': 'TCE-GO', 'sigilo': 2} -> NEGADO
+ABAC usuario={'lotacao': 'TCE-GO', 'nivel': 3, 'hora': 22} recurso={'orgao': 'TCE-GO', 'sigilo': 2} -> NEGADO
+ABAC usuario={'lotacao': 'TCM-GO', 'nivel': 3, 'hora': 10} recurso={'orgao': 'TCE-GO', 'sigilo': 2} -> NEGADO
+
+== 2. JWT HS256 montado a mao ==
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmEiLCJwYXB...
+payload (qualquer um decodifica, nao e segredo): {'sub': 'ana', 'papel': 'servidor', 'exp': 2000000000}
+verificacao estrita: ({'sub': 'ana', 'papel': 'servidor', 'exp': 2000000000}, 'ok')
+payload alterado para papel=admin, mesma assinatura -> (None, 'assinatura invalida')
+token com alg=none: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhbmEiLCJwYXBlbCI6ImFkbWluIiwiZXhwIjoyMDAwMDAwMDAwfQ.
+verificador INGENUO : ({'sub': 'ana', 'papel': 'admin', 'exp': 2000000000}, 'aceito sem assinatura (alg none)')
+verificador ESTRITO : (None, 'alg nao permitido: none')
+
+== 3. HOTP (RFC 4226) e TOTP (RFC 6238) com vetores de teste das RFCs ==
+HOTP contador 0..4: ['755224', '287082', '359152', '969429', '338314'] == RFC 4226 ? True
+TOTP SHA-1, T=        59, 8 digitos -> 94287082 (RFC 6238: 94287082) OK
+TOTP SHA-1, T=1111111109, 8 digitos -> 07081804 (RFC 6238: 07081804) OK
+TOTP SHA-1, T=1234567890, 8 digitos -> 89005924 (RFC 6238: 89005924) OK
+codigo de 6 digitos na janela atual: 115984 | na janela seguinte: 829992 | 2 janelas depois: 822581
+servidor aceita o codigo atual com tolerancia de 1 janela: True
+
+== 4. Limite de tentativas (rate limit) contra forca bruta de OTP de 6 digitos ==
+espaco de 6 digitos = 10**6 = 1000000 ; sem limite, 10 tentativas/s esgotam em 27.8 h; com bloqueio apos 5 erros, a chance de acerto em 5 tentativas e 5e-06

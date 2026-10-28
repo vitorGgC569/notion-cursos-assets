@@ -1,0 +1,29 @@
+$ python l01_hash_integridade.py
+== 1. Tamanho do digest independe do tamanho da entrada ==
+md5     entrada de    8 car. -> 128 bits (32 hex) | entrada de 1600 car. -> 128 bits (32 hex)
+sha1    entrada de    8 car. -> 160 bits (40 hex) | entrada de 1600 car. -> 160 bits (40 hex)
+sha256  entrada de    8 car. -> 256 bits (64 hex) | entrada de 1600 car. -> 256 bits (64 hex)
+sha512  entrada de    8 car. -> 512 bits (128 hex) | entrada de 1600 car. -> 512 bits (128 hex)
+sha1('Tribunal') = 501dfbdf939974847dc5030a81c43bf94bd1d3bb
+
+== 2. Efeito avalanche: trocar 1 bit da entrada ==
+original : Pagar R$ 1.000,00 ao fornecedor 0042
+alterada : Pagar R$ 1/000,00 ao fornecedor 0042
+sha256 original: 32aca6b5c70b4aaf71a5097c0d504364b7c293a44cf31fea9fe8634177ac7d0e
+sha256 alterada: 5811f19d639a9de6f281c0ed3447b498744df5c0fa14faf0218d0930bdbba955
+bits diferentes no digest: 135 de 256 (52.7%); esperado perto de 50%
+
+== 3. Hash simples nao autentica; HMAC exige a chave ==
+atacante recalcula sha256 da mensagem falsa: 99fda8e6d736cfdf9cb4fe5fc73c94b6 ... (valido, qualquer um calcula)
+HMAC-SHA256 legitimo   : 1af9f577ca33cfc0118a76994bd669e1 ...
+HMAC do atacante (sem chave): 225193b878947b2760736622d8ea8478 ...
+receptor confere tag da mensagem falsa com a tag recebida: False
+receptor confere tag da mensagem original: True
+
+== 4. Integridade de arquivo: sha256sum e openssl dgst concordam ==
+python  : ecd5341974a065b9d975808ec8340a1c55defd35a760041dfcb9eefdf975480b
+sha256sum: ecd5341974a065b9d975808ec8340a1c55defd35a760041dfcb9eefdf975480b
+openssl : ecd5341974a065b9d975808ec8340a1c55defd35a760041dfcb9eefdf975480b
+os tres iguais? True
+apos editar o arquivo, sha256sum: 59890bf2a72a75e7ec40a188db1cc4adb246bcbed936a146146b565989dfda01
+hash mudou? True

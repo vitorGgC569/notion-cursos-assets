@@ -1,0 +1,34 @@
+$ python l02_senhas.py
+== 1. Hash sem sal: senhas iguais geram hashes iguais ==
+ana    sha256 = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a...
+bruno  sha256 = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a...
+carla  sha256 = 1f7de51cb6092a6350f4f28fb423c04473be57e8...
+
+== 2. Ataque de dicionario contra hash sem sal ==
+hash vazado: 55a5e9e78207b4df8699d60886fa070079463547 ...
+senha recuperada com tabela pre-calculada de 6 palavras: senha123
+
+== 3. Com sal aleatorio os hashes diferem (mesma senha) ==
+ana    sal=8807e6ed0fb55752... hash=71c45f78a3fc872e109a7a071c0539e7...
+bruno  sal=b0ae33906c1758e4... hash=c7d8da71c8d5cc9cca10a6b413ade5a7...
+a tabela pre-calculada do item 2 nao serve mais: o sal muda o resultado de cada usuario
+
+== 4. Custo: sha256 puro x PBKDF2 x scrypt (tempo medido nesta execucao) ==
+sha256 simples        :       0.41 us por tentativa ->      2,444,817 tentativas/s
+PBKDF2 1.000 iter.    :      0.171 ms por tentativa ->          5,838 tentativas/s
+PBKDF2 600.000 iter.  :     98.414 ms por tentativa ->             10 tentativas/s
+scrypt n=2^14,r=8,p=1 :     50.055 ms por tentativa ->             20 tentativas/s
+
+== 5. Entropia (bits) = comprimento x log2(tamanho do alfabeto) ==
+8 minusculas                           37.6 bits  espaco = 2.088e+11
+8 letras e digitos                     47.6 bits  espaco = 2.183e+14
+8 de 94 simbolos imprimiveis           52.4 bits  espaco = 6.096e+15
+12 de 94 simbolos                      78.7 bits  espaco = 4.759e+23
+frase de 4 palavras (lista de 7776)    51.7 bits  espaco = 3.656e+15
+
+== 6. Tempo de forca bruta (media = metade do espaco), usando as taxas medidas acima ==
+8 minusculas                   sha256 puro:             11.9 horas | PBKDF2 600k:             325.6 anos
+8 letras e digitos             sha256 puro:               1.4 anos | PBKDF2 600k:         340,454.1 anos
+8 de 94 simbolos imprimiveis   sha256 puro:              39.5 anos | PBKDF2 600k:       9,504,907.4 anos
+12 de 94 simbolos              sha256 puro:   3,084,280,899.3 anos | PBKDF2 600k: 742,094,656,816,074.8 anos
+(taxas de uma CPU, 1 nucleo, nesta maquina; GPUs e hardware dedicado sao bem mais rapidos. Valores variam a cada execucao.)

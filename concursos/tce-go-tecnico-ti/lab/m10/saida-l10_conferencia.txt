@@ -1,0 +1,50 @@
+$ python l10_conferencia.py
+formula         entrada                                          Python             JavaScript  igual?
+entropyBits     (8, 26)                                     37.60351775            37.60351775  sim
+entropyBits     (8, 62)                                     47.63357048            47.63357048  sim
+entropyBits     (12, 94)                                    78.65506622            78.65506622  sim
+entropyBits     (4, 7776)                                   51.69925001            51.69925001  sim
+entropyBits     (16, 10)                                    53.15084952            53.15084952  sim
+keysSym         (2,)                                                  1                      1  sim
+keysSym         (10,)                                                45                     45  sim
+keysSym         (50,)                                              1225                   1225  sim
+keysSym         (100,)                                             4950                   4950  sim
+keysSym         (1000,)                                          499500                 499500  sim
+keysAsym        (2,)                                                  4                      4  sim
+keysAsym        (10,)                                                20                     20  sim
+keysAsym        (50,)                                               100                    100  sim
+keysAsym        (100,)                                              200                    200  sim
+keysAsym        (1000,)                                            2000                   2000  sim
+ale             (500000, 0.4, 0.5)                               100000                 100000  sim
+ale             (800000, 0.25, 0.2)                               40000                  40000  sim
+ale             (6000, 1.0, 3.0)                                  18000                  18000  sim
+ale             (120000, 0.3, 2)                                  72000                  72000  sim
+sle             (500000, 0.4)                                    200000                 200000  sim
+sle             (800000, 0.25)                                   200000                 200000  sim
+sle             (6000, 1.0)                                        6000                   6000  sim
+downtimeHours   (99,)                                              87.6                   87.6  sim
+downtimeHours   (99.9,)                                            8.76                   8.76  sim
+downtimeHours   (99.99,)                                          0.876                  0.876  sim
+downtimeHours   (99.5,)                                            43.8                   43.8  sim
+seriesAvail     (99, 99)                                          98.01                  98.01  sim
+seriesAvail     (99.9, 99.5)                                    99.4005                99.4005  sim
+parallelAvail   (99, 99)                                          99.99                  99.99  sim
+parallelAvail   (99.9, 99.5)                                    99.9995                99.9995  sim
+parallelAvail   (90, 90)                                             99                     99  sim
+bruteYears      (40, 1000000000.0)                      1.742071051e-05        1.742071051e-05  sim
+bruteYears      (56, 1000000000.0)                          1.141683684            1.141683684  sim
+bruteYears      (64, 1000000000000.0)                       0.292271023            0.292271023  sim
+bruteYears      (128, 1e+18)                            5.391448762e+12        5.391448762e+12  sim
+restoreSets     ('completo', 5)                                       1                      1  sim
+restoreSets     ('incremental', 5)                                    6                      6  sim
+restoreSets     ('diferencial', 5)                                    2                      2  sim
+restoreSets     ('diferencial', 0)                                    1                      1  sim
+backupBytes     ('completo', 100, 5, 6)                             700                    700  sim
+backupBytes     ('incremental', 100, 5, 6)                          130                    130  sim
+backupBytes     ('diferencial', 100, 5, 6)                          205                    205  sim
+hexLen          (128,)                                               32                     32  sim
+hexLen          (160,)                                               40                     40  sim
+hexLen          (256,)                                               64                     64  sim
+hexLen          (512,)                                              128                    128  sim
+
+46 de 46 conferencias iguais

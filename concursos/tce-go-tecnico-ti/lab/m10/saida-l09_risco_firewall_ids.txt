@@ -1,0 +1,36 @@
+$ python l09_risco_firewall_ids.py
+== 1. Analise quantitativa de risco: SLE = AV x EF; ALE = SLE x ARO ==
+Servidor de processos (indisponibilidade)    AV=R$ 500,000.00 EF= 40% SLE=R$ 200,000.00 ARO=0.5/ano ALE=R$ 100,000.00
+Base de pessoal (vazamento)                  AV=R$ 800,000.00 EF= 25% SLE=R$ 200,000.00 ARO=0.2/ano ALE=R$  40,000.00
+Estacao de usuario (ransomware)              AV=R$  6,000.00 EF=100% SLE=R$   6,000.00 ARO=3.0/ano ALE=R$  18,000.00
+ALE total = R$ 158,000.00
+Controle que custa R$ 40.000/ano e reduz o ARO do servidor de 0,5 para 0,1: economia de ALE = R$ 80,000.00; vale a pena? True
+
+== 2. Filtro de pacotes SEM estado (ACL) x COM estado (stateful), simulado em Python ==
+ACL sem estado (olha cada pacote isolado, so cabecalhos):
+      200.1.1.1 -> 10.1.1.5:443   SYN => permitir
+      200.1.1.1 -> 10.1.1.5:22    SYN => negar (regra padrao: default deny)
+       10.2.2.2 -> 10.1.1.5:22    SYN => permitir
+      200.1.1.1 -> 10.1.1.5:3306  SYN => negar (regra padrao: default deny)
+      200.1.1.1 -> 10.1.1.5:443   ACK => permitir
+    203.0.113.5 -> 10.1.1.5:443   ACK => permitir
+Stateful (mantem tabela de conexoes):
+      200.1.1.1 -> 10.1.1.5:443   SYN => permitir e registrar conexao
+      200.1.1.1 -> 10.1.1.5:22    SYN => negar (regra padrao)
+       10.2.2.2 -> 10.1.1.5:22    SYN => permitir e registrar conexao
+      200.1.1.1 -> 10.1.1.5:3306  SYN => negar (regra padrao)
+      200.1.1.1 -> 10.1.1.5:443   ACK => permitir (pertence a conexao registrada)
+    203.0.113.5 -> 10.1.1.5:443   ACK => negar (ACK sem conexao estabelecida)
+
+== 3. Deteccao de forca bruta em log de autenticacao (logica de IDS por assinatura/limiar) ==
+eventos no log: 150
+regra: >= 10 falhas do mesmo IP em 60 s
+ALERTA: 203.0.113.66 a partir de t=200s com 30 falhas na janela -> bloquear/limitar (resposta de um IPS)
+IPs com falhas isoladas (abaixo do limiar, sem alerta): ['10.0.0.12', '10.0.0.13', '10.0.0.14', '10.0.0.17', '10.0.0.19'] ...
+
+== 4. Varredura de portas SO em 127.0.0.1, em portas que este proprio script abre ==
+portas testadas: 13 (as 3 abertas pelo script e as 5 vizinhas de cada lado da primeira)
+portas abertas que o script criou: [39981, 43391, 50615]
+portas encontradas pela varredura (conexao TCP completa): [39981, 43391, 50615]
+todas as portas abertas encontradas? True
+(alvo unico: o proprio localhost. Nenhuma outra maquina e nenhuma ferramenta externa, como nmap, foram usadas.)

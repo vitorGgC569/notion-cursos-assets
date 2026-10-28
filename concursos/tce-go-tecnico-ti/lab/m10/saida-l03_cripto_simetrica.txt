@@ -1,0 +1,22 @@
+$ python l03_cripto_simetrica.py
+== 1. AES-256-GCM: cifra e autentica ==
+chave: 256 bits | nonce: 96 bits
+texto claro: 37 bytes | cifrado+tag: 53 bytes (tag de 16 bytes)
+decifra ok : Parecer sigiloso do processo 2026/001
+1 bit alterado no cifrado -> InvalidTag (integridade e autenticidade verificadas)
+dado associado diferente  -> InvalidTag
+
+== 2. ECB revela padroes; GCM nao ==
+entrada: 9 blocos de 16 bytes, 7 blocos repetidos
+ECB : 7 blocos cifrados repetidos  <- o padrao vaza
+CBC : 0 blocos cifrados repetidos
+GCM : 0 blocos cifrados repetidos
+
+== 3. Reusar o nonce no modo de fluxo (CTR/GCM) destroi o sigilo ==
+c1 XOR c2 == p1 XOR p2 ? True (o atacante nao precisa da chave para obter p1 XOR p2)
+com p1 conhecido, o atacante recupera p2: Salario do servidor B: 98000
+
+== 4. openssl enc (CLI) com derivacao de chave PBKDF2 ==
+arquivo cifrado comeca com: b'Salted__'
+decifrado : conteudo confidencial
+senha errada -> 40578607D07F0000:error:1C800064:Provider routines:ossl_cipher_unpadblock:bad decrypt:../providers/implementations/ciphers/ciphercommon_block.c:107:
