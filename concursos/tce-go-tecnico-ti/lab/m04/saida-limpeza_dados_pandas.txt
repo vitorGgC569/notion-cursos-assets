@@ -1,0 +1,31 @@
+BRUTO
+    id orgao    valor
+0   1     A   1200.0
+1   2     B   1350.0
+2   3     A    980.0
+3   3     A    980.0
+4   4     C      NaN
+5   5     B   1100.0
+6   6   NaN   1250.0
+7   7     A  98000.0 
+
+ausentes por coluna:
+ id       0
+orgao    1
+valor    1 
+
+após remover duplicados: 7 linhas
+IQR: Q1=1125.0 Q3=1325.0 limite superior=1625.0
+outliers marcados: [7]
+média=17313.3  mediana=1225.0  (o outlier puxa a média)
+
+LIMPO E TRANSFORMADO (z-score, min-max e one-hot)
+  id  valor_imp      z  minmax  orgao_A  orgao_B  orgao_C  orgao_desconhecido
+  1     1200.0  0.135   0.595        1        0        0                   0
+  2     1350.0  1.414   1.000        0        1        0                   0
+  3      980.0 -1.741   0.000        1        0        0                   0
+  4     1225.0  0.348   0.662        0        0        1                   0
+  5     1100.0 -0.718   0.324        0        1        0                   0
+  6     1250.0  0.561   0.730        0        0        0                   1
+
+z-score: média=-0.000, desvio=1.000

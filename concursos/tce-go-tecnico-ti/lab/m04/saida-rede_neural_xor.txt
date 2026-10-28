@@ -1,0 +1,14 @@
+época     0  perda = 0.31734
+época   100  perda = 0.20061
+época   500  perda = 0.00377
+época  1000  perda = 0.00108
+época  2000  perda = 0.00042
+época  5000  perda = 0.00014
+
+entrada  esperado  saída da rede  classe
+(0, 0)     0        0.0051        0
+(0, 1)     1        0.9885        1
+(1, 0)     1        0.9889        1
+(1, 1)     0        0.0169        0
+
+acertos: 4/4

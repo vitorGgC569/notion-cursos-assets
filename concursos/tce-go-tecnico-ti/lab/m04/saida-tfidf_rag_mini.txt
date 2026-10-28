@@ -1,0 +1,16 @@
+PERGUNTA: O cliente pode pedir revisão de uma decisão automatizada?
+   0.146  lgpd-art20
+   0.062  mlops
+
+PERGUNTA: Quais princípios a estratégia brasileira de IA adota?
+   0.483  ebia
+
+PERGUNTA: Como medir se o modelo generaliza?
+   0.255  mlops
+
+PROMPT MONTADO PARA O LLM (consulta: Dado anonimizado ainda é dado pessoal? )
+---
+Responda apenas com base nos trechos abaixo e cite a fonte. Se não houver resposta, diga que não sabe.
+[lgpd-art12] Os dados anonimizados não serão considerados dados pessoais, salvo quando o processo de anonimização puder ser revertido com esforços razoáveis.
+[lgpd-art20] O titular dos dados tem direito a solicitar a revisão de decisões tomadas unicamente com base em tratamento automatizado de dados pessoais que afetem seus interesses.
+Pergunta: Dado anonimizado ainda é dado pessoal?

@@ -1,0 +1,15 @@
+grau  erro treino (MSE)  erro validação (MSE)  diagnóstico
+   1            0.2597                0.1284  underfitting
+   2            0.2389                0.1560  underfitting
+   3            0.0425                0.0785  bom ajuste
+   4            0.0415                0.1125  bom ajuste
+   6            0.0274                0.2167  overfitting
+   9            0.0212              131.6695  overfitting
+  12            0.0196          2695031.3133  overfitting
+
+melhor grau pela validação: 3 (MSE de validação 0.0785)
+
+k-fold (k = 5): MSE médio de teste por grau
+  grau 1: 0.2304  (desvio padrão entre as rodadas 0.0996)
+  grau 3: 0.0570  (desvio padrão entre as rodadas 0.0310)
+  grau 9: 0.0991  (desvio padrão entre as rodadas 0.0950)

@@ -1,0 +1,7 @@
+iteração 1: C1 grupo=['A', 'B', 'C']  C2 grupo=['D', 'E', 'F', 'G', 'H']
+   novos centroides: C1=(1.83; 2.33)  C2=(4.50; 5.60)
+iteração 2: C1 grupo=['A', 'B', 'C']  C2 grupo=['D', 'E', 'F', 'G', 'H']
+   novos centroides: C1=(1.83; 2.33)  C2=(4.50; 5.60)
+   convergiu: centroides não mudaram
+
+inércia (soma das distâncias² ao centroide): 16.033

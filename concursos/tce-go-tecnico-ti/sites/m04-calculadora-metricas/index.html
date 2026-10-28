@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Calculadora de métricas de classificação · TCE-GO 2026 · Técnico de Controle Externo, TI</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#app">Ir para o conteúdo</a>
+<div class="wrap"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">TCE-GO 2026 · Técnico de Controle Externo, TI</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 4</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<p class="kicker">Módulo 4 · IA, Ciência de Dados e Automação</p><h1>Calculadora de métricas de classificação</h1><p class="lead">Informe a matriz de confusão (VP, FP, FN e VN) para ver acurácia, precisão, recall, especificidade, F1 e mais. Use para conferir as suas contas e depois refaça de cabeça.</p>
+<style>.cwrap label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}.cwrap input{font:16px var(--mono);padding:9px 12px;border:1px solid var(--line-2);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);width:100%;max-width:200px}
+.cwrap .row{display:flex;gap:12px;flex-wrap:wrap}.cwrap .row>div{flex:1;min-width:130px}.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.tbl th{color:var(--muted);font-weight:600;width:34%}
+.bn{color:var(--accent);font-weight:700}.muted{color:var(--muted);font-size:13px}.cwrap .btn{margin:10px 8px 0 0}</style>
+<div class="cwrap"><div class="row"><div><label for="vp">VP (verdadeiros positivos)</label><input id="vp" type="number" min="0" value="30"></div><div><label for="fp">FP (falsos positivos)</label><input id="fp" type="number" min="0" value="20"></div><div><label for="fn">FN (falsos negativos)</label><input id="fn" type="number" min="0" value="10"></div><div><label for="vn">VN (verdadeiros negativos)</label><input id="vn" type="number" min="0" value="140"></div></div>
+<button class="btn" id="ex1" type="button">Exemplo: 30, 20, 10, 140</button><button class="btn" id="ex2" type="button">Exemplo: modelo ingênuo em classe rara</button>
+<div id="outm" aria-live="polite"></div></div><div id="app" hidden></div>
+<div class="foot"><span>Módulo 4</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="../assets/app.js"></script><script type="application/json" id="data">{"id": "m04-calculadora-metricas"}</script><script src="../assets/calc-met.js"></script>
+<script>(function(){var f=document.getElementById('full');if(f){f.href=location.href.split('?')[0]}if(window.top===window.self&&f)f.style.display='none'})();</script>
+</body></html>

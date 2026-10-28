@@ -1,0 +1,15 @@
+ORIGINAL : Processo 123: o servidor João da Silva, CPF 529.982.247-25, e-mail joao.silva@exemplo.gov.br, telefone (62) 98888-7777, relatou o fato. CPF inválido de teste: 111.111.111-11.
+MASCARADO: Processo 123: o servidor João da Silva, CPF [CPF], e-mail [EMAIL], telefone [TELEFONE], relatou o fato. CPF inválido de teste: 111.111.111-11.
+
+CPF 529.982.247-25 válido? True | 111.111.111-11 válido? False
+
+Pseudonimização (HMAC-SHA256 com chave guardada à parte):
+  529.982.247-25 -> ea3343507411 (mesmo valor, mesmo pseudônimo: permite juntar bases)
+  outro CPF      -> d0043699d0a9
+  Continua sendo dado pessoal: quem tem a chave consegue reidentificar.
+
+k-anonimato dos quase-identificadores (idade, sexo, cidade): k = 1
+  grupos com 1 pessoa (reidentificáveis): [('74', 'M', 'Goiânia'), ('52', 'M', 'Rio Verde')]
+  após generalizar idade (7x, 3x, 5x) e cidade (GO): {('7x', 'F', 'GO'): 2, ('7x', 'M', 'GO'): 1, ('3x', 'F', 'GO'): 2, ('5x', 'M', 'GO'): 1} -> k = 1
+  suprimindo os registros que continuam únicos: 2 removidos -> {('7x', 'F', 'GO'): 2, ('3x', 'F', 'GO'): 2} -> k = 2
+  Trade-off: mais anonimato, menos informação (utilidade) para o modelo.
