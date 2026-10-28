@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Notebooks de linha',label:'Pregão',text:'<p>Notebooks de especificação usual de mercado são <b>bens comuns</b>. A modalidade é o <b>pregão</b>, com critério de menor preço ou maior desconto, conduzido por pregoeiro.</p>',scene:function(){return sc('OBJETO 1',[['Bem comum','n','padrão de mercado'],['→','n'],['Pregão','a','menor preço']],'obrigatório para bens e serviços comuns')}},
+{title:'2. Construção de um prédio',label:'Concorrência',text:'<p>Uma <b>obra de engenharia</b> não vai a pregão. A modalidade é a <b>concorrência</b>, que também atende bens e serviços especiais e serviços especiais de engenharia.</p>',scene:function(){return sc('OBJETO 2',[['Obra de engenharia','n'],['→','n'],['Concorrência','a','art. 6º, XXXVIII']],'serviço comum de engenharia pode ir a pregão')}},
+{title:'3. Venda de carros inservíveis',label:'Leilão',text:'<p>Para <b>alienar</b> bens móveis inservíveis ou imóveis, a modalidade é o <b>leilão</b>. Vence o <b>maior lance</b>, e <b>não há fase de habilitação</b>.</p>',scene:function(){return sc('OBJETO 3',[['Alienar bens','n','inservíveis'],['→','n'],['Leilão','a','maior lance']],'sem habilitação')}},
+{title:'4. Projeto de uma praça',label:'Concurso',text:'<p>Para escolher um <b>trabalho técnico, científico ou artístico</b>, a modalidade é o <b>concurso</b>, com <b>prêmio ou remuneração</b> ao vencedor, que cede os direitos patrimoniais.</p>',scene:function(){return sc('OBJETO 4',[['Trabalho artístico','n','ou técnico'],['→','n'],['Concurso','a','melhor técnica']],'prêmio ou remuneração')}},
+{title:'5. Solução inovadora',label:'Diálogo competitivo',text:'<p>O objeto envolve <b>inovação</b> e a Administração não consegue definir as especificações sozinha. Usa-se o <b>diálogo competitivo</b>, conduzido por comissão de pelo menos três servidores efetivos.</p>',scene:function(){return sc('OBJETO 5',[['Inovação','n','sem especificação'],['→','n'],['Diálogo','a','competitivo']],'25 dias úteis + fase competitiva de 60')}},
+{title:'Resumo',label:'Resumo',text:'<p>Bem ou serviço <b>comum</b>: pregão. <b>Obra</b> e itens <b>especiais</b>: concorrência. <b>Alienação</b>: leilão. <b>Trabalho técnico ou artístico</b>: concurso. <b>Inovação</b>: diálogo. <b>Convite</b> e <b>tomada de preços</b>: acabaram.</p>',scene:function(){return sc('RESUMO',[['Comum: pregão','d'],['Obra: concorrência','d'],['Alienar: leilão','d']],'concurso e diálogo: casos especiais')}}
+];
+K.explain({w:720,h:200,steps:S,alt:'Cinco objetos de licitação e a modalidade da Lei 14.133 que se aplica a cada um'});
+})();
