@@ -1,0 +1,13 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y){var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box('t'+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+var S=[
+{title:'1. Propina',label:'Art. 9',text:'<p>O agente recebe vantagem patrimonial indevida em razão do cargo. É <b>enriquecimento ilícito</b> (art. 9º). A sanção máxima de suspensão dos direitos políticos é de <b>14 anos</b>.</p>',scene:function(){return sc('CONDUTA 1',[['Recebe propina','m','vantagem indevida'],['→','n'],['Art. 9','a','até 14 anos']],'enriquecimento ilícito')}},
+{title:'2. Desvio de verba',label:'Art. 10',text:'<p>O agente, dolosamente, desvia verba pública. Há <b>perda patrimonial efetiva</b>: <b>prejuízo ao erário</b> (art. 10). A suspensão dos direitos políticos vai até <b>12 anos</b>.</p>',scene:function(){return sc('CONDUTA 2',[['Desvia verba','m','dolo e perda efetiva'],['→','n'],['Art. 10','a','até 12 anos']],'prejuízo ao erário')}},
+{title:'3. Violação de princípios',label:'Art. 11',text:'<p>O agente viola, dolosamente, os deveres de honestidade, imparcialidade e legalidade, numa das condutas listadas na lei, para obter proveito indevido. É o <b>art. 11</b>. Não há suspensão de direitos políticos: multa de até <b>24 vezes</b> a remuneração.</p>',scene:function(){return sc('CONDUTA 3',[['Viola princípios','n','conduta listada na lei'],['→','n'],['Art. 11','a','rol taxativo']],'multa até 24 remunerações')}},
+{title:'4. Culpa, sem dolo',label:'Sem improbidade',text:'<p>O agente erra por <b>negligência</b>, sem intenção. Após a Lei 14.230/2021, a culpa <b>não</b> configura improbidade. Pode haver outra responsabilização, mas não a da Lei de Improbidade.</p>',scene:function(){return sc('CONDUTA 4',[['Erro por negligência','n','sem dolo'],['→','n'],['Não é improbidade','m']],'a lei nova exige dolo')}},
+{title:'Resumo',label:'Resumo',text:'<p>Vantagem: <b>art. 9</b>. Perda patrimonial efetiva: <b>art. 10</b>. Princípios: <b>art. 11</b>. Todos exigem <b>dolo</b>, e a prescrição é de <b>8 anos</b>.</p>',scene:function(){return sc('RESUMO',[['Art. 9: vantagem','d'],['Art. 10: perda','d'],['Art. 11: princípios','d'],['Dolo sempre','d']],'prescrição em 8 anos')}}
+];
+K.explain({w:720,h:200,steps:S,alt:'Condutas e o artigo da Lei de Improbidade que cada uma fere'});
+})();

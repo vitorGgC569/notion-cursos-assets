@@ -1,0 +1,14 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y){var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box('t'+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+var S=[
+{title:'1. Viatura bate no carro',label:'Objetiva',text:'<p>Um motorista da prefeitura, em serviço, bate no carro de um particular. A prefeitura responde de forma <b>objetiva</b>: basta conduta, dano e nexo. Depois ela pode regressar contra o motorista, se houve dolo ou culpa.</p>',scene:function(){return sc('SITUAÇÃO 1',[['Agente em serviço causa dano','n'],['→','n'],['Objetiva','a','risco administrativo']],'sem provar culpa')}},
+{title:'2. Culpa da própria vítima',label:'Excludente',text:'<p>A vítima atravessa a pista fora da faixa, em local sinalizado, e é atingida por uma viatura. A <b>culpa exclusiva da vítima</b> rompe o nexo causal e afasta a responsabilidade.</p>',scene:function(){return sc('SITUAÇÃO 2',[['Culpa exclusiva da vítima','m','sem nexo'],['→','n'],['Sem responsabilidade','a']],'excludente')}},
+{title:'3. Buraco na rua',label:'Omissão genérica',text:'<p>O dano decorre de buraco numa via, e a Administração não consertou. É omissão <b>genérica</b>: em regra a responsabilidade é <b>subjetiva</b>, e é preciso demonstrar a falha do serviço.</p>',scene:function(){return sc('SITUAÇÃO 3',[['Omissão genérica','n','falta do serviço'],['→','n'],['Subjetiva','a','culpa anônima']],'prova da falha')}},
+{title:'4. Detento ferido na cela',label:'Dever de guarda',text:'<p>Um preso é agredido por outro dentro do presídio. O Estado tem <b>dever específico de guarda</b>, e a responsabilidade é <b>objetiva</b>, mesmo na omissão.</p>',scene:function(){return sc('SITUAÇÃO 4',[['Omissão específica','n','dever de guarda'],['→','n'],['Objetiva','a']],'preso, aluno, paciente')}},
+{title:'5. Quem a vítima processa?',label:'Tema 940',text:'<p>A vítima processa o <b>Estado</b> (ou a prestadora do serviço), e não o agente. O Estado regressa contra o agente se houver <b>dolo ou culpa</b>. É a dupla garantia do Tema 940 do STF.</p>',scene:function(){return sc('SITUAÇÃO 5',[['Vítima','n'],['→','n'],['Estado','a','paga'],['→','n'],['Regresso contra o agente','d','dolo ou culpa']],'agente só em regresso')}},
+{title:'Resumo',label:'Resumo',text:'<p>Ação de agente: <b>objetiva</b>. Culpa exclusiva da vítima ou força maior: <b>afasta</b>. Omissão genérica: <b>subjetiva</b>. Dever de guarda: <b>objetiva</b>. Agente: só <b>regresso</b>.</p>',scene:function(){return sc('RESUMO',[['Ação: objetiva','d'],['Excludente: afasta','d'],['Omissão: subjetiva','d'],['Guarda: objetiva','d']],'quatro respostas para a banca')}}
+];
+K.explain({w:720,h:200,steps:S,alt:'Cinco situações de responsabilidade civil do Estado e a resposta de cada uma'});
+})();
