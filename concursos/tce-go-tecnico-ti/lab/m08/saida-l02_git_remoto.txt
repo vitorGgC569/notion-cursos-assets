@@ -1,0 +1,187 @@
+
+--- 1. Remoto bare (o 'servidor') e duas pessoas clonando ---
+$ git init -q --bare -b main origem.git && git clone -q origem.git ana 2>&1; git clone -q origem.git bia 2>&1; ls
+warning: You appear to have cloned an empty repository.
+warning: You appear to have cloned an empty repository.
+ana
+bia
+origem.git
+$ git push -u origin main
+To /tmp/m8-git2-Gpj3/origem.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+$ git remote -v && git branch -vv
+origin	/tmp/m8-git2-Gpj3/origem.git (fetch)
+origin	/tmp/m8-git2-Gpj3/origem.git (push)
+* main f1fe46b [origin/main] feat: inicio
+$ git pull -q && git log --oneline
+f1fe46b feat: inicio
+
+--- 2. Push rejeitado (non-fast-forward) e pull --rebase ---
+$ git push
+To /tmp/m8-git2-Gpj3/origem.git
+   f1fe46b..044ba30  main -> main
+$ git push
+To /tmp/m8-git2-Gpj3/origem.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to '/tmp/m8-git2-Gpj3/origem.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+[codigo de saida 1]
+$ git fetch && git status -sb
+From /tmp/m8-git2-Gpj3/origem
+   f1fe46b..044ba30  main       -> origin/main
+## main...origin/main [ahead 1, behind 1]
+$ git log --oneline --graph --all
+* 148150b feat: parte da Ana
+| * 044ba30 feat: parte da Bia
+|/  
+* f1fe46b feat: inicio
+$ git pull --rebase && git log --oneline --graph
+Rebasing (1/1)Successfully rebased and updated refs/heads/main.
+* 4cbecdb feat: parte da Ana
+* 044ba30 feat: parte da Bia
+* f1fe46b feat: inicio
+$ git push && git status -sb
+To /tmp/m8-git2-Gpj3/origem.git
+   044ba30..4cbecdb  main -> main
+## main...origin/main
+
+--- 3. fetch nao altera o seu trabalho; pull = fetch + integracao ---
+$ git fetch && git log --oneline HEAD..origin/main
+From /tmp/m8-git2-Gpj3/origem
+   044ba30..4cbecdb  main       -> origin/main
+4cbecdb feat: parte da Ana
+$ git merge --ff-only origin/main && git log --oneline -3
+Updating 044ba30..4cbecdb
+Fast-forward
+ ana.py | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 ana.py
+4cbecdb feat: parte da Ana
+044ba30 feat: parte da Bia
+f1fe46b feat: inicio
+
+--- 4. Branch remoto, push -u e exclusao ---
+$ git switch -c feature/x && git push -u origin feature/x 2>&1 | tail -2
+Switched to a new branch 'feature/x'
+ * [new branch]      feature/x -> feature/x
+branch 'feature/x' set up to track 'origin/feature/x'.
+$ git branch -r
+  origin/feature/x
+  origin/main
+$ git push origin --delete feature/x 2>&1 | tail -1; git branch -r
+ - [deleted]         feature/x
+  origin/main
+
+--- 5. Remote: adicionar e remover (questao TRT-5/2022) ---
+$ git remote add analista ../origem.git && git remote -v
+analista	../origem.git (fetch)
+analista	../origem.git (push)
+origin	/tmp/m8-git2-Gpj3/origem.git (fetch)
+origin	/tmp/m8-git2-Gpj3/origem.git (push)
+$ git remote remove analista && git remote -v
+origin	/tmp/m8-git2-Gpj3/origem.git (fetch)
+origin	/tmp/m8-git2-Gpj3/origem.git (push)
+
+--- 6. Git Flow na pratica: main, develop, feature, release, hotfix ---
+$ git switch -c develop && git push -q -u origin develop 2>&1 | tail -1; git branch
+Switched to a new branch 'develop'
+* develop
+  main
+$ git switch -c feature/boleto develop
+Switched to a new branch 'feature/boleto'
+$ git switch develop && git merge --no-ff -q feature/boleto -m 'Merge feature/boleto em develop' && git branch -d feature/boleto
+Switched to branch 'develop'
+Your branch is up to date with 'origin/develop'.
+Deleted branch feature/boleto (was cecb6c9).
+$ git switch -c release/1.0.0 develop
+Switched to a new branch 'release/1.0.0'
+$ git switch main && git merge --no-ff -q release/1.0.0 -m 'Release 1.0.0' && git tag -a v1.0.0 -m 'release 1.0.0'
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+$ git switch develop && git merge --no-ff -q release/1.0.0 -m 'Merge release 1.0.0 em develop' && git branch -d release/1.0.0
+Switched to branch 'develop'
+Your branch is ahead of 'origin/develop' by 2 commits.
+  (use "git push" to publish your local commits)
+Deleted branch release/1.0.0 (was 27741fb).
+$ git switch -c hotfix/1.0.1 main
+Switched to a new branch 'hotfix/1.0.1'
+$ git switch main && git merge --no-ff -q hotfix/1.0.1 -m 'Hotfix 1.0.1' && git tag -a v1.0.1 -m 'hotfix 1.0.1'
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 4 commits.
+  (use "git push" to publish your local commits)
+$ git switch develop && git merge --no-ff -q hotfix/1.0.1 -m 'Merge hotfix 1.0.1 em develop' ; git branch -d hotfix/1.0.1
+Switched to branch 'develop'
+Your branch is ahead of 'origin/develop' by 4 commits.
+  (use "git push" to publish your local commits)
+Deleted branch hotfix/1.0.1 (was 6e0c9fe).
+$ git log --oneline --graph --all --decorate | head -20
+*   e6f9bdc (HEAD -> develop) Merge hotfix 1.0.1 em develop
+|\  
+* \   c0ae4b2 Merge release 1.0.0 em develop
+|\ \  
+| | | *   56257c6 (tag: v1.0.1, main) Hotfix 1.0.1
+| | | |\  
+| | | |/  
+| | |/|   
+| | * | 6e0c9fe fix: corrige bug critico
+| | |/  
+| | *   0b56e46 (tag: v1.0.0) Release 1.0.0
+| | |\  
+| | |/  
+| |/|   
+| * | 27741fb chore: versao 1.0.0
+|/ /  
+* |   904c8f3 Merge feature/boleto em develop
+|\ \  
+| |/  
+|/|   
+
+--- 7. Trunk-based: ramos curtos e feature flag ---
+$ git switch main && git switch -c tb/pagamento-pix
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 6 commits.
+  (use "git push" to publish your local commits)
+Switched to a new branch 'tb/pagamento-pix'
+$ git switch main && git merge --ff-only tb/pagamento-pix && git branch -d tb/pagamento-pix && git log --oneline -2
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 6 commits.
+  (use "git push" to publish your local commits)
+Updating 56257c6..ded2088
+Fast-forward
+ flags.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 flags.py
+Deleted branch tb/pagamento-pix (was ded2088).
+ded2088 feat: pix atras de feature flag
+56257c6 Hotfix 1.0.1
+$ python3 -c 'import flags; print(flags.pagar(10)); flags.FLAGS["pix"]=True; print(flags.pagar(10))'
+boleto:10
+pix:10
+
+--- 8. Hook pre-commit: o Git recusa o commit ---
+$ git commit -m 'add cfg'
+pre-commit: segredo detectado, commit recusado
+[codigo de saida 1]
+$ git status --short
+A  cfg.env
+
+--- 9. Inspecao: log com autor, blame, shortlog ---
+$ git log --format='%h %an %s' | head -4
+ded2088 Ana Dev feat: pix atras de feature flag
+56257c6 Ana Dev Hotfix 1.0.1
+6e0c9fe Ana Dev fix: corrige bug critico
+0b56e46 Ana Dev Release 1.0.0
+$ git blame -L1,2 app.py | cut -c1-60
+^f1fe46b (Ana Dev 2026-01-02 10:00:00 -0300 1) v=1
+044ba30f (Bia Dev 2026-01-03 10:00:00 -0300 2) bia=1
+$ git shortlog -sn --all | head
+    11	Ana Dev
+     1	Bia Dev
+$ git diff --stat v1.0.0 v1.0.1
+ VERSION | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

@@ -1,0 +1,79 @@
+
+--- 1. Aplicacao instrumentada: counter, gauge e histogram ---
+$ grep -nE 'Counter\(|Gauge\(|Histogram\(' app.py | cut -c1-110
+5:REQS = Counter("http_requests_total", "Total de requisicoes", ["path", "status"])
+6:FILA = Gauge("fila_pedidos", "Pedidos aguardando na fila (sobe e desce)")
+7:LAT = Histogram("http_request_seconds", "Latencia das requisicoes", buckets=(0.01, 0.05, 0.1, 0.5, 1))
+$ curl -s localhost:15810/metrics | grep -E '^(http_requests_total|fila_pedidos|http_request_seconds_count|# TYPE (http_requests_total|fila_pedidos|http_request_seconds))'
+# TYPE http_requests_total counter
+http_requests_total{path="/home",status="200"} 30.0
+http_requests_total{path="/erro",status="500"} 6.0
+http_requests_total{path="/api",status="200"} 10.0
+# TYPE fila_pedidos gauge
+fila_pedidos 0.0
+# TYPE http_request_seconds histogram
+http_request_seconds_count 46.0
+# TYPE http_request_seconds_created gauge
+
+--- 2. Logs estruturados em JSON: cada linha e um evento consultavel ---
+$ head -3 app.log
+{"nivel": "INFO", "path": "/home", "status": 200, "ms": 20}
+{"nivel": "INFO", "path": "/home", "status": 200, "ms": 20}
+{"nivel": "INFO", "path": "/home", "status": 200, "ms": 20}
+$ python3 -c "import json; L=[json.loads(l) for l in open('app.log')]; print('eventos:',len(L),' erros:',sum(1 for x in L if x['nivel']=='ERROR'))"
+eventos: 46  erros: 6
+
+--- 3. Prometheus: configuracao e regra de alerta validadas com promtool ---
+$ docker run --rm -v /tmp/m8-obs-1669703:/etc/prometheus --entrypoint promtool prom/prometheus:latest check config /etc/prometheus/prometheus.yml 2>&1 | sed 's#/etc/prometheus/##'
+Checking prometheus.yml
+  SUCCESS: 1 rule files found
+ SUCCESS: prometheus.yml is valid prometheus config file syntax
+
+Checking regras.yml
+  SUCCESS: 1 rules found
+
+$ docker run --rm -v /tmp/m8-obs-1669703:/etc/prometheus --entrypoint promtool prom/prometheus:latest check rules /etc/prometheus/regras.yml 2>&1 | sed 's#/etc/prometheus/##'
+Checking regras.yml
+  SUCCESS: 1 rules found
+
+
+--- 4. Prometheus coletando (scrape) a aplicacao ---
+$ curl -s http://127.0.0.1:15809/api/v1/targets | python3 -c "import sys,json; [print(t['labels']['job'], t['health']) for t in json.load(sys.stdin)['data']['activeTargets']]"
+app up
+$ PromQL: sum by (status) (http_requests_total)
+{'status': '200'} 40
+{'status': '500'} 18
+$ PromQL: fila_pedidos  (gauge: sobe e desce, volta a zero)
+{'__name__': 'fila_pedidos', 'instance': '127.0.0.1:15810', 'job': 'app'} 0
+$ PromQL: histogram_quantile(0.95, sum by (le) (rate(http_request_seconds_bucket[1m])))
+p95 (s) = 0.43999999999999995
+
+--- 5. Alerta disparado pela regra (taxa de erros 500) ---
+$ curl -s http://127.0.0.1:15809/api/v1/rules | python3 -c "import sys,json; r=json.load(sys.stdin)['data']['groups'][0]['rules'][0]; print(r['name'], r['state'], r['health'])"
+TaxaDeErros5xxAlta firing ok
+$ curl -s http://127.0.0.1:15809/api/v1/alerts | python3 -c "import sys,json; a=json.load(sys.stdin)['data']['alerts']; print(len(a),'alerta(s):', [x['labels']['alertname']+'/'+x['state'] for x in a])"
+1 alerta(s): ['TaxaDeErros5xxAlta/firing']
+
+--- 6. Counter nunca diminui; gauge sobe e desce (questao 101 do BCB) ---
+$ /workspace/m8tools/obsvenv/bin/python -c "
+from prometheus_client import Counter, Gauge
+c=Counter('chamadas','x'); g=Gauge('conexoes','y')
+c.inc(3); g.inc(5); g.dec(2)
+try:
+    c.inc(-1)
+except ValueError as e: print('counter.inc(-1) ->', e)
+print('gauge apos inc(5) e dec(2):', g._value.get())
+"
+counter.inc(-1) -> Counters can only be incremented by non-negative amounts.
+gauge apos inc(5) e dec(2): 3.0
+
+--- 7. Traces: spans de uma requisicao compartilham o trace_id (OpenTelemetry) ---
+$ /workspace/m8tools/obsvenv/bin/python traces.py
+trace=19cb289f span=27fd30 pai=b6def4 nome=consulta-estoque dur_ms=10
+trace=19cb289f span=6492f9 pai=b6def4 nome=grava-banco dur_ms=30
+trace=19cb289f span=b6def4 pai=- nome=POST /pedido dur_ms=41
+
+--- 8. Grafana: padroes de escuta (questao 134 do TCU/2025) ---
+$ docker run --rm --entrypoint sh grafana/grafana:latest -c "grep -nE '^;?(http_addr|http_port) ' /usr/share/grafana/conf/defaults.ini"
+50:http_addr =
+53:http_port = 3000

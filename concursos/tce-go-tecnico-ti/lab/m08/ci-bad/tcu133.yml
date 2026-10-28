@@ -1,0 +1,12 @@
+on:
+  label:
+    types:
+      - created
+  page_build:
+    types:
+      - main
+jobs:
+  j:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo oi

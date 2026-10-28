@@ -1,0 +1,10 @@
+groups:
+  - name: app
+    rules:
+      - alert: TaxaDeErros5xxAlta
+        expr: sum(rate(http_requests_total{status="500"}[5s])) > 0
+        for: 2s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Erros 500 acima do aceitavel"

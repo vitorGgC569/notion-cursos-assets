@@ -1,0 +1,258 @@
+git version 2.47.3
+
+--- 1. Repositorio, primeiro commit e as tres areas ---
+$ git init -b main app && cd app && git config user.name 'Ana Dev' && git config user.email ana@exemplo.test
+Initialized empty Git repository in /tmp/m8-git1-yQiO/app/.git/
+$ git status --short
+?? app.py
+$ git add app.py && git status --short
+A  app.py
+$ git commit -q -m 'feat: primeira versao' && git log --oneline
+df71d03 feat: primeira versao
+$ git status --short && git diff
+ M app.py
+diff --git a/app.py b/app.py
+index ad2234f..1a7ec21 100644
+--- a/app.py
++++ b/app.py
+@@ -1 +1,2 @@
+ print("ola")
++print("mundo")
+$ git diff --staged | wc -l
+0
+$ git add app.py && git diff --staged --stat
+ app.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git commit -q -m 'feat: imprime mundo' && git log --oneline
+c5c9d29 feat: imprime mundo
+df71d03 feat: primeira versao
+
+--- 2. O que e um commit: objetos do Git ---
+$ git cat-file -p HEAD
+tree 2aa85d6f5d465c5411da2099112594f1a6a6711e
+parent df71d038f4bb8ff5c3adbd4dc9575054d49b84b5
+author Ana Dev <ana@exemplo.test> 1767531600 -0300
+committer Ana Dev <ana@exemplo.test> 1767531600 -0300
+
+feat: imprime mundo
+$ git cat-file -t HEAD && git cat-file -t HEAD^{tree} && git cat-file -t HEAD:app.py
+commit
+tree
+blob
+
+--- 3. Branch e merge fast-forward ---
+$ git switch -c feature/login && git branch
+Switched to a new branch 'feature/login'
+* feature/login
+  main
+$ git switch main && git merge feature/login
+Switched to branch 'main'
+Updating c5c9d29..012cff1
+Fast-forward
+ login.py | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 login.py
+$ git log --oneline --graph --all
+* 012cff1 feat: login
+* c5c9d29 feat: imprime mundo
+* df71d03 feat: primeira versao
+
+--- 4. Merge sem fast-forward (--no-ff) cria commit de merge ---
+$ git switch -c feature/relatorio
+Switched to a new branch 'feature/relatorio'
+$ git switch main
+Switched to branch 'main'
+$ git merge --no-ff feature/relatorio -m 'Merge feature/relatorio'
+Merge made by the 'ort' strategy.
+ rel.py | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 rel.py
+$ git log --oneline --graph --all
+*   40938dc Merge feature/relatorio
+|\  
+| * c02d98b feat: relatorio
+* | 71e2c30 chore: ajuste em main
+|/  
+* 012cff1 feat: login
+* c5c9d29 feat: imprime mundo
+* df71d03 feat: primeira versao
+$ git cat-file -p HEAD | head -4
+tree 5e12144fc6db45662e8646ac426db5b5d6ab3149
+parent 71e2c30eeb0d579ed6e6d32573045d683554b743
+parent c02d98b9b66bd9de01b284c400cbdad24dd40e4e
+author Ana Dev <ana@exemplo.test> 1767877200 -0300
+
+--- 5. Conflito de merge e resolucao ---
+$ git switch -c ajuste-a
+Switched to a new branch 'ajuste-a'
+$ git switch main && git switch -c ajuste-b
+Switched to branch 'main'
+Switched to a new branch 'ajuste-b'
+$ git merge ajuste-a
+Auto-merging cfg.py
+CONFLICT (add/add): Merge conflict in cfg.py
+Automatic merge failed; fix conflicts and then commit the result.
+[codigo de saida 1]
+$ git status --short
+AA cfg.py
+$ cat cfg.py
+<<<<<<< HEAD
+cor = "verde"
+=======
+cor = "azul"
+>>>>>>> ajuste-a
+$ git add cfg.py && git status --short
+M  cfg.py
+$ git commit -q -m 'merge: resolve conflito de cor' && git log --oneline --graph -5
+*   35916d2 merge: resolve conflito de cor
+|\  
+| * 5cb1c67 cfg: azul
+* | 6e08ffc cfg: verde
+|/  
+*   40938dc Merge feature/relatorio
+|\  
+| * c02d98b feat: relatorio
+
+--- 6. Rebase: historia linear ---
+$ git switch main && git switch -c feature/rebase
+Switched to branch 'main'
+Switched to a new branch 'feature/rebase'
+$ git switch main
+Switched to branch 'main'
+$ git switch feature/rebase
+Switched to branch 'feature/rebase'
+$ git log --oneline --graph --all -6
+* 4fd2d53 chore: m1 em main
+| * 70f9cf2 feat: r1
+|/  
+| *   35916d2 merge: resolve conflito de cor
+| |\  
+| | * 5cb1c67 cfg: azul
+| |/  
+|/|   
+| * 6e08ffc cfg: verde
+|/  
+*   40938dc Merge feature/relatorio
+|\  
+$ git rebase main
+Rebasing (1/1)Successfully rebased and updated refs/heads/feature/rebase.
+$ git log --oneline --graph -5
+* 9e65505 feat: r1
+* 4fd2d53 chore: m1 em main
+*   40938dc Merge feature/relatorio
+|\  
+| * c02d98b feat: relatorio
+* | 71e2c30 chore: ajuste em main
+|/  
+$ git switch main && git merge --ff-only feature/rebase && git log --oneline -3
+Switched to branch 'main'
+Updating 4fd2d53..9e65505
+Fast-forward
+ r1.py | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 r1.py
+9e65505 feat: r1
+4fd2d53 chore: m1 em main
+40938dc Merge feature/relatorio
+
+--- 7. Tag, stash, reset (soft, mixed, hard) e revert ---
+$ git tag -a v1.0.0 -m 'primeira versao estavel' && git tag && git show v1.0.0 --stat | head -6
+v1.0.0
+tag v1.0.0
+Tagger: Ana Dev <ana@exemplo.test>
+Date:   Tue Jan 6 10:00:00 2026 -0300
+
+primeira versao estavel
+
+$ git stash push -m 'wip' && git status --short && git stash list
+Saved working directory and index state On main: wip
+stash@{0}: On main: wip
+$ git stash pop && git status --short
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   wip.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   app.py
+
+Dropped refs/stash@{0} (137062887df81049d60358b4b05eff26ca9e353b)
+ M app.py
+A  wip.txt
+$ git log --oneline -3
+3f14788 wip: salva
+9e65505 feat: r1
+4fd2d53 chore: m1 em main
+$ git reset --soft HEAD~1 && git status --short && git log --oneline -1
+M  app.py
+A  wip.txt
+9e65505 feat: r1
+$ git reset --mixed HEAD && git status --short
+Unstaged changes after reset:
+M	app.py
+ M app.py
+?? wip.txt
+$ git reset --hard HEAD~1 && git status --short && git log --oneline -1 && ls wip.txt
+HEAD is now at 9e65505 feat: r1
+9e65505 feat: r1
+ls: cannot access 'wip.txt': No such file or directory
+[codigo de saida 2]
+$ git reflog -4
+9e65505 HEAD@{0}: reset: moving to HEAD~1
+b8c1039 HEAD@{1}: commit: wip: salva de novo
+9e65505 HEAD@{2}: reset: moving to HEAD
+9e65505 HEAD@{3}: reset: moving to HEAD~1
+$ git reset --hard HEAD@{1} && git log --oneline -1 && ls wip.txt
+HEAD is now at b8c1039 wip: salva de novo
+b8c1039 wip: salva de novo
+wip.txt
+$ git revert --no-edit HEAD && git log --oneline -3
+[main 9ed624a] Revert "wip: salva de novo"
+ Date: Fri Jan 9 10:00:00 2026 -0300
+ 2 files changed, 2 deletions(-)
+ delete mode 100644 wip.txt
+9ed624a Revert "wip: salva de novo"
+b8c1039 wip: salva de novo
+9e65505 feat: r1
+
+--- 8. cherry-pick ---
+$ git switch -c hotfix main~2
+Switched to a new branch 'hotfix'
+$ git switch main
+Switched to branch 'main'
+$ git cherry-pick 1665011 && git log --oneline -2
+[main 2eba5ac] fix: corrige erro em producao
+ Date: Thu Jan 1 10:00:00 2026 -0300
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fix.py
+2eba5ac fix: corrige erro em producao
+9ed624a Revert "wip: salva de novo"
+
+--- 9. bisect: achar o commit que quebrou ---
+$ git switch -c busca main
+Switched to a new branch 'busca'
+$ git log --oneline -6
+e9560c0 ver 6
+3171377 ver 5
+95fc72a ver 4
+d788dd7 ver 3
+f7de8f8 ver 2
+f45da03 ver 1
+$ git bisect start HEAD HEAD~5 && git bisect run sh -c '! grep -q BUG ver.txt' | tail -5; git bisect reset
+Bisecting: 2 revisions left to test after this (roughly 1 step)
+[d788dd70d74b4dd7829c6e1cac44be547622d3d3] ver 3
+    ver 4
+
+ ver.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+bisect found first bad commit
+Previous HEAD position was 95fc72a ver 4
+Switched to branch 'busca'
+
+--- 10. .gitignore e arquivos rastreados ---
+$ git status --short
+?? .gitignore
+$ git check-ignore -v a.log
+.gitignore:1:*.log	a.log

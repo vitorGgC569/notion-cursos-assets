@@ -1,0 +1,205 @@
+
+--- 0. Versoes ---
+$ act --version && actionlint -version | head -1 && docker --version
+act version 0.2.92
+1.7.12
+Docker version 29.9.2, build a82e528
+
+--- 1. actionlint: o workflow esta valido? ---
+$ cat .github/workflows/ci.yml | head -12
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instala o flake8
+$ actionlint && echo 'actionlint: sem erros'
+actionlint: sem erros
+
+--- 2. act -l: o grafo de jobs (needs) como o GitHub o enxerga ---
+$ act -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-22.04 -l 2>/dev/null
+Stage  Job ID  Job name  Workflow name  Workflow file  Events           
+0      lint    lint      ci             ci.yml         push,pull_request
+1      test    test      ci             ci.yml         push,pull_request
+2      build   build     ci             ci.yml         push,pull_request
+3      deploy  deploy    ci             ci.yml         push,pull_request
+
+--- 3. Execucao completa: lint -> test (matriz) -> build -> deploy ---
+$ act push (saida filtrada)
+[ci/lint]  Run Main actions/checkout@v4
+[ci/lint]     Success - Main actions/checkout@v4
+[ci/lint]  Run Main Instala o flake8
+[ci/lint]     Success - Main Instala o flake8
+[ci/lint]  Run Main Analise estatica
+[ci/lint]     Success - Main Analise estatica
+[ci/lint]   Job succeeded
+[ci/test-1]  Run Main actions/checkout@v4
+[ci/test-2]  Run Main actions/checkout@v4
+[ci/test-2]     Success - Main actions/checkout@v4
+[ci/test-1]     Success - Main actions/checkout@v4
+[ci/test-1]  Run Main Versao do Python
+[ci/test-2]  Run Main Versao do Python
+[ci/test-2]   | Python 3.14.10
+[ci/test-1]   | Python 3.12.16
+[ci/test-2]     Success - Main Versao do Python
+[ci/test-1]     Success - Main Versao do Python
+[ci/test-1]  Run Main Testes unitarios
+[ci/test-2]  Run Main Testes unitarios
+[ci/test-1]   | test_divide (test_calc.TesteCalc.test_divide) ... ok
+[ci/test-1]   | test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+[ci/test-1]   | test_soma (test_calc.TesteCalc.test_soma) ... ok
+[ci/test-1]   | Ran 3 tests in 0.000s
+[ci/test-1]   | OK
+[ci/test-1]     Success - Main Testes unitarios
+[ci/test-2]   | test_divide (test_calc.TesteCalc.test_divide) ... ok
+[ci/test-2]   | test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+[ci/test-2]   | test_soma (test_calc.TesteCalc.test_soma) ... ok
+[ci/test-2]   | Ran 3 tests in 0.000s
+[ci/test-2]   | OK
+[ci/test-2]     Success - Main Testes unitarios
+[ci/test-1]   Job succeeded
+[ci/test-2]   Job succeeded
+[ci/build ]  Run Main actions/checkout@v4
+[ci/build ]     Success - Main actions/checkout@v4
+[ci/build ]  Run Main Empacota o artefato
+[ci/build ]   | -rw-rw-rw- 1 root root 312 Oct 28 19:51 calc.zip
+[ci/build ]     Success - Main Empacota o artefato
+[ci/build ]  Run Main actions/upload-artifact@v4
+[ci/build ]   | Artifact pacote-calc.zip successfully finalized. Artifact ID 3117407851
+[ci/build ]     Success - Main actions/upload-artifact@v4
+[ci/build ]   Job succeeded
+[ci/deploy]  Run Main echo "deploy simulado da ref refs/heads/main (sha 6d8a9b9ab8257808637214455fc7ad14c1b7e873)"
+[ci/deploy]   | deploy simulado da ref refs/heads/main (sha 6d8a9b9ab8257808637214455fc7ad14c1b7e873)
+[ci/deploy]     Success - Main echo "deploy simulado da ref refs/heads/main (sha 6d8a9b9ab8257808637214455fc7ad14c1b7e873)"
+[ci/deploy]   Job succeeded
+
+--- 4. Teste quebrado: a falha para o pipeline (needs) e deploy nao roda ---
+$ act push (saida filtrada)
+[ci/lint]  Run Main actions/checkout@v4
+[ci/lint]     Success - Main actions/checkout@v4
+[ci/lint]  Run Main Instala o flake8
+[ci/lint]     Success - Main Instala o flake8
+[ci/lint]  Run Main Analise estatica
+[ci/lint]     Success - Main Analise estatica
+[ci/lint]   Job succeeded
+[ci/test-1]  Run Main actions/checkout@v4
+[ci/test-2]  Run Main actions/checkout@v4
+[ci/test-1]     Success - Main actions/checkout@v4
+[ci/test-2]     Success - Main actions/checkout@v4
+[ci/test-2]  Run Main Versao do Python
+[ci/test-1]  Run Main Versao do Python
+[ci/test-1]   | Python 3.12.16
+[ci/test-2]   | Python 3.14.10
+[ci/test-1]     Success - Main Versao do Python
+[ci/test-2]     Success - Main Versao do Python
+[ci/test-2]  Run Main Testes unitarios
+[ci/test-1]  Run Main Testes unitarios
+[ci/test-1]   | test_divide (test_calc.TesteCalc.test_divide) ... ok
+[ci/test-1]   | test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+[ci/test-1]   | test_soma (test_calc.TesteCalc.test_soma) ... FAIL
+[ci/test-1]   | FAIL: test_soma (test_calc.TesteCalc.test_soma)
+[ci/test-1]   | AssertionError: -1 != 5
+[ci/test-1]   | Ran 3 tests in 0.001s
+[ci/test-1]   | FAILED (failures=1)
+[ci/test-1]     Failure - Main Testes unitarios
+[ci/test-1]   Job failed
+[ci/test-2]   | test_divide (test_calc.TesteCalc.test_divide) ... ok
+[ci/test-2]   | test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+[ci/test-2]   | test_soma (test_calc.TesteCalc.test_soma) ... FAIL
+[ci/test-2]   | FAIL: test_soma (test_calc.TesteCalc.test_soma)
+[ci/test-2]   | AssertionError: -1 != 5
+[ci/test-2]   | Ran 3 tests in 0.001s
+[ci/test-2]   | FAILED (failures=1)
+[ci/test-2]     Failure - Main Testes unitarios
+[ci/test-2]   Job failed
+
+--- 5. Falha de lint antes dos testes ---
+$ act push (saida filtrada)
+[ci/lint]  Run Main actions/checkout@v4
+[ci/lint]     Success - Main actions/checkout@v4
+[ci/lint]  Run Main Instala o flake8
+[ci/lint]     Success - Main Instala o flake8
+[ci/lint]  Run Main Analise estatica
+[ci/lint]   | calc/__init__.py:9:1: F401 'os' imported but unused
+[ci/lint]   | calc/__init__.py:9:1: E305 expected 2 blank lines after class or function definition, found 0
+[ci/lint]   | calc/__init__.py:9:1: E402 module level import not at top of file
+[ci/lint]     Failure - Main Analise estatica
+[ci/lint]   Job failed
+
+--- 6. Evento pull_request: a condicao 'if' do deploy ---
+$ act pull_request (saida filtrada)
+[ci/lint]  Run Main actions/checkout@v4
+[ci/lint]     Success - Main actions/checkout@v4
+[ci/lint]  Run Main Instala o flake8
+[ci/lint]     Success - Main Instala o flake8
+[ci/lint]  Run Main Analise estatica
+[ci/lint]     Success - Main Analise estatica
+[ci/lint]   Job succeeded
+[ci/test-1]  Run Main actions/checkout@v4
+[ci/test-2]  Run Main actions/checkout@v4
+[ci/test-1]     Success - Main actions/checkout@v4
+[ci/test-2]     Success - Main actions/checkout@v4
+[ci/test-1]  Run Main Versao do Python
+[ci/test-2]  Run Main Versao do Python
+[ci/test-1]   | Python 3.12.16
+[ci/test-2]   | Python 3.14.10
+[ci/test-2]     Success - Main Versao do Python
+[ci/test-1]     Success - Main Versao do Python
+[ci/test-2]  Run Main Testes unitarios
+[ci/test-1]  Run Main Testes unitarios
+[ci/test-1]   | test_divide (test_calc.TesteCalc.test_divide) ... ok
+[ci/test-1]   | test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+[ci/test-1]   | test_soma (test_calc.TesteCalc.test_soma) ... ok
+[ci/test-1]   | Ran 3 tests in 0.000s
+[ci/test-1]   | OK
+[ci/test-1]     Success - Main Testes unitarios
+[ci/test-2]   | test_divide (test_calc.TesteCalc.test_divide) ... ok
+[ci/test-2]   | test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+[ci/test-2]   | test_soma (test_calc.TesteCalc.test_soma) ... ok
+[ci/test-2]   | Ran 3 tests in 0.000s
+[ci/test-2]   | OK
+[ci/test-1]   Job succeeded
+[ci/test-2]     Success - Main Testes unitarios
+[ci/test-2]   Job succeeded
+[ci/build ]  Run Main actions/checkout@v4
+[ci/build ]     Success - Main actions/checkout@v4
+[ci/build ]  Run Main Empacota o artefato
+[ci/build ]   | -rw-rw-rw- 1 root root 312 Oct 28 19:52 calc.zip
+[ci/build ]     Success - Main Empacota o artefato
+[ci/build ]  Run Main actions/upload-artifact@v4
+[ci/build ]   | Artifact pacote-calc.zip successfully finalized. Artifact ID 3117407851
+[ci/build ]     Success - Main actions/upload-artifact@v4
+[ci/build ]   Job succeeded
+
+--- 7. actionlint nos exemplos com erro (inclui o trecho da questao 133 do TCU/2025) ---
+$ cat ci-bad/tcu133.yml | head -8
+on:
+  label:
+    types:
+      - created
+  page_build:
+    types:
+      - main
+jobs:
+$ actionlint ci-bad/tcu133.yml
+ci-bad/tcu133.yml:5:3: "types" cannot be specified for "page_build" Webhook event [events]
+  |
+5 |   page_build:
+  |   ^~~~~~~~~~~
+[codigo de saida 1]
+$ actionlint ci-bad/erros.yml
+ci-bad/erros.yml:10:27: property "refx" is not defined in object type {action: string; action_path: string; action_ref: string; action_repository: string; action_status: string; actor: string; actor_id: string; api_url: string; artifact_cache_size_limit: number; base_ref: string; env: string; event: object; event_name: string; event_path: string; graphql_url: string; head_ref: string; job: string; output: string; path: string; ref: string; ref_name: string; ref_protected: bool; ref_type: string; repository: string; repository_id: string; repository_owner: string; repository_owner_id: string; repository_visibility: string; repositoryurl: string; retention_days: number; run_attempt: string; run_id: string; run_number: string; secret_source: string; server_url: string; sha: string; state: string; step_summary: string; token: string; triggering_actor: string; workflow: string; workflow_ref: string; workflow_sha: string; workspace: string} [expression]
+   |
+10 |       - run: echo "ok ${{ github.refx }}"
+   |                           ^~~~~~~~~~~
+ci-bad/erros.yml:11:3: job "test" needs job "compila" which does not exist in this workflow [job-needs]
+   |
+11 |   test:
+   |   ^~~~~
+[codigo de saida 1]

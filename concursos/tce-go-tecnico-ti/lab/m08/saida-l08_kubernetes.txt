@@ -1,0 +1,156 @@
+
+--- 1. Cluster de 2 nos (control-plane + worker) com o kind ---
+$ kind version | cut -d' ' -f1-2
+kind v0.33.0
+$ kind create cluster --name m8do --config /workspace/concursos/tce-go-tecnico-ti/build/m08/lab/k8s/kind-m8do.yaml --wait 150s 2>&1 | grep -E 'Creating cluster|Ready after|Set kubectl|Have a' | sed -E 's/[^ -~]//g'
+Creating cluster "m8do" ...
+  Ready after 7s 
+Set kubectl context to "kind-m8do"
+$ kubectl wait --for=condition=Ready node --all --timeout=150s
+node/m8do-control-plane condition met
+node/m8do-worker condition met
+$ kubectl get nodes -o wide | awk '{print $1, $2, $3, $5}' | column -t
+NAME                STATUS  ROLES          VERSION
+m8do-control-plane  Ready   control-plane  v1.37.0
+m8do-worker         Ready   <none>         v1.37.0
+$ kubectl get nodes -o custom-columns=NO:.metadata.name,RUNTIME:.status.nodeInfo.containerRuntimeVersion
+NO                   RUNTIME
+m8do-control-plane   containerd://2.3.4
+m8do-worker          containerd://2.3.4
+
+--- 2. Deployment (3 replicas), ReplicaSet e Pods ---
+$ kubectl apply -f /workspace/concursos/tce-go-tecnico-ti/build/m08/lab/k8s/web.yaml
+deployment.apps/web created
+service/web created
+$ kubectl rollout status deployment/web --timeout=90s | tail -1
+deployment "web" successfully rolled out
+$ kubectl get deploy,rs,pods -l app=web -o wide | awk '{print $1, $2, $3, $4, $5}' | column -t | cut -c1-90
+NAME                           READY    UP-TO-DATE  AVAILABLE  AGE
+deployment.apps/web            3/3      3           3          5s
+NAME                           DESIRED  CURRENT     READY      AGE
+replicaset.apps/web-b4f46b689  3        3           3          5s
+NAME                           READY    STATUS      RESTARTS   AGE
+pod/web-b4f46b689-5vzr2        1/1      Running     0          5s
+pod/web-b4f46b689-bllhk        1/1      Running     0          5s
+pod/web-b4f46b689-rrbsp        1/1      Running     0          5s
+$ kubectl get pods -l app=web -o custom-columns=POD:.metadata.name,NO:.spec.nodeName | sed -E 's/web-[a-z0-9]+-[a-z0-9]+/web-xxxxx/' | sort | uniq -c
+      1 POD                   NO
+      3 web-xxxxx   m8do-worker
+
+--- 3. Service: balanceamento entre os Pods pelo DNS do cluster ---
+$ kubectl get svc web -o jsonpath='{.spec.type} {.spec.clusterIP}{"\n"}' | awk '{print $1, "(IP interno)"}'
+ClusterIP (IP interno)
+$ kubectl get endpoints web -o jsonpath='{range .subsets[*].addresses[*]}{.ip}{"\n"}{end}' 2>/dev/null | wc -l
+3
+$ kubectl exec deploy/web -- nslookup web.default.svc.cluster.local $(kubectl -n kube-system get pods -l k8s-app=kube-dns -o jsonpath='{.items[0].status.podIP}') | grep -E 'Name|Address' | sed -E 's/^Address: ([0-9.]+)$/Address: IP-do-Service/' | tail -2
+Name:	web.default.svc.cluster.local
+Address: IP-do-Service
+
+--- 3b. Limite deste sandbox: o kube-proxy nao grava as regras do Service ---
+$ kubectl -n kube-system logs ds/kube-proxy --tail=40 | grep -m1 -oE 'Extension statistic revision 0 not supported, missing kernel module\?'
+Found 2 pods, using pod/kube-proxy-q58g2
+Extension statistic revision 0 not supported, missing kernel module?
+$ kubectl exec deploy/web -- wget -T3 -qO- http://web.default.svc.cluster.local; echo saida=$?
+wget: bad address 'web.default.svc.cluster.local'
+command terminated with exit code 1
+saida=1
+
+--- 4. Rolling update, historico e rollback ---
+$ kubectl set image deployment/web nginx=nginx:1.29-alpine
+deployment.apps/web image updated
+$ kubectl rollout status deployment/web --timeout=90s | tail -1
+deployment "web" successfully rolled out
+$ kubectl get rs -l app=web -o custom-columns=NOME:.metadata.name,DESEJADO:.spec.replicas,IMAGEM:.spec.template.spec.containers[0].image
+NOME             DESEJADO   IMAGEM
+web-5f48d67c47   3          nginx:1.29-alpine
+web-b4f46b689    0          nginx:1.30-alpine
+$ kubectl rollout history deployment/web
+deployment.apps/web 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+$ kubectl rollout undo deployment/web && kubectl rollout status deployment/web --timeout=90s | tail -1
+Warning: resource deployments/web was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/web rolled back
+deployment "web" successfully rolled out
+$ kubectl get deploy web -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+nginx:1.30-alpine
+
+--- 5. Escala e autocorrecao (self-healing) ---
+$ kubectl scale deployment/web --replicas=5 && kubectl rollout status deployment/web --timeout=60s | tail -1
+deployment.apps/web scaled
+deployment "web" successfully rolled out
+$ kubectl delete pod -l app=web --wait=false --field-selector=status.phase=Running | wc -l
+5
+$ kubectl rollout status deployment/web --timeout=60s | tail -1;  kubectl get deploy web | awk '{print $1, $2}' | column -t
+deployment "web" successfully rolled out
+NAME  READY
+web   5/5
+$ kubectl scale deployment/web --replicas=3 && kubectl rollout status deployment/web --timeout=60s | tail -1
+deployment.apps/web scaled
+deployment "web" successfully rolled out
+
+--- 6. Readiness probe falhando: o Pod nao recebe trafego ---
+$ kubectl patch deployment web --type=json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/readinessProbe/httpGet/path","value":"/nao-existe"}]'
+deployment.apps/web patched
+$ kubectl get pods -l app=web | awk '{print $2, $3}' | sort | uniq -c
+      2 0/1 Running
+      2 1/1 Running
+      1 READY STATUS
+$ kubectl get endpoints web -o jsonpath='{.subsets}{"\n"}'; kubectl rollout status deployment/web --timeout=5s 2>&1 | tail -1
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+[{"addresses":[{"ip":"10.244.1.16","nodeName":"m8do-worker","targetRef":{"kind":"Pod","name":"web-b4f46b689-4qtpj","namespace":"default","uid":"45a999b1-a9c8-4bfb-95b8-9ac4bde4e40f"}},{"ip":"10.244.1.17","nodeName":"m8do-worker","targetRef":{"kind":"Pod","name":"web-b4f46b689-fpfms","namespace":"default","uid":"f3b6f17e-f0f3-4bfb-be65-7c97a0f0c788"}}],"notReadyAddresses":[{"ip":"10.244.1.18","nodeName":"m8do-worker","targetRef":{"kind":"Pod","name":"web-6866598d8-qhrvw","namespace":"default","uid":"c5d23ded-2cb4-42bb-98ba-adeeb679dedd"}},{"ip":"10.244.1.19","nodeName":"m8do-worker","targetRef":{"kind":"Pod","name":"web-6866598d8-k7kjm","namespace":"default","uid":"04a2cd96-9252-4f45-a434-b79c16eeeb99"}}],"ports":[{"port":80,"protocol":"TCP"}]}]
+error: timed out waiting for the condition
+$ kubectl rollout undo deployment/web >/dev/null && kubectl rollout status deployment/web --timeout=90s | tail -1
+Warning: resource deployments/web was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment "web" successfully rolled out
+
+--- 7. DaemonSet: um Pod por no (o control-plane tem taint) ---
+$ kubectl apply -f /workspace/concursos/tce-go-tecnico-ti/build/m08/lab/k8s/agente.yaml
+daemonset.apps/agente created
+$ kubectl get pods -l app=agente -o wide | awk '{print $1, $3, $7}' | sed -E 's/agente-[a-z0-9]+/agente-xxxxx/' | column -t
+NAME          STATUS   NODE
+agente-xxxxx  Running  m8do-worker
+$ kubectl get nodes -o custom-columns=NO:.metadata.name,TAINT:.spec.taints[*].key
+NO                   TAINT
+m8do-control-plane   node-role.kubernetes.io/control-plane
+m8do-worker          <none>
+$ kubectl patch ds agente --type=json -p '[{"op":"add","path":"/spec/template/spec/tolerations","value":[{"key":"node-role.kubernetes.io/control-plane","operator":"Exists","effect":"NoSchedule"}]}]' && kubectl rollout status ds/agente --timeout=90s | tail -1
+daemonset.apps/agente patched
+daemon set "agente" successfully rolled out
+$ kubectl get ds agente | awk '{print $1, "desejados="$2, "prontos="$4}'
+NAME desejados=DESIRED prontos=READY
+agente desejados=2 prontos=2
+
+--- 8. Hooks de ciclo de vida: PostStart e PreStop ---
+$ kubectl apply -f /workspace/concursos/tce-go-tecnico-ti/build/m08/lab/k8s/hooks.yaml && kubectl wait --for=condition=Ready pod/hooks --timeout=60s
+pod/hooks created
+pod/hooks condition met
+$ kubectl exec hooks -- cat /usr/share/nginx/html/start.txt
+iniciado
+$ time kubectl delete pod hooks   (PreStop = sleep 6)
+segundos ate o Pod sumir: 9 (o PreStop roda antes do SIGTERM)
+
+--- 9. Questao BCB 96: kind Service nao cria Deployment (dry-run no servidor) ---
+$ kubectl apply --dry-run=server -f /workspace/concursos/tce-go-tecnico-ti/build/m08/lab/k8s/svc-bcb96.yaml
+service/my-nginx-svc created (server dry run)
+$ kubectl create deployment nginx --image=nginx --dry-run=client -o yaml | head -4
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+
+--- 10. Namespaces, ConfigMap e variavel de ambiente ---
+$ kubectl create namespace hom && kubectl create configmap cfg -n hom --from-literal=AMBIENTE=homologacao
+namespace/hom created
+configmap/cfg created
+$ kubectl run envpod -n hom --image=busybox:latest --restart=Never --env=X=1 --overrides='{"spec":{"containers":[{"name":"envpod","image":"busybox:latest","command":["sh","-c","echo AMBIENTE=$AMBIENTE"],"envFrom":[{"configMapRef":{"name":"cfg"}}]}]}}' && sleep 5 && kubectl logs -n hom envpod
+pod/envpod created
+AMBIENTE=homologacao
+
+--- 11. Limpeza ---
+$ kind delete cluster --name m8do 2>&1 | head -1
+Deleting cluster "m8do" ...
+$ kind get clusters 2>&1
+No kind clusters found.

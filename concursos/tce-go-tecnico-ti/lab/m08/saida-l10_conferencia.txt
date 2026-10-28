@@ -1,0 +1,21 @@
+node: 1000 questoes geradas (sementes 1 a 1000) com a resposta do modelo
+
+--- Git real contra o modelo, por tipo de questao ---
+contagem   150 de 150 iguais
+rebase     173 de 173 iguais
+reset      164 de 164 iguais
+revert     169 de 169 iguais
+stash      170 de 170 iguais
+status     174 de 174 iguais
+
+Total: 1000 de 1000 respostas do gerador iguais as do Git real
+
+--- Cenarios fixos: ff, --no-ff, conflito, rebase, revert, stash ---
+ff        status=(vazio)                pais=1 commits=2  IGUAL ao modelo
+noff      status=(vazio)                pais=2 commits=3  IGUAL ao modelo
+conflito  status=UU a.txt               pais=1 commits=2  IGUAL ao modelo
+rebase    status=(vazio)                pais=1 commits=3  IGUAL ao modelo
+revert    status=(vazio)                pais=1 commits=3  IGUAL ao modelo
+stash     status= M a.txt               pais=0 commits=1  IGUAL ao modelo
+
+Cenarios fixos: todos iguais ao Git real

@@ -1,0 +1,24 @@
+name: m8do-comp
+services:
+  web:
+    build: ./dk-app
+    image: m8do/app:comp
+    environment:
+      REDIS_HOST: cache
+    ports:
+      - "15802:8000"
+    depends_on:
+      cache:
+        condition: service_healthy
+    restart: unless-stopped
+  cache:
+    image: redis:7-alpine
+    volumes:
+      - dados:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+volumes:
+  dados:

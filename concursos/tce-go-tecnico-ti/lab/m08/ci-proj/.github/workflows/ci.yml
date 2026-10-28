@@ -1,0 +1,51 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instala o flake8
+        run: pip install --quiet flake8
+      - name: Analise estatica
+        run: flake8 --max-line-length=100 calc test_calc.py
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        imagem: ["python:3.12-slim", "python:3.14-slim"]
+    container: ${{ matrix.imagem }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Versao do Python
+        run: python --version
+      - name: Testes unitarios
+        run: python -m unittest -v
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Empacota o artefato
+        run: |
+          mkdir -p dist
+          python3 -m zipfile -c dist/calc.zip calc
+          ls -l dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pacote-calc
+          path: dist/calc.zip
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "deploy simulado da ref ${{ github.ref }} (sha ${{ github.sha }})"

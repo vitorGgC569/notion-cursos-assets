@@ -1,0 +1,157 @@
+
+--- 1. Cliente e servidor (daemon): o Docker e uma arquitetura cliente-servidor com API REST ---
+$ docker version --format 'cliente={{.Client.Version}} servidor={{.Server.Version}} os={{.Server.Os}}'
+cliente=29.9.2 servidor=29.9.2 os=linux
+$ curl -s --unix-socket /tmp/docker.sock http://localhost/version | python3 -c "import sys,json; d=json.load(sys.stdin); print('API REST via socket UNIX:', d['ApiVersion'], d['Os'])"
+API REST via socket UNIX: 1.56 linux
+$ uname -r; docker run --rm alpine uname -r
+6.12.94+
+6.12.94+
+
+--- 2. Build com cache de camadas: Dockerfile ruim (COPY . antes do pip) ---
+$ docker build -f Dockerfile.ruim -t m8do/app:ruim dk-app   (1a vez)
+contexto enviado ao daemon: 1.83kB
+[2/4] WORKDIR /app                                              CACHED
+[3/4] COPY . .                                                  executado
+[4/4] RUN pip install --no-cache-dir -r requirements.txt        executado
+$ (alteramos so o app.py) docker build ... (2a vez: o pip reinstala)
+contexto enviado ao daemon: 1.10kB
+[2/4] WORKDIR /app                                              CACHED
+[3/4] COPY . .                                                  executado
+[4/4] RUN pip install --no-cache-dir -r requirements.txt        executado
+
+--- 3. Dockerfile bom: dependencias antes do codigo ---
+$ docker build -t m8do/app:1 dk-app   (1a vez)
+contexto enviado ao daemon: 63B
+[2/6] WORKDIR /app                                              CACHED
+[3/6] COPY requirements.txt .                                   executado
+[4/6] RUN pip install --no-cache-dir -r requirements.txt        executado
+[5/6] COPY app.py .                                             executado
+[6/6] RUN useradd --system --uid 10001 appuser                  executado
+$ (alteramos so o app.py) docker build ... (2a vez: pip em CACHED)
+contexto enviado ao daemon: 982B
+[2/6] WORKDIR /app                                              CACHED
+[3/6] COPY requirements.txt .                                   CACHED
+[4/6] RUN pip install --no-cache-dir -r requirements.txt        CACHED
+[5/6] COPY app.py .                                             executado
+[6/6] RUN useradd --system --uid 10001 appuser                  executado
+$ docker history m8do/app:2 --format '{{.CreatedBy}}' | head -9 | cut -c1-70
+CMD ["python" "app.py"]
+HEALTHCHECK {Test:[CMD python -c import urll…
+EXPOSE [8000/tcp]
+USER 10001
+RUN /bin/sh -c useradd --system --uid 10001 …
+COPY app.py . # buildkit
+RUN /bin/sh -c pip install --no-cache-dir -r…
+COPY requirements.txt . # buildkit
+WORKDIR /app
+
+--- 4. .dockerignore reduz o contexto e evita vazar segredo ---
+$ docker build -f Dockerfile.ruim (contexto com um arquivo de 20 MB e um segredo.env, sem .dockerignore)
+contexto enviado ao daemon: 20.98MB
+$ docker run --rm m8do/app:ruim2 ls /app
+Dockerfile
+Dockerfile.hadolint
+Dockerfile.ruim
+app.py
+dados.bin
+requirements.txt
+segredo.env
+$ docker build -f Dockerfile.ruim (com .dockerignore: segredo.env, dados.bin ignorados)
+contexto enviado ao daemon: 258B
+$ docker run --rm m8do/app:ruim ls /app
+Dockerfile
+Dockerfile.hadolint
+Dockerfile.ruim
+app.py
+requirements.txt
+
+--- 5. Multi-stage: imagem final minima ---
+$ docker images m8do/go --format '{{.Repository}}:{{.Tag}}  {{.Size}}'
+m8do/go:multi  2.04MB
+m8do/go:single  412MB
+$ docker run --rm m8do/go:multi
+ola do binario estatico
+$ docker run --rm --entrypoint /bin/sh m8do/go:multi -c id 2>&1 | head -1 | sed -E 's/.*unable to start container process: //'
+error during container init: exec: "/bin/sh": stat /bin/sh: no such file or directory
+
+--- 6. Usuario nao-root, HEALTHCHECK e inspecao ---
+$ docker run -d --name m8do-web -p 15801:8000 m8do/app:1
+13754356f975678efc523091b835da685185053acf7e4936c17ccb83f716dffd
+$ docker ps --filter name=m8do-web --format '{{.Names}} {{.Status}}'
+m8do-web Up 6 seconds (healthy)
+$ docker inspect m8do-web --format 'usuario={{.Config.User}} saude={{.State.Health.Status}}'
+usuario=10001 saude=healthy
+$ curl -s localhost:15801/; echo; curl -s localhost:15801/; echo
+{"host": "13754356f975", "hits": 1, "usuario": 10001}
+{"host": "13754356f975", "hits": 2, "usuario": 10001}
+$ docker exec m8do-web id
+uid=10001(appuser) gid=999(appuser) groups=999(appuser)
+
+--- 7. docker commit: criar imagem a partir de um container (nao e reprodutivel) ---
+$ docker run -d --name m8do-c1 alpine:latest sleep 300
+e0a1fcb0d52dccb9e776f6c8ca8920a87a9fa3bc47b288a06052847f60276e3d
+$ docker exec m8do-c1 sh -c 'echo configurado-a-mao > /etc/marca'
+$ docker commit m8do-c1 m8do/base:commit | cut -c1-19
+sha256:4b0fc9dd5a99
+$ docker run --rm m8do/base:commit cat /etc/marca
+configurado-a-mao
+$ docker history m8do/base:commit --format '{{.CreatedBy}}' | head -2 | cut -c1-60
+sleep 300
+CMD ["/bin/sh"]
+
+--- 8. Registry: tag, push e pull com um registry local ---
+$ docker run -d --name m8do-reg -p 15808:5000 registry:2 | cut -c1-12
+968c2553f1f7
+$ docker tag m8do/app:1 localhost:15808/m8do/app:1
+$ docker push localhost:15808/m8do/app:1 2>&1 | tail -2 | cut -c1-100
+f2be67225471: Pushed
+1: digest: sha256:090ba704fef4c13fbc44f8565751817f55ad4b685acf3a704795dfe735e6aeca size: 856
+$ curl -s localhost:15808/v2/_catalog; echo; curl -s localhost:15808/v2/m8do/app/tags/list; echo
+{"repositories":["m8do/app"]}
+
+{"name":"m8do/app","tags":["1"]}
+
+$ docker rmi localhost:15808/m8do/app:1 >/dev/null && docker pull -q localhost:15808/m8do/app:1 | cut -c1-60
+localhost:15808/m8do/app:1
+
+--- 9. Rede definida pelo usuario (DNS por nome) e volume (dados sobrevivem) ---
+$ docker network create m8do-rede | cut -c1-12
+a456f992767f
+$ docker run -d --name m8do-web2 --network m8do-rede m8do/app:1 | cut -c1-12
+53d55f2b3018
+$ docker run --rm --network m8do-rede m8do/app:1 python -c "import urllib.request as u; print(u.urlopen('http://m8do-web2:8000/saude').read().decode())"
+{"status": "ok"}
+$ docker volume create m8do-dados
+m8do-dados
+$ docker run --rm -v m8do-dados:/dados alpine sh -c 'echo persistente > /dados/x.txt'
+$ docker run --rm -v m8do-dados:/dados alpine cat /dados/x.txt
+persistente
+
+--- 10. Seguranca de container: o menor privilegio ---
+$ docker run --rm --read-only --cap-drop ALL --security-opt no-new-privileges --user 10001 alpine sh -c 'echo teste > /x.txt'
+sh: can't create /x.txt: Read-only file system
+[codigo de saida 1]
+$ docker run --rm --read-only --tmpfs /tmp --cap-drop ALL --user 10001 alpine sh -c 'echo teste > /tmp/x.txt && cat /tmp/x.txt'
+teste
+$ docker run --rm --cap-drop ALL alpine sh -c 'ip link add d0 type dummy' 2>&1 | head -1
+ip: RTNETLINK answers: Operation not permitted
+$ hadolint dk-app/Dockerfile.hadolint
+dk-app/Dockerfile.hadolint:1 DL3007 warning: Using latest is prone to errors if the image will ever update. Pin the version explicitly to a release tag
+dk-app/Dockerfile.hadolint:2 DL3008 warning: Pin versions in apt get install. Instead of `apt-get install <package>` use `apt-get install <package>=<version>`
+dk-app/Dockerfile.hadolint:2 DL3014 warning: Use the `-y` switch to avoid manual input `apt-get -y install <package>`
+dk-app/Dockerfile.hadolint:2 DL3009 info: Delete the apt lists (/var/lib/apt/lists) after installing something
+dk-app/Dockerfile.hadolint:2 DL3015 info: Avoid additional packages by specifying `--no-install-recommends`
+dk-app/Dockerfile.hadolint:3 DL3020 error: Use COPY instead of ADD for files and folders
+dk-app/Dockerfile.hadolint:4 DL3013 warning: Pin versions in pip. Instead of `pip install <package>` use `pip install <package>==<version>` or `pip install --requirement <requirements file>`
+dk-app/Dockerfile.hadolint:4 DL3042 warning: Avoid use of cache directory with pip. Use `pip install --no-cache-dir <package>`
+dk-app/Dockerfile.hadolint:5 DL3025 warning: Use arguments JSON notation for CMD and ENTRYPOINT arguments
+[codigo de saida 1]
+$ hadolint dk-app/Dockerfile && echo 'hadolint: dk-app/Dockerfile sem avisos'
+hadolint: dk-app/Dockerfile sem avisos
+
+--- 11. Varredura de vulnerabilidades da imagem com Trivy ---
+$ trivy image --input app1.tar --format json   (resumo com python)
+imagem base: debian 13.7
+vulnerabilidades por severidade: {'LOW': 62, 'HIGH': 44, 'MEDIUM': 63, 'UNKNOWN': 1}
+com correcao disponivel: {'MEDIUM': 5, 'LOW': 1}

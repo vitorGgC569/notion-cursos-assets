@@ -1,0 +1,30 @@
+- name: Configura o servidor (conexao local)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    destino: "{{ lookup('env', 'DESTINO') }}"
+    ambiente: dev
+  tasks:
+    - name: Garante o diretorio de configuracao
+      ansible.builtin.file:
+        path: "{{ destino }}/etc/app"
+        state: directory
+        mode: "0755"
+    - name: Cria o arquivo base (so se ele nao existir)
+      ansible.builtin.copy:
+        dest: "{{ destino }}/etc/app/app.conf"
+        content: |
+          ambiente={{ ambiente }}
+          debug=false
+        force: false
+        mode: "0644"
+    - name: Garante a linha workers=4 (cria ou corrige)
+      ansible.builtin.lineinfile:
+        path: "{{ destino }}/etc/app/app.conf"
+        regexp: '^workers='
+        line: "workers=4"
+    - name: Remove um arquivo que nao deve existir
+      ansible.builtin.file:
+        path: "{{ destino }}/etc/app/legado.conf"
+        state: absent

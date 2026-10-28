@@ -1,0 +1,88 @@
+
+--- 1. O arquivo compose.yaml ---
+$ cat compose.yaml
+name: m8do-comp
+services:
+  web:
+    build: ./dk-app
+    image: m8do/app:comp
+    environment:
+      REDIS_HOST: cache
+    ports:
+      - "15802:8000"
+    depends_on:
+      cache:
+        condition: service_healthy
+    restart: unless-stopped
+  cache:
+    image: redis:7-alpine
+    volumes:
+      - dados:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+volumes:
+  dados:
+$ docker compose version --short && docker compose config --quiet && echo 'compose config: arquivo valido'
+5.6.1
+compose config: arquivo valido
+
+--- 2. Sobe a pilha: o web espera o Redis ficar saudavel ---
+$ docker compose up -d --build 2>&1 | grep -E 'Container|Network|Volume' | sed -E 's/ +[0-9.]+s$//; s/ +$//' | awk '!v[$0]++'
+ Network m8do-comp_default Creating
+ Volume m8do-comp_dados Creating
+ Volume m8do-comp_dados Created
+ Network m8do-comp_default Created
+ Container m8do-comp-cache-1 Creating
+ Container m8do-comp-cache-1 Created
+ Container m8do-comp-web-1 Creating
+ Container m8do-comp-web-1 Created
+ Container m8do-comp-cache-1 Starting
+ Container m8do-comp-cache-1 Started
+ Container m8do-comp-cache-1 Waiting
+ Container m8do-comp-cache-1 Healthy
+ Container m8do-comp-web-1 Starting
+ Container m8do-comp-web-1 Started
+$ docker compose ps --format '{{.Service}}: {{.State}} ({{.Health}})'
+cache: running (healthy)
+web: running (healthy)
+$ curl -s localhost:15802/; echo; curl -s localhost:15802/; echo; curl -s localhost:15802/; echo
+{"host": "b72eff54f3cb", "hits": 1, "usuario": 10001}
+{"host": "b72eff54f3cb", "hits": 2, "usuario": 10001}
+{"host": "b72eff54f3cb", "hits": 3, "usuario": 10001}
+
+--- 3. O contador mora no Redis e no volume, nao no container web ---
+$ docker compose restart web 2>&1 | grep -E 'Restart' | tail -1
+ Container m8do-comp-web-1 Restarting 
+$ curl -s localhost:15802/; echo
+{"host": "b72eff54f3cb", "hits": 4, "usuario": 10001}
+$ docker compose rm -sf cache 2>&1 | grep -E 'Removed|Stopped' | head -1
+ Container m8do-comp-cache-1 Stopped 
+$ docker compose up -d cache 2>&1 | grep -E 'Started|Healthy|Running' | head -2
+ Container m8do-comp-cache-1 Started 
+$ curl -s localhost:15802/; echo
+{"host": "b72eff54f3cb", "hits": 5, "usuario": 10001}
+
+--- 4. Variaveis e override por ambiente ---
+$ docker compose -f compose.yaml -f compose.dev.yaml config | grep -A4 'web:' | head -6
+  web:
+    restart: unless-stopped
+    environment:
+      MODO: desenvolvimento
+      REDIS_HOST: cache
+
+--- 5. Logs e encerramento ---
+$ docker compose logs cache 2>&1 | grep -E 'Ready to accept|Redis version' | head -2 | cut -c1-110
+cache-1  | 1:C 28 Oct 2026 20:00:02.279 * Redis version=7.4.12, bits=64, commit=00000000, modified=0, pid=1, j
+cache-1  | 1:M 28 Oct 2026 20:00:02.290 * Ready to accept connections tcp
+$ docker compose down -v 2>&1 | grep -E 'Removed|Stopped' | sed -E 's/ +[0-9.]+s$//; s/ +$//' | sort -u
+ Container m8do-comp-cache-1 Removed
+ Container m8do-comp-cache-1 Stopped
+ Container m8do-comp-web-1 Removed
+ Container m8do-comp-web-1 Stopped
+ Network m8do-comp_default Removed
+ Volume m8do-comp_dados Removed
+$ docker ps -a --filter name=m8do-comp -q | wc -l
+0

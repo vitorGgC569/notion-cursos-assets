@@ -1,0 +1,105 @@
+
+--- 1. Versao e lista de jobs (stages, needs, quando executa) ---
+$ gitlab-ci-local --version
+4.76.1
+$ gitlab-ci-local --list
+name                description  stage   when        allow_failure  environment  needs
+teste: [3.12-slim]               test    on_success  false
+teste: [3.14-slim]               test    on_success  false
+empacota                         build   on_success  false                       [teste]
+deploy-homologacao               deploy  on_success  false                       [empacota]
+deploy-producao                  deploy  manual      true                        [empacota]
+
+--- 2. Executa o pipeline inteiro (ramo main) ---
+$ gitlab-ci-local (saida filtrada)
+teste: [3.14-slim] starting python:3.14-slim (test)
+teste: [3.12-slim] starting python:3.12-slim (test)
+teste: [3.12-slim] $ python --version
+teste: [3.14-slim] $ python --version
+teste: [3.12-slim] > Python 3.12.16
+teste: [3.12-slim] $ python -m unittest -v
+teste: [3.14-slim] > Python 3.14.10
+teste: [3.14-slim] $ python -m unittest -v
+teste: [3.12-slim] > test_divide (test_calc.TesteCalc.test_divide) ... ok
+teste: [3.12-slim] > test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+teste: [3.12-slim] > test_soma (test_calc.TesteCalc.test_soma) ... ok
+teste: [3.12-slim] >
+teste: [3.12-slim] > ----------------------------------------------------------------------
+teste: [3.12-slim] > Ran 3 tests in 0.000s
+teste: [3.12-slim] >
+teste: [3.12-slim] > OK
+teste: [3.14-slim] > test_divide (test_calc.TesteCalc.test_divide) ... ok
+teste: [3.14-slim] > test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+teste: [3.14-slim] > test_soma (test_calc.TesteCalc.test_soma) ... ok
+teste: [3.14-slim] >
+teste: [3.14-slim] > ----------------------------------------------------------------------
+teste: [3.14-slim] > Ran 3 tests in 0.000s
+teste: [3.14-slim] >
+teste: [3.14-slim] > OK
+teste: [3.12-slim] finished in
+teste: [3.14-slim] finished in
+empacota           starting python:3.12-slim (build)
+empacota           $ mkdir -p dist
+empacota           $ python -m zipfile -c dist/calc.zip calc
+empacota           $ ls -l dist
+empacota           > total 4
+empacota           > -rw-r--r-- 1 root root 312 Oct 28 19:53 calc.zip
+empacota           finished in
+deploy-homologacao starting python:3.12-slim (deploy)
+deploy-homologacao $ echo "deploy em $AMBIENTE usando o artefato"
+deploy-homologacao > deploy em homologacao usando o artefato
+deploy-homologacao $ ls dist
+deploy-homologacao > calc.zip
+deploy-homologacao finished in
+ PASS  teste: [3.12-slim]
+ PASS  teste: [3.14-slim]
+ PASS  empacota
+ PASS  deploy-homologacao
+pipeline finished in
+
+--- 3. Um job isolado com suas dependencias ---
+$ gitlab-ci-local --needs empacota
+teste: [3.12-slim] starting python:3.12-slim (test)
+teste: [3.14-slim] starting python:3.14-slim (test)
+teste: [3.14-slim] $ python --version
+teste: [3.14-slim] > Python 3.14.10
+teste: [3.14-slim] $ python -m unittest -v
+teste: [3.12-slim] $ python --version
+teste: [3.12-slim] > Python 3.12.16
+teste: [3.12-slim] $ python -m unittest -v
+teste: [3.12-slim] > test_divide (test_calc.TesteCalc.test_divide) ... ok
+teste: [3.12-slim] > test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+teste: [3.12-slim] > test_soma (test_calc.TesteCalc.test_soma) ... ok
+teste: [3.12-slim] >
+teste: [3.12-slim] > ----------------------------------------------------------------------
+teste: [3.12-slim] > Ran 3 tests in 0.000s
+teste: [3.12-slim] >
+teste: [3.12-slim] > OK
+teste: [3.14-slim] > test_divide (test_calc.TesteCalc.test_divide) ... ok
+teste: [3.14-slim] > test_divide_por_zero (test_calc.TesteCalc.test_divide_por_zero) ... ok
+teste: [3.14-slim] > test_soma (test_calc.TesteCalc.test_soma) ... ok
+teste: [3.14-slim] >
+teste: [3.14-slim] > ----------------------------------------------------------------------
+teste: [3.14-slim] > Ran 3 tests in 0.000s
+teste: [3.14-slim] >
+teste: [3.14-slim] > OK
+teste: [3.12-slim] finished in
+teste: [3.14-slim] finished in
+empacota starting python:3.12-slim (build)
+empacota $ mkdir -p dist
+empacota $ python -m zipfile -c dist/calc.zip calc
+empacota $ ls -l dist
+empacota > total 4
+empacota > -rw-rw-rw- 1 root root 312 Oct 28 19:53 calc.zip
+empacota finished in
+ PASS  teste: [3.12-slim]
+ PASS  teste: [3.14-slim]
+ PASS  empacota
+pipeline finished in
+
+--- 4. rules: os jobs de deploy so existem no ramo main ---
+$ gitlab-ci-local --list (ramo experimento: sem deploy)
+name                description  stage   when        allow_failure  environment  needs
+teste: [3.12-slim]               test    on_success  false
+teste: [3.14-slim]               test    on_success  false
+empacota                         build   on_success  false                       [teste]

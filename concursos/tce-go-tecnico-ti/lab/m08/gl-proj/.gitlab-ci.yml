@@ -1,0 +1,55 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+stages:
+  - test
+  - build
+  - deploy
+
+default:
+  image: python:3.12-slim
+
+variables:
+  AMBIENTE: "homologacao"
+
+teste:
+  stage: test
+  parallel:
+    matrix:
+      - IMAGEM: ["3.12-slim", "3.14-slim"]
+  image: python:$IMAGEM
+  script:
+    - python --version
+    - python -m unittest -v
+
+empacota:
+  stage: build
+  needs: ["teste"]
+  script:
+    - mkdir -p dist
+    - python -m zipfile -c dist/calc.zip calc
+    - ls -l dist
+  artifacts:
+    paths:
+      - dist/
+
+deploy-homologacao:
+  stage: deploy
+  needs: ["empacota"]
+  script:
+    - echo "deploy em $AMBIENTE usando o artefato"
+    - ls dist
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy-producao:
+  stage: deploy
+  needs: ["empacota"]
+  script:
+    - echo "deploy em producao"
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual

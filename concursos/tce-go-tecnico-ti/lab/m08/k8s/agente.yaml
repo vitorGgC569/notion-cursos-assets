@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: agente
+spec:
+  selector:
+    matchLabels:
+      app: agente
+  template:
+    metadata:
+      labels:
+        app: agente
+    spec:
+      containers:
+        - name: agente
+          image: busybox:latest
+          command: ["sh", "-c", "echo coletando logs do no; sleep 3600"]

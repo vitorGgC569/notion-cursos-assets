@@ -1,0 +1,15 @@
+name: ci-com-erros
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "ok ${{ github.refx }}"
+  test:
+    needs: compila
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo teste

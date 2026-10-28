@@ -1,0 +1,155 @@
+
+--- 1. Versao, init, fmt e validate ---
+$ tofu version | head -1
+OpenTofu v1.13.2
+$ tofu init 2>&1 | grep -E 'Installing|Installed|Initializing|successfully' | sed -E 's/\(signed.*//'
+Initializing the backend...
+Initializing provider plugins...
+- Installing kreuzwerker/docker v3.9.0 to the shared cache directory...
+- Installing hashicorp/local v2.9.1 to the shared cache directory...
+- Installed hashicorp/local v2.9.1 
+- Installed kreuzwerker/docker v3.9.0 
+OpenTofu has been successfully initialized!
+$ tofu fmt -check && echo 'fmt: formatado'; tofu validate
+fmt: formatado
+Success! The configuration is valid.
+
+--- 2. plan: o que vai mudar (nada foi criado ainda) ---
+$ tofu plan -out=plano.bin 2>&1 | grep -E '^\s*# |Plan:|Changes to Outputs|^\s+\+ url'
+  # docker_container.web will be created
+  # docker_image.nginx will be created
+  # local_file.config will be created
+Plan: 3 to add, 0 to change, 0 to destroy.
+Changes to Outputs:
+  + url = "http://localhost:15803"
+
+--- 3. apply: cria a infraestrutura ---
+$ tofu apply plano.bin 2>&1 | grep -E 'Creating|Creation|Apply complete|url'
+docker_image.nginx: Creating...
+local_file.config: Creating...
+local_file.config: Creation complete after 0s [id=b18baf7231f93be82035f3a74f121e564c720ae2]
+docker_image.nginx: Creation complete after 1s [id=sha256:47928bf67eb62a1863cb08d9ecb52d3e704304ba614eaee17884204677702951nginx:1.30-alpine]
+docker_container.web: Creating...
+docker_container.web: Creation complete after 0s [id=106768d8faf149efb895d10aa13730e1a1835c039cfd1c49fec82c77a4e18be3]
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+url = "http://localhost:15803"
+$ cat saida/app-dev.conf
+ambiente=dev
+porta=15803
+$ docker ps --filter name=m8do-tf-web --format '{{.Names}} {{.Image}} {{.Ports}}'
+m8do-tf-web-dev 47928bf67eb6 0.0.0.0:15803->80/tcp
+$ curl -s -o /dev/null -w 'HTTP %{http_code}\n' localhost:15803
+HTTP 200
+$ tofu state list
+docker_container.web
+docker_image.nginx
+local_file.config
+
+--- 4. Idempotencia: aplicar de novo nao muda nada ---
+$ tofu plan 2>&1 | grep -E 'No changes|Plan:|up-to-date'
+No changes. Your infrastructure matches the configuration.
+
+--- 5. Mudanca declarada: a porta passa a ser 15804 ---
+$ tofu plan -var porta=15804 2>&1 | grep -E '^\s*# |forces replacement|Plan:|^\s+[-+] porta='
+  # docker_container.web must be replaced
+        # (16 unchanged attributes hidden)
+          ~ external = 15803 -> 15804 # forces replacement
+            # (3 unchanged attributes hidden)
+        # (1 unchanged block hidden)
+  # local_file.config must be replaced
+      ~ content              = <<-EOT # forces replacement
+          - porta=15803
+          + porta=15804
+        # (3 unchanged attributes hidden)
+Plan: 2 to add, 0 to change, 2 to destroy.
+$ tofu apply -auto-approve -var porta=15804 2>&1 | grep -E 'Destroying|Creating|Modifying|Apply complete|url'
+  ~ url = "http://localhost:15803" -> "http://localhost:15804"
+local_file.config: Destroying... [id=b18baf7231f93be82035f3a74f121e564c720ae2]
+local_file.config: Creating...
+docker_container.web: Destroying... [id=106768d8faf149efb895d10aa13730e1a1835c039cfd1c49fec82c77a4e18be3]
+docker_container.web: Creating...
+Apply complete! Resources: 2 added, 0 changed, 2 destroyed.
+url = "http://localhost:15804"
+$ curl -s -o /dev/null -w 'HTTP %{http_code} na 15804\n' localhost:15804
+HTTP 200 na 15804
+
+--- 6. Drift: alguem altera o arquivo na mao; o plan detecta e o apply corrige ---
+$ tofu plan -var porta=15804 2>&1 | grep -E 'changed outside|^\s*# |Plan:|No changes'
+  # local_file.config will be created
+Plan: 1 to add, 0 to change, 0 to destroy.
+$ tofu apply -auto-approve -var porta=15804 2>&1 | grep -E 'Apply complete'
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+$ cat saida/app-dev.conf
+ambiente=dev
+porta=15804
+
+--- 7. Validacao de variavel e novo ambiente (hom) ---
+$ tofu plan -var ambiente=teste 2>&1 | grep -E 'Error|ambiente deve' | head -2
+Error: Invalid value for variable
+ambiente deve ser dev, hom ou prod.
+$ tofu plan -var porta=15804 -var ambiente=hom 2>&1 | grep -E '^\s*# |Plan:'
+  # docker_container.web must be replaced
+        # (16 unchanged attributes hidden)
+        # (1 unchanged block hidden)
+  # local_file.config must be replaced
+        # (2 unchanged attributes hidden)
+Plan: 2 to add, 0 to change, 2 to destroy.
+
+--- 8. destroy: remove tudo o que o estado conhece ---
+$ tofu destroy -auto-approve -var porta=15804 2>&1 | grep -E 'Destroying|Destruction|Destroy complete'
+local_file.config: Destroying... [id=880b87ee80db7f102941ad32945b6f5fe0c046ac]
+local_file.config: Destruction complete after 0s
+docker_container.web: Destroying... [id=2e1dad5b0b913738d155418a662a667e26aaf8c3eda843e2fbb7bda701ad2007]
+docker_container.web: Destruction complete after 1s
+docker_image.nginx: Destroying... [id=sha256:47928bf67eb62a1863cb08d9ecb52d3e704304ba614eaee17884204677702951nginx:1.30-alpine]
+docker_image.nginx: Destruction complete after 0s
+Destroy complete! Resources: 3 destroyed.
+$ tofu state list | wc -l; docker ps -a --filter name=m8do-tf -q | wc -l; ls saida
+0
+0
+
+--- 9. Ansible (IaC procedural-idempotente): duas execucoes seguidas ---
+$ /workspace/m8tools/ans/bin/ansible --version | head -1
+ansible [core 2.21.5]
+$ /workspace/m8tools/ans/bin/ansible-playbook playbook.yml 2>&1 | grep -E 'TASK|changed:|ok:|PLAY RECAP|localhost'
+TASK [Garante o diretorio de configuracao] *************************************
+ok: [localhost]
+TASK [Cria o arquivo base (so se ele nao existir)] *****************************
+changed: [localhost]
+TASK [Garante a linha workers=4 (cria ou corrige)] *****************************
+changed: [localhost]
+TASK [Remove um arquivo que nao deve existir] **********************************
+changed: [localhost]
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+$ /workspace/m8tools/ans/bin/ansible-playbook playbook.yml 2>&1 | grep -E 'TASK|changed:|ok:|PLAY RECAP|localhost'
+TASK [Garante o diretorio de configuracao] *************************************
+ok: [localhost]
+TASK [Cria o arquivo base (so se ele nao existir)] *****************************
+ok: [localhost]
+TASK [Garante a linha workers=4 (cria ou corrige)] *****************************
+ok: [localhost]
+TASK [Remove um arquivo que nao deve existir] **********************************
+ok: [localhost]
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+$ /workspace/m8tools/ans/bin/ansible-playbook playbook.yml --check --diff 2>&1 | grep -E 'changed:|^[-+][a-z]|PLAY RECAP|localhost'
+ok: [localhost]
+ok: [localhost]
+-workers=1
++workers=4
+changed: [localhost]
+ok: [localhost]
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+$ cat /tmp/m8-iac-1619702/srv/etc/app/app.conf
+ambiente=dev
+debug=false
+workers=1
+$ /workspace/m8tools/ans/bin/ansible-playbook playbook.yml 2>&1 | grep -E 'PLAY RECAP|localhost *:'
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+$ cat /tmp/m8-iac-1619702/srv/etc/app/app.conf
+ambiente=dev
+debug=false
+workers=4
