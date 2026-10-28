@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Objetivos',label:'Para que serve a informação',text:'<p>A informação contábil de propósito geral serve à <b>prestação de contas e responsabilização</b> e à <b>tomada de decisão</b>.</p>',scene:function(){return sc('PASSO 1 DE 6',[['Prestação de contas','a'],['Responsabilização','n'],['Tomada de decisão','n']],'capítulo 2')}},
+{title:'2. Usuários',label:'Quem usa a informação',text:'<p>Os usuários principais são os <b>usuários dos serviços</b> e os <b>provedores de recursos</b>, e seus representantes.</p>',scene:function(){return sc2('PASSO 2 DE 6',[['Usuários dos serviços','a','e representantes']],[['Provedores de recursos','m','e representantes']],'capítulo 2')}},
+{title:'3. Seis características',label:'Qualidade da informação',text:'<p><b>Relevância</b>, <b>representação fidedigna</b>, <b>compreensibilidade</b>, <b>tempestividade</b>, <b>comparabilidade</b> e <b>verificabilidade</b>.</p>',scene:function(){return sc('PASSO 3 DE 6',[['Relevância','a'],['Fidedigna','n'],['Verificabilidade','n']],'capítulo 3')}},
+{title:'4. Três restrições',label:'Limites da informação',text:'<p><b>Materialidade</b>, <b>custo-benefício</b> e <b>equilíbrio</b> entre as características. Não são características, são restrições.</p>',scene:function(){return sc('PASSO 4 DE 6',[['Materialidade','a'],['Custo-benefício','n'],['Equilíbrio','n']],'capítulo 3')}},
+{title:'5. Seis elementos',label:'Ativo, passivo e o resto',text:'<p>Ativo, passivo, receita, despesa, <b>contribuição</b> e <b>distribuição aos proprietários</b>. A situação patrimonial líquida não é um dos seis.</p>',scene:function(){return sc2('PASSO 5 DE 6',[['Ativo','a','recurso controlado']],[['Passivo','m','obrigação presente']],'capítulo 5')}},
+{title:'6. Reconhecer e mensurar',label:'Capítulos 6 e 7',text:'<p>Reconhece-se o que atende à <b>definição de elemento</b> e pode ser mensurado. Os ativos usam <b>custo histórico, mercado, reposição, preço líquido de venda ou valor em uso</b>.</p>',scene:function(){return sc2('PASSO 6 DE 6',[['Reconhecimento','a','definição + mensuração']],[['Mensuração','m','5 bases de ativo']],'capítulos 6 e 7')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pela Estrutura Conceitual: objetivos, usuários, características, restrições, elementos e reconhecimento e mensuração'});
+})();

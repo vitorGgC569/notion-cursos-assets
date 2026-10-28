@@ -1,0 +1,15 @@
+(function(){
+var K=window.K,X=K.X;
+function row(tokens,y,p){p=p||'t';var x=16,N=[];tokens.forEach(function(t,i){var w=Math.max(46,Math.round(t[0].length*8+26),Math.round((t[2]||'').length*6.4+18));N.push(X.box(p+i,x,y,w,44,t[0],t[1]||'n',t[2]||''));x+=w+10});return N}
+function sc(h,tokens,note){var N=[X.text('hd',16,34,h,'b')].concat(row(tokens,70));if(note)N.push(X.text('nt',16,150,note,'t'));return N}
+function sc2(h,r1,r2,note){var N=[X.text('hd',16,34,h,'b')].concat(row(r1,64,'a')).concat(row(r2,114,'b'));if(note)N.push(X.text('nt',16,174,note,'t'));return N}
+var S=[
+{title:'1. Estoque',label:'NBC TSP 04',text:'<p>Mantido para <b>venda, consumo ou distribuição</b>. Mede-se pelo <b>menor</b> entre custo e valor realizável líquido. <b>PEPS</b> ou custo médio; <b>UEPS não</b>.</p>',scene:function(){return sc('PASSO 1 DE 6',[['Estoque','a'],['Menor valor','n'],['Sem UEPS','n']],'NBC TSP 04')}},
+{title:'2. Propriedade para investimento',label:'NBC TSP 06',text:'<p>Mantida para <b>aluguel ou valorização</b>. Custo ou <b>valor justo</b>, conforme a política.</p>',scene:function(){return sc2('PASSO 2 DE 6',[['Aluguel','a','ou valorização']],[['Custo ou valor justo','m','política']],'NBC TSP 06')}},
+{title:'3. Imobilizado',label:'NBC TSP 07',text:'<p>Item <b>tangível</b> para uso na produção, aluguel ou fins administrativos, por <b>mais de um período</b>. Custo ou <b>reavaliação</b>.</p>',scene:function(){return sc('PASSO 3 DE 6',[['Tangível','a'],['Mais de um período','n'],['Custo ou reavaliação','n']],'NBC TSP 07')}},
+{title:'4. Intangível',label:'NBC TSP 08',text:'<p>Ativo <b>não monetário</b>, identificável, <b>sem substância física</b>. Pesquisa é <b>despesa</b>. Vida útil <b>indefinida</b> não se amortiza.</p>',scene:function(){return sc2('PASSO 4 DE 6',[['Definida','a','amortiza']],[['Indefinida','m','só testa']],'NBC TSP 08')}},
+{title:'5. Depreciação',label:'Valor depreciável',text:'<p>Alocação sistemática ao longo da <b>vida útil</b>. Começa quando o ativo está <b>disponível para uso</b>. <b>Terreno</b> em regra não deprecia. Revisões <b>ao fim de cada exercício</b>.</p>',scene:function(){return sc('PASSO 5 DE 6',[['Disponível para uso','a'],['Terreno não','n'],['Revisão anual','n']],'NBC TSP 07')}},
+{title:'6. Perda',label:'NBC TSP 09 e 10',text:'<p>Se o valor contábil superar o <b>valor recuperável</b> (o <b>maior</b> entre valor justo líquido e valor em uso), reconhece-se <b>perda</b>. A <b>09</b> é para ativo <b>não gerador</b> de caixa; a <b>10</b>, para gerador.</p>',scene:function(){return sc2('PASSO 6 DE 6',[['TSP 09','a','não gerador']],[['TSP 10','m','gerador de caixa']],'NBC TSP 09 e 10')}}
+];
+K.explain({w:720,h:230,steps:S,alt:'Seis passos pelos ativos: estoque, propriedade para investimento, imobilizado, intangível, depreciação e perda por redução ao valor recuperável'});
+})();
