@@ -2,8 +2,8 @@
 var K=window.K,X=K.X;
 function sc(o){
   o=o||{};var N=[];
-  N.push(X.zone('z1',20,30,330,190,'modulo20-worker · 172.18.0.4'+(o.cidr?' · '+o.cidr[0]:'')));
-  N.push(X.zone('z2',370,30,330,190,'modulo20-worker2 · 172.18.0.2'+(o.cidr?' · '+o.cidr[1]:'')));
+  N.push(X.zone('z1',20,18,330,202,'modulo20-worker · 172.18.0.4'+(o.cidr?' · '+o.cidr[0]:'')));
+  N.push(X.zone('z2',370,18,330,202,'modulo20-worker2 · 172.18.0.2'+(o.cidr?' · '+o.cidr[1]:'')));
   N.push(X.pill('s1',36,48,o.st||'NotReady',o.stc||'d',120));
   N.push(X.pill('s2',386,48,o.st||'NotReady',o.stc||'d',120));
   N.push(X.box('cni1',176,44,160,30,o.cni||'/etc/cni/net.d/ vazia',o.cnic||'d'));
