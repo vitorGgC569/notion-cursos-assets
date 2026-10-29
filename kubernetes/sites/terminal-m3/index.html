@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Terminal ao vivo · M3 · Curso de Kubernetes</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="style.css"></head>
+<body class="tm"><a class="skip" href="#v-passo">Ir para o conteúdo</a>
+<div class="wrap wide"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">Curso de Kubernetes</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 3</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<main>
+<p class="kicker">Módulo 3 · Linux: Shell, Pipes e Editores</p><h1>Terminal ao vivo</h1>
+<p class="lead">Cada comando da tabela do módulo, rodando de verdade. As saídas foram gravadas numa máquina Linux e só foram cortadas onde aparece "...". Veja o comando ser digitado, leia o que cada parte da resposta quer dizer e depois pratique na aba "Sua vez".</p>
+<div class="tabs" role="tablist"><button role="tab" data-t="passo" aria-selected="true">Passo a passo</button><button role="tab" data-t="vez" aria-selected="false">Sua vez</button></div>
+<section id="v-passo">
+<div class="prog"><i id="prog"></i></div>
+<div class="chips" id="chips"></div>
+<p class="intro" id="intro"></p>
+<div class="bar"><button class="btn" id="prev">◀ Anterior</button><button class="btn" id="next">Próximo ▶</button><button class="btn" id="play">Autoplay</button><button class="btn" id="again">Repetir</button><select class="btn" id="spd" aria-label="Velocidade"><option value="1">1x</option><option value="1.6">1,6x</option><option value="0.7">0,7x</option></select><span class="sp"></span><span class="ct" id="ctr"></span></div>
+<div class="stage"><div class="term"><div class="tb"><i></i><i></i><i></i><span>aluno@vm-aula</span></div><div class="scr" id="scr" aria-live="polite"></div></div>
+<div class="exp" id="exp"></div></div>
+<p class="small" style="margin-top:10px">Atalhos: setas para navegar, espaço para autoplay. A máquina da gravação roda Debian; no seu Ubuntu os nomes e números podem mudar, a leitura é a mesma.</p>
+</section>
+<section id="v-vez" hidden>
+<div class="prog"><i id="tprog"></i></div><p class="small" id="tcount"></p>
+<div class="tk"><ol class="tlist" id="tlist"></ol>
+<div><div class="card2"><h3 id="tn"></h3><p id="tq"></p><div class="bar" style="margin:10px 0 0"><button class="btn" id="thint">Dica</button><button class="btn" id="tsol">Mostrar o comando</button><button class="btn" id="treset">Reiniciar tarefa</button></div><div class="ans" id="tans" hidden><form style="display:flex;gap:8px;flex:1;flex-wrap:wrap"><label style="width:100%;font-size:13px;color:var(--muted)">Resposta</label><input autocomplete="off" aria-label="Resposta"><button class="btn pri" type="submit">Conferir</button></form></div><div class="fb" id="tfb" hidden></div></div>
+<div class="term"><div class="tb"><i></i><i></i><i></i><span>aluno@vm-aula, simulador</span></div><div class="scr" id="tscr" style="--h:300px" aria-live="polite"></div><form id="tform"><span class="pr" id="tpr">aluno@vm-aula:~$</span><input id="tin" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Digite um comando"></form></div>
+<p class="small" style="margin-top:8px">As tarefas foram gravadas em sequência numa máquina real, então faça na ordem. O simulador aceita variações comuns de espaços e aspas e só responde com saídas gravadas: fora do roteiro, ele avisa em vez de inventar uma resposta.</p></div></div>
+</section>
+</main>
+<div class="foot"><span>Linux: Shell, Pipes e Editores</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="data.js"></script><script src="app.js"></script>
+</body></html>
