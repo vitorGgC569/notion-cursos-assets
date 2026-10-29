@@ -1,0 +1,16 @@
+$ python l1_indice_lotce.py
+artigos distintos encontrados: 163 | maior numero: 148
+artigos com mais de uma versao no PDF compilado: 17
+sufixados (-A etc.): ['16-A', '16-B', '16-C', '16-D', '16-E', '16-F', '16-G', '29-A', '42-A', '44-A', '55-A', '97-A', '107-A', '110-A', '129-A']
+artigos integralmente vetados (nao existem no direito vigente): ['29', '42', '44', '145', '146']
+
+artigos por titulo (posicao da primeira ocorrencia no texto):
+  Titulo I     DA COMPETÊNCIA E DA JURISDIÇÃO           arts. 1 a 5 (5)
+  Titulo II    DA ORGANIZAÇÃO                           arts. 6 a 40 (43)
+  Titulo III   DO CONTROLE INTERNO                      arts. 41 a 44-A (6)
+  Titulo IV    DO EXERCÍCIO DO CONTROLE EXTERNO         arts. 45 a 109 (68)
+  Titulo V     DAS SANÇÕES                              arts. 110 a 115 (7)
+  Titulo VI    DAS MEDIDAS CAUTELARES                   arts. 116 a 119 (4)
+  Titulo VII   DOS RECURSOS E DA REVISÃO                arts. 120 a 129 (10)
+  Titulo VIII  DA JURISPRUDÊNCIA E DOS INCIDENTES PROCESSUAIS arts. 129-A a 135 (7)
+  Titulo IX    DISPOSIÇÕES GERAIS E TRANSITÓRIAS        arts. 136 a 148 (13)

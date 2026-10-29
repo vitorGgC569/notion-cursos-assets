@@ -1,0 +1,17 @@
+$ python l3_dias_uteis.py
+Regra do art. 55: dias uteis, exclui o dia do comeco, inclui o do vencimento.
+Calendario usado: sabados, domingos e 10 feriados nacionais de 2026 (lista no script). Feriados estaduais/municipais e pontos facultativos NAO considerados.
+
+Citacao recebida; defesa (art. 67, II): 15 dias
+  inicio 28/10/2026 (Wed) -> vence 19/11/2026 (Thu) em dias uteis | em dias corridos seria 12/11/2026 | diferenca 7 dias
+Embargos de declaracao (art. 127, par. 1): 5 dias
+  inicio 28/10/2026 (Wed) -> vence 05/11/2026 (Thu) em dias uteis | em dias corridos seria 02/11/2026 | diferenca 3 dias
+Agravo (art. 128): 10 dias
+  inicio 10/11/2026 (Tue) -> vence 25/11/2026 (Wed) em dias uteis | em dias corridos seria 20/11/2026 | diferenca 5 dias
+Recurso de reconsideracao (art. 125): 15 dias (datas hipoteticas)
+  inicio 23/11/2026 (Mon) -> vence 14/12/2026 (Mon) em dias uteis | em dias corridos seria 08/12/2026 | diferenca 6 dias
+Pagamento de debito/multa (art. 80): 15 dias
+  inicio 01/09/2026 (Tue) -> vence 23/09/2026 (Wed) em dias uteis | em dias corridos seria 16/09/2026 | diferenca 7 dias
+
+caso-limite: o dia do comeco e excluido, mesmo que seja util
+  inicio sexta 2026-10-30 +1 dia util -> 2026-11-03

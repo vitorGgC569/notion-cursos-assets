@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Calculadora de prazos em dias úteis · TCE-GO 2026 · Técnico de Controle Externo, TI</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#app">Ir para o conteúdo</a>
+<div class="wrap"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">TCE-GO 2026 · Técnico de Controle Externo, TI</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 12</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<p class="kicker">Módulo 12 · Legislação Institucional (TCE-GO)</p><h1>Calculadora de prazos em dias úteis</h1><p class="lead">Escolha a data do começo e o prazo e veja o vencimento pela regra do art. 55 da Lei Orgânica: dias úteis, excluindo o dia do começo e incluindo o do vencimento.</p>
+<style>.rg-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:0 0 14px}.rg-ctl label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}.rg-ctl input,.rg-ctl textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line,#ccd);border-radius:8px;background:transparent;color:inherit}.rg-out{font-size:18px;line-height:1.6}.rg-top{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}</style>
+<div class="rg-top"><button class="btn" type="button" data-n="15">Defesa ou reconsideração (15)</button><button class="btn" type="button" data-n="5">Embargos (5)</button><button class="btn" type="button" data-n="10">Agravo (10)</button></div>
+<div class="card"><p class="kicker">Calculadora (art. 55 da Lei 16.168/2007)</p><div class="rg-ctl"><div><label for="ini">Data do começo do prazo (é excluída da contagem)</label><input type="date" id="ini" value="2026-10-28"></div><div><label for="n">Prazo em dias úteis</label><input type="number" id="n" min="1" max="120" value="15"></div></div>
+<div><label for="fer" style="display:block;margin-bottom:6px;font-size:13px;color:var(--muted)">Feriados considerados (um por linha, AAAA-MM-DD). Lista pré-carregada: 10 feriados nacionais de 2026. Não inclui feriados estaduais, municipais nem pontos facultativos do TCE-GO.</label><textarea id="fer" rows="6" style="display:block;width:100%">2026-01-01
+2026-04-03
+2026-04-21
+2026-05-01
+2026-09-07
+2026-10-12
+2026-11-02
+2026-11-15
+2026-11-20
+2026-12-25</textarea></div>
+<p class="rg-out" id="out" aria-live="polite" style="margin-top:14px"></p></div>
+<div class="card" style="margin-top:18px"><p class="kicker">Limites desta calculadora</p><p class="muted" style="font-size:14px">É um modelo didático. Ela aplica só a regra do caput do art. 55: dias úteis, excluindo o dia do começo e incluindo o do vencimento. Não trata o termo inicial, nem eventuais regras de comunicação fora da região metropolitana, nem suspensão ou interrupção de prazos, nem o expediente do Tribunal. Confira o texto vigente da lei e o calendário do Tribunal antes de contar um prazo real. A lógica foi conferida em Node.js contra o laboratório L3, em Python.</p></div>
+<script src="prazo.js"></script>
+<script>(function(){var $=function(i){return document.getElementById(i)};function f(s){var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
+var N=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];function wd(s){return N[parse(s).getUTCDay()]}
+function go(){var ini=$('ini').value,n=parseInt($('n').value,10);if(!ini||!(n>0)){$('out').textContent='Informe a data e o prazo.';return}
+var fer=new Set($('fer').value.split(/\s+/).filter(function(x){return /^\d{4}-\d{2}-\d{2}$/.test(x)}));var u=prazoUteis(ini,n,fer),c=prazoCorridos(ini,n);var dif=Math.round((parse(u)-parse(c))/86400000);
+$('out').innerHTML='Começo: <b>'+f(ini)+'</b> ('+wd(ini)+'), excluído da contagem.<br>Vencimento em dias úteis: <b>'+f(u)+'</b> ('+wd(u)+').<br>Em dias corridos seria '+f(c)+' ('+dif+' dias a menos).'}
+['ini','n','fer'].forEach(function(i){$(i).addEventListener('input',go)});Array.prototype.forEach.call(document.querySelectorAll('[data-n]'),function(b){b.addEventListener('click',function(){$('n').value=b.getAttribute('data-n');go()})});go()})();</script>
+<div class="foot"><span>Módulo 12</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="../assets/app.js"></script><script type="application/json" id="data">{"id": "m12-calculadora-prazos"}</script>
+<script>(function(){var f=document.getElementById('full');if(f){f.href=location.href.split('?')[0]}if(window.top===window.self&&f)f.style.display='none'})();</script>
+</body></html>

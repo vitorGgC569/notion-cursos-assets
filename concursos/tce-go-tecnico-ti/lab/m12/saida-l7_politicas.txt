@@ -1,0 +1,13 @@
+$ python l7_politicas.py
+RA 17/2024, art. 8: 10 principios: autenticidade, celeridade, confidencialidade, conhecimento, clareza, disponibilidade, ética, integridade, privacidade, responsabilidade
+
+RA 15/2024, art. 4: 3 niveis
+   I estratégico -> o Plano Estratégico
+   II tático -> o Plano de Controle Externo e o Plano de Gestão
+   III operacional -> os planos diretores das unidades diretamente vinculadas à Presidência
+
+RN 5/2024, art. 16: Art. 16. O Presidente do TCE-GO indicará o encarregado pelo tratamento de dados pessoais. §1º A identidade e as informações de contato do encarregado de tratamento de dados serão disponibilizadas, per
+
+RA 19/2024, art. 3: Art. 3º A gestão, a implementação, o desenvolvimento e a revisão da Política de Comunicação no Tribunal de Contas do Estado de Goiás competem à Diretoria de Comunicação.
+
+RA 17/2024, art. 7: Art. 7º Os critérios para gestão da segurança da informação observam o disposto nesta Resolução, tendo como base os requisitos da NBR ISO/IEC 27001:2022 associado a requisitos legais aplicáveis e subscritos pelo TCE-GO. CAPÍTULO V DOS PRINCÍPIOS E DEFINIÇÕES

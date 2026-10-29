@@ -1,0 +1,23 @@
+$ python l6_estrutura.py
+LOTCE art. 8, integrantes: 10
+   I Plenário
+   II Câmaras
+   III Auditorias
+   IV Presidência
+   V Vice-Presidência
+   VI Corregedoria Geral
+   VII Conselheiros
+   VIII Auditores
+   IX Ministério Público junto ao Tribunal de Contas
+   X Serviços Técnicos e Administrativos
+  (o inciso III, Auditorias, aparece no texto com a marca Revogado pela Lei 17.260/2011, art. 6)
+
+RA 14/2025 art. 2, grupos: 7
+  I   Órgãos Colegiados do Corpo Deliberativo       3: Tribunal Pleno | Primeira Câmara | Segunda Câmara
+  II  Órgãos do Corpo Diretivo                      3: Presidência | Vice-Presidência | Corregedoria-Geral
+  III Órgãos Superiores                             4: Gabinetes de Conselheiros | Gabinetes de Conselheiros Substitutos | Ouvidoria | Escola Superior de Controle Externo Aélson Nascimento
+  IV  Órgãos com Independência Funcional            1: Ministério Público de Contas do Estado de Goiás
+  V   Unidades de Apoio à Segurança Institucional   2: Assistência de Segurança Policial Militar | Assistência de Segurança Bombeiro Militar
+  VI  Unidades Básicas                              5: Secretaria Executiva da Presidência | Secretaria de Planejamento | Secretaria Administrativa | Secretaria de Controle Externo | Secretaria-Geral
+  VII Unidades Colegiadas                           1: Comitês e Comissões permanentes
+  total de unidades citadas no art. 2: 19

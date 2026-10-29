@@ -1,0 +1,7 @@
+$ python l5_conferir_questoes.py
+Q25: gabarito FCC = E | trecho vigente encontrado em Lei 16.168 art. 56: SIM
+Q26: gabarito FCC = A | trecho vigente encontrado em Lei 16.168 art. 66, par. 2: SIM
+Q27: gabarito FCC = E | trecho vigente encontrado em CE-GO art. 26, par. 2: SIM
+Q28: gabarito FCC = B | trecho vigente encontrado em RI art. 113: SIM
+
+Observacao: a prova e de 2009; o teste acima so mostra que o texto atual ainda sustenta o gabarito.
