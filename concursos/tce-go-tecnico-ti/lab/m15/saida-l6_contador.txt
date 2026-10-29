@@ -1,0 +1,21 @@
+$ python3 l6_contador.py
+vazio                    OK  linhas a 60/90/120: [0, 0, 0]
+uma palavra              OK  linhas a 60/90/120: [1, 1, 1]
+so espacos               OK  linhas a 60/90/120: [0, 0, 0]
+enter no fim             OK  linhas a 60/90/120: [3, 3, 3]
+linha em branco no meio  OK  linhas a 60/90/120: [3, 3, 3]
+palavra gigante          OK  linhas a 60/90/120: [4, 3, 2]
+exato 90                 OK  linhas a 60/90/120: [2, 1, 1]
+91 com espaco            OK  linhas a 60/90/120: [2, 2, 1]
+modelo a1                OK  linhas a 60/90/120: [16, 12, 8]
+modelo a2                OK  linhas a 60/90/120: [15, 10, 7]
+modelo a3                OK  linhas a 60/90/120: [15, 10, 8]
+modelo a4                OK  linhas a 60/90/120: [17, 12, 10]
+modelo a5                OK  linhas a 60/90/120: [15, 9, 8]
+modelo s1                OK  linhas a 60/90/120: [14, 10, 8]
+modelo r1                OK  linhas a 60/90/120: [20, 14, 11]
+modelo r2                OK  linhas a 60/90/120: [14, 8, 7]
+modelo r3                OK  linhas a 60/90/120: [15, 11, 8]
+
+317 textos x 3 larguras: 0 divergencias entre JavaScript e Python.
+Node: v24.22.1

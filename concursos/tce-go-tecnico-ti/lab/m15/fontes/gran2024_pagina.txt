@@ -1,0 +1,71 @@
+
+ Um Tribunal de Justiça Trabalhista está modernizando sua...
+ Provas
+ Questões
+ Discursivas
+ Simulados
+ Disciplinas
+ Concursos
+ Todos os concursos
+ Principais cargos
+ Principais bancas
+ Principais regiões
+ Principais anos
+ Principais órgãos
+ Programa de Estudo
+ Raio-X
+ Novidade
+ Planos
+ Tutoriais
+ Entrar 
+ Cadastre-se 
+ Provas
+ Questões
+ Discursivas
+ Simulados
+ Disciplinas
+ Concursos
+ Todos os concursos
+ Principais cargos
+ Principais bancas
+ Principais regiões
+ Principais anos
+ Principais órgãos
+ Programa de Estudo
+ Raio-X
+ Novidade 
+ Planos
+ Tutoriais
+ Gran Questões 
+ Discursivas
+ Q3558872
+ Um Tribunal de Justiça Trabalhista está modernizando sua...
+ Voltar
+ Q3558872
+ Tecnologia da Informação
+ Ano:
+ 2024
+ Banca:
+ Fundação Carlos Chagas - FCC
+ Prova:
+ FCC - TRT 20 - Analista Judiciário - Área Tecnologia da Informação - 2024
+ Instruções da Banca sobre a questão
+ Instruções da banca Examinadora
+Conforme Edital publicado, Capítulo 11: [...] 11.2 A prova discursiva Estudo de caso constará de 01 (uma) questão prática, para a qual o candidato deverá apresentar, por escrito, as soluções. [...] 11.9 Será atribuida nota ZERO à Prova Discursiva-Estudo de Caso nos seguintes casos: 11.9.1 fugir ao tema proposto; 11.9.2 apresentar textos sob forma não articulada verbalmente (apenas com desenhos, números e palavras soltas ou em versos) ou qualquer fragmento de texto escrito fora do local apropriado; 11.9.3 for assinada fora do local apropriado; 11.9.4 apresentar qualquer sinal que, de alguma forma, possibilite a identificação do candidato; 11.9.5 estiver em branco; 11.9.6 apresentar letra ilegível e/ou incompreensível; 11.9.7 não atender aos requisitos definidos na grade de correção/máscara de critérios definidos pela Banca Examinadora. 11.10 Respostas que apresentarem trechos reproduzidos de textos já divulgados em fontes de acesso público a que a Banca Examinadora tenha acesso, ou que apresentem cópia de trecho dos textos motivadores, de questões ou textos da prova objetiva, poderão ser penalizadas com redução drástica da nota. [...] 11.12 Na Prova Discursiva-Estudo de Caso, deverá ser rigorosamente observado o limite máximo de 15 (quinze) linhas para a sob pena de perda de pontos a serem atribuídos ao Estudo de Caso. 11.13 A folha para rascunho no Caderno de Provas é de preenchimento facultativo. Em hipótese alguma o rascunho elaborado pelo candidato será considerado na correção da Prova Discursiva-Estudo de Caso pela Banca Examinadora. 11.14 Eventuais marcações nos enunciados das questões, que não excedam a palavras sublinhadas ou circuladas, não trarão prejuízo à correção da prova.
+ Um Tribunal de Justiça Trabalhista está modernizando sua infraestrutura de TI para adotar uma abordagem ágil e DevSecOps, buscando melhorar a eficiência, segurança e escalabilidade no desenvolvimento de sistemas judiciais e administrativos. O Tribunal deseja desenvolver aplicações sem gerenciar a infraestrutura subjacente. Com relação à infraestrutura de redes, possui três switches interligados com múltiplos caminhos, resultando em tempestades de broadcast e alta utilização da CPU, causando lentidão na rede.
+Desafios:
+Migração para a nuvem:
+O Tribunal precisa de uma solução que permita focar no desenvolvimento e integração de segurança, sem preocupação com a infraestrutura subjacente.
+Desenvolvimento web e mobile:
+É necessário entregar novos sistemas e aplicativos web e mobile de forma contínua e integrada, sem preocupação com a infraestrutura subjacente.
+Interação de segurança (DevSecOps):
+A solução deve incluir automação e verificações de segurança e suporte a plugins de segurança com testes integrados.
+Performance da rede:
+A rede com os 3 switches precisa de redundância de caminho, balanceamento de carga e alta largura de banda, sem depender de gerenciamento via SNMP, segmentação por VLANS e redes definidas por software (SDN).
+Nesse cenário, diante dos desafios apresentados, considere que um Analista de Tecnologia da Informação do Tribunal deve informar, justificando sua resposta:
+a. o modelo de serviço em nuvem que atenda às necessidades do Tribunal.
+b. a solução mais adequada de integração continua e entrega continua com automação nativa de verificações de segurança e suporte a plugins de segurança que seria a mais adequada para o Tribunal.
+c. a solução mais adequada para resolver o problema da tempestade de broadcast, fornecer redundância de caminho entre os switches com convergência rápida, compartilhamento de carga, maior largura de banda e tolerância a falhas.
+Observação:
+É necessário informar na sua resposta, obrigatoriamente, a letra do item correspondente.
+ 

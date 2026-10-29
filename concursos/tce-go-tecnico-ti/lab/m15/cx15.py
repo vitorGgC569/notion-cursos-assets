@@ -1,0 +1,92 @@
+# -*- coding: utf-8 -*-
+# Cartoes, desafios, fontes e videoaulas do Modulo 15.
+import quotes15 as Q
+CARDS=[
+ ('Quantas questões tem o Estudo de Caso do TCE-GO e que nota ele vale?','Uma questão prática (edital, item 11.4), avaliada de 0 a 100 pontos (11.8). É eliminatória e classificatória.'),
+ ('Qual a nota mínima para ser habilitado no Estudo de Caso?','50 pontos (edital, item 11.9). Abaixo disso o candidato é excluído do concurso (11.21), mesmo com boa nota nas objetivas.'),
+ ('Quantos candidatos têm o Estudo de Caso corrigido?','Só os mais bem classificados na Prova Objetiva: até a 48ª posição na ampla concorrência, a 12ª entre os negros e todos os habilitados entre as pessoas com deficiência (item 11.2), considerados os empates na última posição. Os demais são excluídos (11.3).'),
+ ('O Estudo de Caso é aplicado em outro dia?','Não. É no mesmo dia e período das objetivas (item 11.1), previsto para 17/01/2027 (cronograma sujeito a alterações). A prova toda dura 4h30.'),
+ ('Qual é o tema do Estudo de Caso?','Conteúdo dos Conhecimentos Específicos, com disciplinas que podem estar inter-relacionadas (item 11.6). Treine casos que misturam duas ou três matérias.'),
+ ('O que a banca avalia, segundo o edital?','O domínio de conteúdo do tema, a experiência prévia do candidato e a adequabilidade quanto à atribuição do cargo (item 11.7).'),
+ ('Quando a nota é prejudicada proporcionalmente?','Quando há abordagem tangencial, parcial ou diluída em meio a divagações e/ou colagem de textos e de questões (item 11.10).'),
+ ('Cite quatro casos de nota ZERO (item 11.12).','Fugir ao tema; texto não articulado (só desenhos, números, palavras soltas) ou fragmento fora do local; sinal ou identificação nas linhas da resposta definitiva; prova em branco; letra ilegível; assinatura fora do local; não atender à grade de correção.'),
+ ('O que acontece com rasura e com texto fora do espaço?','O trecho é desconsiderado, com risco de perda de pontos (item 11.13). Fragmento fora do espaço definitivo não é corrigido (11.14).'),
+ ('Pode copiar o enunciado ou textos prontos na resposta?','Não: reproduzir trechos de textos públicos ou copiar os textos motivadores e questões pode levar à redução drástica da nota (item 11.15).'),
+ ('E o limite de linhas?','Deve ser rigorosamente observado o limite de linhas estabelecido na questão, sob pena de perda de pontos (item 11.16). O número vem do enunciado, não do edital.'),
+ ('O rascunho vale alguma coisa?','Não. É facultativo e jamais é considerado na correção (item 11.17). Atenção ao espaço do rascunho e ao da resposta definitiva (11.18).'),
+ ('Sublinhar e circular o enunciado prejudica?','Não: marcações que não excedam palavras sublinhadas ou circuladas não trazem prejuízo (item 11.19).'),
+ ('Pode usar lápis, borracha ou calculadora?','Não (item 11.5). Use caneta esferográfica de material transparente, tinta preta ou azul (item 8.12).'),
+ ('O que é o espelho de correção?','A grade (máscara de critérios) com a abordagem esperada em cada item e a pontuação. A banca a divulga na vista da prova (item 11.20). Treine escrevendo como se cada comando valesse pontos.'),
+ ('Como ordenar a resposta?','Um parágrafo por comando, começando pela letra do item (a, b, c). Responda exatamente o que foi pedido, na ordem do enunciado.'),
+ ('Como aplicar a resposta ao caso?','Cite o elemento do caso (o sistema, o dado, o prazo) ao explicar o conceito: não basta definir, é preciso ligar à situação.'),
+ ('Qual a diferença entre "relacione", "explique" e "justifique"?','Relacione: liste os nomes. Explique ou descreva: diga como funciona. Justifique: dê a razão que sustenta a escolha. (Interpretação do curso.)'),
+ ('Quando o enunciado pede "duas medidas", quantas dar?','Duas. Uma a mais não costuma pontuar e gasta linhas; uma a menos perde a parte. (Orientação do curso.)'),
+ ('Como se ordena o desempate?','Depois do critério do Estatuto do Idoso (item 12.4), para TI a ordem é: maior nota no Estudo de Caso, maior nota na prova de Conhecimentos Específicos, mais acertos em Língua Portuguesa, maior idade e, por fim, ter exercido função de jurado (item 12.4.2.2).'),
+ ('Quanto o Estudo de Caso entra na nota final?','A nota final é a soma das notas ponderadas das objetivas mais a nota do Estudo de Caso (item 12.2).'),
+ ('Quando sair da sala?','Não antes de 3 horas do início da prova (item 8.20, f). Não se pode ficar com relógio na sala: use marcos de tempo e o relógio da sala.'),
+ ('Prazo para comunicar incidente de segurança com dados pessoais à ANPD?','Três dias úteis, contados do conhecimento de que o incidente afetou dados pessoais (Resolução CD/ANPD 15/2024, art. 6º). O art. 48 da LGPD fala em prazo razoável, definido pela autoridade.'),
+ ('PaaS, em uma frase.','O consumidor implanta suas aplicações, criadas ou adquiridas, na infraestrutura do provedor, sem gerenciar a infraestrutura de base (NIST SP 800-145).'),
+ ('Como guardar senhas?','Nunca em texto puro: só o hash, com algoritmo lento (Argon2id, bcrypt ou PBKDF2) e salt único por senha (OWASP).'),
+]
+M_ZERO=dict(id='m15-desafio-zero',title='Desafio: pontua, perde pontos ou nota zero?',lead='Leia a situação e classifique conforme o capítulo 11 do edital do TCE-GO. A classificação "perde pontos" inclui o que o edital trata como redução ou perda; confira o item citado em cada resposta.',
+ labels=['Sem prejuízo','Perde pontos','Nota zero'],
+ items=[('Você sublinha e circula palavras do enunciado antes de escrever.',0,'Sem prejuízo: marcações que não excedam palavras sublinhadas ou circuladas não trazem prejuízo (item 11.19).'),
+  ('Você escreve um rascunho na folha de rascunho e depois passa a limpo.',0,'Sem prejuízo: o rascunho é facultativo e não é corrigido (item 11.17); só vale o que está na resposta definitiva.'),
+  ('A resposta aborda o tema só de passagem, com divagações no meio.',1,'Perde pontos: a nota é prejudicada proporcionalmente por abordagem tangencial, parcial ou diluída em divagações (item 11.10).'),
+  ('Você copia trechos do enunciado para dentro da resposta.',1,'Perde pontos: a cópia de trecho dos textos motivadores pode levar à redução drástica da nota (item 11.15).'),
+  ('Sua resposta passa do número de linhas dado na questão.',1,'Perde pontos: o limite de linhas deve ser rigorosamente observado, sob pena de perda de pontos (item 11.16).'),
+  ('Um trecho da resposta tem rasura.',1,'Perde pontos: o trecho com rasura é desconsiderado, com risco de perda de pontos (item 11.13).'),
+  ('Você escreve sobre outro assunto de TI, sem relação com o caso.',2,'Nota zero: fugir ao tema proposto (item 11.12, a).'),
+  ('Você assina a resposta com o seu nome nas linhas da resposta definitiva.',2,'Nota zero: qualquer sinal, marca, rubrica, assinatura ou nome nas linhas da resposta definitiva que possibilite a identificação (item 11.12, c).'),
+  ('A folha de resposta definitiva fica em branco.',2,'Nota zero: prova em branco (item 11.12, d).'),
+  ('A letra está ilegível e incompreensível.',2,'Nota zero: letra ilegível e/ou incompreensível (item 11.12, e). Escreva em letra de forma se a sua cursiva não for clara.'),
+  ('A resposta é só uma lista de palavras soltas, sem frases.',2,'Nota zero: texto sob forma não articulada verbalmente, com palavras soltas (item 11.12, b).'),
+  ('A resposta ignora os requisitos da grade de correção definida pela banca.',2,'Nota zero: não atender aos requisitos da grade de correção, critérios ou espelho (item 11.12, g). Por isso leia os comandos e responda o que foi pedido.')])
+M_VERBOS=dict(id='m15-desafio-verbos',title='Desafio: o que o comando pede?',lead='Os comandos abaixo são de casos reais da FCC (TRF-4 2019 e TRT-20 2024) e de casos autorais. Escolha a ação que o verbo pede. A classificação é a interpretação do curso, não uma regra oficial da banca.',
+ labels=['Relacionar (listar nomes ou itens)','Explicar ou descrever o funcionamento','Identificar ou indicar (itens pedidos, sem rodeio)','Escolher e justificar, ou produzir a solução'],
+ items=[('"Relacione os nomes e os tipos de chave dos processos de criptografia." (TRF-4 2019, item a1)',0,'Relacione pede os nomes e os tipos, em lista curta. Explicação aqui gasta linhas.'),
+  ('"Explique, sucintamente, como funciona cada um desses processos de criptografia." (TRF-4 2019, item a2)',1,'Explique pede o funcionamento, e "sucintamente" limita a profundidade: uma ou duas frases por processo.'),
+  ('"Identifique procedimentos que devem ser estabelecidos para prevenir o acesso não autorizado aos sistemas e aplicações." (TRF-4 2019, item b)',2,'Identifique pede apontar os procedimentos pedidos, nomeando cada um com uma frase de apoio.'),
+  ('"Descreva, sucintamente, o funcionamento de uma rede privada virtual e os benefícios de seu uso" (TRF-4 2019, item d)',1,'Descreva o funcionamento: como a VPN trabalha. Os benefícios são a segunda parte do mesmo comando e precisam aparecer.'),
+  ('"O código faltante na lacuna III para fazer com que somente o usuário que tenha efetuado o login possa acessar a página p1.php" (TRF-4 2019, Q2, item c)',3,'Aqui se produz a solução (o código), não se explica a teoria. Uma linha de justificativa só se sobrar espaço.'),
+  ('"o modelo de serviço em nuvem que atenda às necessidades do Tribunal", informando e justificando a resposta (TRT-20 2024, item a)',3,'O enunciado diz "informar, justificando": escolha (PaaS) e dê a razão ligada ao caso.'),
+  ('"a solução mais adequada de integração contínua e entrega contínua com automação nativa de verificações de segurança" (TRT-20 2024, item b)',3,'"Mais adequada" pede escolher e justificar por critérios do enunciado (verificações nativas, plugins).'),
+  ('Indique duas medidas imediatas de contenção e uma de preservação de evidências. (caso autoral A1)',2,'Indique com número fixo: duas mais uma. Nem mais, nem menos.'),
+  ('Enumere os documentos e liste os itens que o estudo técnico preliminar deve conter. (exemplo autoral)',0,'Enumere e liste pedem nomes e itens, sem desenvolvimento.'),
+  ('Explique como funciona a recuperação até um ponto no tempo no PostgreSQL. (exemplo autoral)',1,'Explique pede o funcionamento: backup base mais reaplicação do WAL até o instante escolhido.')])
+SOURCES=[
+ ('Legislação e normas (links oficiais)',[
+  ('Lei nº 13.709/2018 (LGPD), texto atualizado, portal da Câmara dos Deputados','https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709-14-agosto-2018-787077-normaatualizada-pl.html'),
+  ('Resolução CD/ANPD nº 15/2024 (comunicação de incidente de segurança), Biblioteca Digital do Ministério da Justiça','https://bibliotecadigital.mj.gov.br/bitstream/1/12879/2/RES_ANPD_2024_15.html'),
+  ('Lei nº 14.133/2021, edição do Senado Federal atualizada até julho de 2026 (PDF)','https://www2.senado.leg.br/jspui/bitstream/id/962232/1/Lei_licitacoes_contratos_administrativos_6ed_2026.pdf')]),
+ ('Padrões e especificações (em inglês)',[
+  ('NIST SP 800-145: The NIST Definition of Cloud Computing','https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf'),
+  ('NIST FIPS 197: Advanced Encryption Standard (AES)','https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf'),
+  ('RFC 7519: JSON Web Token (JWT)','https://www.rfc-editor.org/rfc/rfc7519'),
+  ('RFC 8017: PKCS #1, RSA Cryptography Specifications','https://www.rfc-editor.org/rfc/rfc8017'),
+  ('RFC 4301: Security Architecture for the Internet Protocol','https://www.rfc-editor.org/rfc/rfc4301')]),
+ ('Documentação técnica (em inglês)',[
+  ('PostgreSQL: Continuous Archiving and Point-in-Time Recovery','https://www.postgresql.org/docs/current/continuous-archiving.html'),
+  ('PostgreSQL: SQL Dump','https://www.postgresql.org/docs/current/backup-dump.html'),
+  ('Python: sqlite3 (placeholders)','https://docs.python.org/3/library/sqlite3.html'),
+  ('OWASP: SQL Injection Prevention Cheat Sheet','https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html'),
+  ('OWASP: Password Storage Cheat Sheet','https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html'),
+  ('GitLab: Application security','https://docs.gitlab.com/ee/user/application_security/'),
+  ('Jenkins: Managing Plugins','https://www.jenkins.io/doc/book/managing/plugins/'),
+  ('Linux kernel: Linux Ethernet Bonding Driver HOWTO','https://www.kernel.org/doc/html/latest/networking/bonding.html'),
+  ('PHP: filter_input','https://www.php.net/manual/en/function.filter-input.php'),
+  ('PHP: filtros de sanitização','https://www.php.net/manual/en/filter.constants.sanitization.php'),
+  ('PHP: mysqli::__construct','https://www.php.net/manual/en/mysqli.construct.php'),
+  ('PHP: mysqli::prepare','https://www.php.net/manual/en/mysqli.prepare.php'),
+  ('PHP: password_hash','https://www.php.net/manual/en/function.password-hash.php'),
+  ('PHP: isset','https://www.php.net/manual/en/function.isset.php')]),
+ ('Fonte secundária (enciclopédia; não substitui os padrões IEEE)',[
+  ('Wikipedia: Spanning Tree Protocol (STP e RSTP)','https://en.wikipedia.org/wiki/Spanning_Tree_Protocol'),
+  ('Wikipedia: Link aggregation (LACP)','https://en.wikipedia.org/wiki/Link_aggregation')])]
+PROVAS=[('TRF-4 2019, Analista Judiciário, Sistemas de Tecnologia da Informação, caderno 04 tipo 001, Prova Estudo de Caso, questões 1 e 2',
+  'https://eticaconcursos.com.br/provas/arquivos/prova/fcc-2019-trf-4-regiao-analista-judiciario-sistemas-de-tecnologia-da-informacao-prova.pdf','https://eticaconcursos.com.br/provas/fcc-2019-trf-4-regiao-analista-judiciario-sistemas-de-tecnologia-da-informacao','eticaconcursos.com.br'),
+ ('TRT-20 2024, Analista Judiciário, Área Tecnologia da Informação, questão discursiva Q3558872 (Estudo de Caso)',
+  'https://questoes.grancursosonline.com.br/questoes-discursivas/tecnologia-da-informacao-14/3558872','','questoes.grancursosonline.com.br')]
+# disciplinas do Anexo II (TI) e o que costuma ser pedido em um caso: ver teoria15.md
+MODS={1:'407731c0f1e481d9bf9efb25a63b12ba',2:'407731c0f1e4810489b2fb7f98cc5d61',3:'407731c0f1e481199e79f1d954ec0b85',4:'407731c0f1e48165ad59ff1ac318dba4',5:'407731c0f1e4816f843bf3b76a6db8a3',6:'407731c0f1e481d08beaebf18e277d23',7:'407731c0f1e4811c910cfc5b26f1a9a8',8:'407731c0f1e481bb89b5d762217a95d3',9:'407731c0f1e481a487e7c7018e06b58e',10:'407731c0f1e481a19817d7599de7ca1f',11:'407731c0f1e481f794b0fa8ac96a0403',12:'407731c0f1e481c0b48af8c378823afc',13:'407731c0f1e481eab21bf74d12f28da7',14:'407731c0f1e4810badf8f3eafc3c95aa'}
+def mention(n): return '<mention url="https://app.notion.com/p/%s" />'%MODS[n]

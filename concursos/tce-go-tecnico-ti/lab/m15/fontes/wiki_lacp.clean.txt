@@ -1,0 +1,468 @@
+
+Link aggregation - Wikipedia
+Jump to content
+ From Wikipedia, the free encyclopedia
+ Using multiple network connections in parallel to increase capacity and reliability
+"IEEE 802.3ad" redirects here; not to be confused with IEEE 802.1ad.
+Link aggregation between a switch and a server
+In computer networking, link aggregation is the combining (aggregating) of multiple network connections in parallel by any of several methods. Link aggregation increases total bandwidth beyond what a single connection could sustain, and provides redundancy where all but one of the physical links may fail without losing connectivity. A link aggregation group (LAG) is the combined collection of physical ports.
+Other umbrella terms used to describe the concept include trunking,[1] bundling,[2] bonding,[1] channeling[3] or teaming.
+Implementation may follow vendor-independent standards such as Link Aggregation Control Protocol (LACP) for Ethernet, defined in IEEE 802.1AX or the previous IEEE 802.3ad, but also proprietary protocols.
+Motivation
+[edit]
+Link aggregation increases the bandwidth and resilience of Ethernet connections.
+Bandwidth requirements do not scale linearly. Ethernet bandwidths historically have increased tenfold each generation: 10 Mbit/s, 100 Mbit/s, 1000 Mbit/s, 10000 Mbit/s. If one started to bump into bandwidth ceilings, then the only option was to move to the next generation, which could be cost prohibitive. An alternative solution, introduced by many of the network manufacturers in the early 1990s, is to use link aggregation to combine two physical Ethernet links into one logical link. Most of these early solutions required manual configuration and identical equipment on both sides of the connection.[4]
+There are three single points of failure inherent to a typical port-cable-port connection, in either a computer-to-switch or a switch-to-switch configuration: the cable itself or either of the ports the cable is plugged into can fail. Multiple logical connections can be made, but many of the higher level protocols were not designed to fail over completely seamlessly. Combining multiple physical connections into one logical connection using link aggregation provides more resilient communications.
+Architecture
+[edit]
+Network architects can implement aggregation at any of the lowest three layers of the OSI model. Examples of aggregation at layer 1 (physical layer) include power line (e.g. IEEE 1901) and wireless (e.g. IEEE 802.11) network devices that combine multiple frequency bands. OSI layer 2 (data link layer, e.g. Ethernet frame in LANs or multi-link PPP in WANs, Ethernet MAC address) aggregation typically occurs across switch ports, which can be either physical ports or virtual ones managed by an operating system. Aggregation at layer 3 (network layer) in the OSI model can use round-robin scheduling, hash values computed from fields in the packet header, or a combination of these two methods.
+Regardless of the layer on which aggregation occurs, it is possible to balance the network load across all links. However, in order to avoid out-of-order delivery, not all implementations take advantage of this. Most methods provide failover as well.
+Combining can either occur such that multiple interfaces share one logical address (i.e., IP) or one physical address (i.e., MAC address), or it allows each interface to have its own address. The former requires that both ends of a link use the same aggregation method, but has performance advantages over the latter.
+Channel bonding is differentiated from load balancing in that load balancing divides traffic between network interfaces on per network socket (layer 4) basis, while channel bonding implies a division of traffic between physical interfaces at a lower level, either per packet (layer 3) or a data link (layer 2) basis.[citation needed]
+IEEE link aggregation
+[edit]
+Standardization process
+[edit]
+By the mid-1990s, most network switch manufacturers had included aggregation capability as a proprietary extension to increase bandwidth between their switches. Each manufacturer developed its own method, which led to compatibility problems. The IEEE 802.3 working group took up a study group to create an interoperable link layer standard (i.e., encompassing the physical and data-link layers both) in a November 1997 meeting.[4] The group quickly agreed to include an automatic configuration feature, which would add in redundancy as well. This became known as Link Aggregation Control Protocol (LACP).
+802.3ad
+[edit]
+As of 2000[update], most gigabit channel-bonding schemes used the IEEE standard of link aggregation, which was formerly clause 43 of the IEEE 802.3 standard added in March 2000 by the IEEE 802.3ad task force.[5] Nearly every network equipment manufacturer quickly adopted this joint standard over their proprietary standards.
+802.1AX
+[edit]
+The 802.3 maintenance task force report for the 9th revision project in November 2006 noted that certain 802.1 layers (such as 802.1X security) were positioned in the protocol stack below link aggregation which was defined as an 802.3 sublayer.[6] To resolve this discrepancy, the 802.3ax (802.1AX) task force was formed,[7] resulting in the formal transfer of the protocol to the 802.1 group with the publication of IEEE 802.1AX-2008 on 3 November 2008.[8] As of February 2025 the current revision of the standard is 802.1AX-2020.[9][10] For an overview of the history of the 802.1AX standard, see this part of the table on the IEEE 802.1 family of standards.
+Link Aggregation Control Protocol
+[edit]
+Within the IEEE Ethernet standards, the Link Aggregation Control Protocol (LACP) provides a method to control the bundling of several physical links together to form a single logical link. LACP allows a network device to negotiate an automatic bundling of links by sending LACP packets to its peer, a directly connected device that also implements LACP.
+LACP Features and practical examples
+Maximum number of bundled ports allowed in the port channel: Valid values are usually from 1 to 8.
+LACP packets are sent with multicast group MAC address 01:80:C2:00:00:02
+During LACP detection period 
+LACP packets are transmitted every second
+Keep-alive mechanism for link member: (slow = 30s, fast=1s)
+Selectable load-balancing mode is available in some implementations[11]
+LACP mode:
+Active: Enables LACP unconditionally.
+Passive: Enables LACP only when an LACP device is detected.
+Advantages over static configuration
+[edit]
+Failover occurs automatically: When a link has an intermediate failure, for example, in a media converter between the devices, a peer system may not perceive any connectivity problems. With static link aggregation, the peer would continue sending traffic down the link, causing the connection to fail.
+Dynamic configuration: The device can confirm that the configuration at the other end can handle link aggregation. With static link aggregation, a cabling or configuration mistake could go undetected and cause undesirable network behavior.[12]
+Practical notes
+[edit]
+LACP works by sending frames (LACPDUs) down all links that have the protocol enabled. If it finds a device on the other end of a link that also has LACP enabled, that device will independently send frames along the same links in the opposite direction, enabling the two units to detect multiple links between themselves and then combine them into a single logical link. LACP can be configured in one of two modes: active or passive. In active mode, LACPDUs are sent 1 per second along the configured links. In passive mode, LACPDUs are not sent until one is received from the other side, a speak-when-spoken-to protocol.
+Proprietary link aggregation
+[edit]
+In addition to the IEEE link aggregation substandards, there are a number of proprietary aggregation schemes, including
+Cisco's EtherChannel (includes negotiation via LACP or the separate Port Aggregation Protocol)
+Juniper's Aggregated Ethernet (a trade name for LACP)
+Nortel's Multi-Link Trunking, Split Multi-Link Trunking, Routed Split Multi-Link Trunking and Distributed Split Multi-Link Trunking (extensions to 802.3ad in either static or LACP mode)
+ZTE's Smartgroup (trade name for LACP)
+Huawei's Eth-Trunk (trade name for 802.3ad in manual [static] or LACP modes)
+Connectify's Speedify (a proprietary VPN).[13]
+Support
+[edit]
+Most high-end network devices support some form of link aggregation. Software-based implementations – such as the *BSD lagg package, Linux bonding driver, Solaris dladm aggr, etc. – exist for many operating systems.
+Linux drivers
+[edit]
+The Linux bonding driver[14] provides a method for aggregating multiple network interface controllers (NICs) into a single logical bonded interface of two or more so-called (NIC) slaves. The majority of modern Linux distributions come with a Linux kernel which has the Linux bonding driver integrated as a loadable kernel module and the ifenslave (if = [network] interface) user-level control program pre-installed. Donald Becker programmed the original Linux bonding driver. It came into use with the Beowulf cluster patches for the Linux kernel 2.0.
+Modes for the Linux bonding driver[14] (network interface aggregation modes) are supplied as parameters to the kernel bonding module at load time. They may be given as command-line arguments to the insmod or modprobe commands, but are usually specified in a Linux distribution-specific configuration file. The behavior of the single logical bonded interface depends upon its specified bonding driver mode. The default parameter is balance-rr.
+Round-robin (balance-rr)
+Transmit alternate network packets in sequential order from the first available NIC slave through the last. This mode provides load balancing and fault tolerance.[15] This mode can cause congestion control issues due to the packet reordering it can introduce.[16]
+Active-backup (active-backup)
+Only one NIC slave in the bond is active. A different slave becomes active if, and only if, the active slave fails. The single logical bonded interface's MAC address is externally visible on only one NIC (port) to simplify forwarding in the network switch. This mode provides fault tolerance.
+XOR (balance-xor)
+Transmit network packets based on a hash of the packet's source and destination. The default algorithm only considers MAC addresses (layer2). Newer versions allow selection of additional policies based on IP addresses (layer2+3) and TCP/UDP port numbers (layer3+4). This selects the same NIC slave for each destination MAC address, IP address, or IP address and port combination, respectively. Single connections will have guaranteed in order packet delivery and will transmit at the speed of a single NIC.[16] This mode provides load balancing and fault tolerance.
+Broadcast (broadcast)
+Transmit network packets on all slave network interfaces. This mode provides fault tolerance.
+IEEE 802.3ad Dynamic link aggregation (802.3ad, LACP)
+Creates aggregation groups that share the same speed and duplex settings. Utilizes all slave network interfaces in the active aggregator group according to the 802.3ad specification. This mode is similar to the XOR mode above and supports the same balancing policies. The link is set up dynamically between two LACP-supporting peers.
+Adaptive transmit load balancing (balance-tlb)
+Linux bonding driver mode that does not require any special network-switch support. The outgoing network packet traffic is distributed according to the current load (computed relative to the speed) on each network interface slave. Incoming traffic is received by one currently designated slave network interface. If this receiving slave fails, another slave takes over the MAC address of the failed receiving slave.
+Adaptive load balancing (balance-alb)
+includes balance-tlb plus receive load balancing (rlb) for IPv4 traffic and does not require any special network switch support. The receive load balancing is achieved by ARP negotiation. The bonding driver intercepts the ARP Replies sent by the local system on their way out and overwrites the source hardware address with the unique hardware address of one of the NIC slaves in the single logical bonded interface, such that different network peers use different MAC addresses for their network packet traffic.
+The Linux Team driver[17] provides an alternative to bonding driver. The main difference is that Team driver kernel part contains only essential code and the rest of the code (link validation, LACP implementation, decision making, etc.) is run in userspace as a part of teamd daemon.
+Usage
+[edit]
+Network backbone
+[edit]
+Link aggregation offers an inexpensive way to set up a high-capacity backbone network that transfers multiple times more data than any single port or device can deliver. Link aggregation also allows the network's backbone speed to grow incrementally as demand on the network increases, without having to replace everything and deploy new hardware.
+Most backbone installations install more cabling or fiber optic pairs than is initially necessary. This is done because labor costs are higher than the cost of the cable, and running extra cable reduces future labor costs if networking needs change. Link aggregation can allow the use of these extra cables to increase backbone speeds for little or no extra cost if ports are available.
+Order of frames
+[edit]
+When balancing traffic, network administrators often wish to avoid reordering Ethernet frames. For example, TCP suffers additional overhead when dealing with out-of-order packets. This goal is approximated by sending all frames associated with a particular session across the same link. Common implementations use L2 or L3 hashes (i.e. based on the MAC or the IP addresses), ensuring that the same flow is always sent via the same physical link.[18][19][20]
+However, this may not provide even distribution across the links in the trunk when only a single or very few pairs of hosts communicate with each other, i.e., when the hashes provide too little variation. It effectively limits the client bandwidth in aggregate.[19] In the extreme, one link is fully loaded while the others are completely idle, and aggregate bandwidth is limited to this single member's maximum bandwidth. For this reason, an even load balancing and full utilization of all trunked links is almost never reached in real-life implementations.
+Use on network interface cards
+[edit]
+NICs trunked together can also provide network links beyond the throughput of any single NIC. For example, this allows a central file server to establish an aggregate 2-gigabit connection using two 1-gigabit NICs teamed together. Note the data signaling rate will still be 1 Gbit/s, which can be misleading depending on the methodologies used to test throughput after link aggregation is employed.
+Microsoft Windows
+[edit]
+Microsoft Windows Server 2012 supports link aggregation natively. Previous Windows Server versions relied on manufacturer support of the feature within their device driver software. Intel, for example, released Advanced Networking Services (ANS) to bond Intel Fast Ethernet and Gigabit cards.[21]
+Nvidia supports teaming with their Nvidia Network Access Manager/Firewall Tool. HP has a teaming tool for HP-branded NICs which supports several modes of link aggregation, including 802.3ad with LACP. In addition, there is a basic layer-3 aggregation[22] that allows servers with multiple IP interfaces on the same network to perform load balancing, and for home users with more than one internet connection, to increase connection speed by sharing the load on all interfaces.[23]
+Broadcom offers advanced functions via Broadcom Advanced Control Suite (BACS), via which the teaming functionality of BASP (Broadcom Advanced Server Program) is available, offering 802.3ad static LAGs, LACP, and smart teaming which doesn't require any configuration on the switches to work. It is possible to configure teaming with BACS with a mix of NICs from different vendors as long as at least one of them is from Broadcom and the other NICs have the required capabilities to support teaming.[24]
+Linux and UNIX
+[edit]
+Linux, FreeBSD, NetBSD, OpenBSD, macOS, OpenSolaris and commercial Unix distributions such as AIX implement Ethernet bonding at a higher level and, as long as the NIC is supported by the kernel, can deal with NICs from different manufacturers or using different drivers.[14]
+Virtualization platforms
+[edit]
+Citrix XenServer and VMware ESX have native support for link aggregation. XenServer offers both static LAGs as well as LACP. vSphere 5.1 (ESXi) supports both static LAGs and LACP natively with its virtual distributed switch.[25]
+Microsoft's Hyper-V does not offer link aggregation support from the hypervisor level, but the above-mentioned methods for teaming under Windows apply to Hyper-V.
+Limitations
+[edit]
+Single switch
+[edit]
+With the modes balance-rr, balance-xor, broadcast and 802.3ad, all physical ports in the link aggregation group must reside on the same logical switch, which, in most common scenarios, will leave a single point of failure when the physical switch to which all links are connected goes offline. The modes active-backup, balance-tlb, and balance-alb can also be set up with two or more switches. But after failover (like all other modes), in some cases, active sessions may fail (due to ARP problems) and have to be restarted.
+However, almost all vendors have proprietary extensions that resolve some of these issues: they aggregate multiple physical switches into one logical switch. Nortel's split multi-link trunking (SMLT) protocol allows multiple Ethernet links to be split across multiple switches in a stack, preventing any single point of failure and additionally allowing all switches to be load balanced across multiple aggregation switches from the single access stack. These devices synchronize state across an Inter-Switch Trunk (IST) such that they appear to the connecting (access) device to be a single device (switch block) and prevent any packet duplication. SMLT provides enhanced resiliency with sub-second failover and sub-second recovery for all speed trunks while operating transparently to end-devices.
+Multi-chassis link aggregation group provides similar features in a vendor-nonspecific manner. To the connected device, the connection appears as a normal link-aggregated trunk. The coordination between the multiple sources involved is handled in a vendor-specific manner.
+Same link speed
+[edit]
+In most implementations, all the ports used in an aggregation consist of the same physical type, such as all copper ports (10/100/1000BASE‑T), all multi-mode fiber ports, or all single-mode fiber ports. However, all the IEEE standard requires is that each link be full duplex and all of them have an identical speed (10, 100, 1,000 or 10,000 Mbit/s).
+Many switches are PHY independent, meaning that a switch could have a mixture of copper, SX, LX, LX10 or other GBIC/SFP modular transceivers. While maintaining the same PHY is the usual approach, it is possible to aggregate a 1000BASE-SX fiber for one link and a 1000BASE-LX (longer, diverse path) for the second link. One path may have a longer propagation time, but since most implementations keep a single traffic flow on the same physical link (using a hash of either MAC addresses, IP addresses, or IP/transport-layer port combinations as index) this doesn't cause problematic out-of-order delivery.
+Ethernet aggregation mismatch
+[edit]
+Aggregation mismatch refers to not matching the aggregation type on both ends of the link. Some switches do not implement the 802.1AX standard but support static configuration of link aggregation. Therefore, link aggregation between similarly statically configured switches may work but will fail between a statically configured switch and a device that is configured for LACP.
+Examples
+[edit]
+Ethernet
+[edit]
+Further information on link aggregation: EtherChannel, Multi-link trunking, and 802.3ad
+On Ethernet interfaces, channel bonding requires assistance from both the Ethernet switch and the host computer's operating system, which must stripe the delivery of frames across the network interfaces in the same manner that I/O is striped across disks in a RAID 0 array.[citation needed] For this reason, some discussions of channel bonding also refer to Redundant Array of Inexpensive Nodes (RAIN) or to redundant array of independent network interfaces.[26]
+PPP
+[edit]
+The Point-to-Point Protocol used for dial-up and other connections to the ISP (including DSL) has a standard link aggregation method called Multilink PPP. Multiple PPP links to the same ISP can be bonded together into a larger-bandwidth link.
+Modems
+[edit]
+In analog modems, multiple dial-up links over POTS may be bonded. Throughput over such bonded connections can come closer to the aggregate bandwidth of the bonded links than can throughput under routing schemes that simply load-balance outgoing network connections over the links.
+DSL
+[edit]
+Similarly, multiple DSL lines can be bonded to give higher bandwidth; in the United Kingdom, ADSL is sometimes bonded to give for example 512 kbit/s upload bandwidth and 4 Mbit/s download bandwidth, in areas that only have access to 2 Mbit/s bandwidth.[citation needed]
+DOCSIS
+[edit]
+Under the DOCSIS 3.0 and 3.1 specifications for data over cable TV systems, multiple channels (i.e., radio-frequency ranges in the coax cable) may be bonded. Under DOCSIS 3.0, up to 32 downstream and 8 upstream channels may be bonded.[27] These are typically 6 or 8 MHz wide. DOCSIS 3.1 defines more complicated arrangements involving aggregation at the level of subcarriers and larger notional channels.[28]
+DOCSIS can also carry PPP. 
+Broadband
+[edit]
+Broadband bonding is a type of channel bonding that refers to the aggregation of multiple channels at OSI layers at level four or above. Channels bonded can be wired links such as a T-1 or DSL line. Additionally, it is possible to bond multiple cellular links for an aggregated wireless bonded link.
+Other bonding methodologies reside at lower OSI layers, requiring coordination with telecommunications companies for implementation. Broadband bonding, because it is implemented at higher layers, can be done without this coordination. An implementation would include some form of multipath protocol (e.g., multipath TCP) that encapsulates the traffic to a server with higher bandwidth.[29]
+Commercial implementations of broadband channel bonding include:
+Connectify's Speedify fast bonding VPN - software app for multiple platforms: PC, Mac, iOS and Android[30]
+Peplink's SpeedFusion Bonding Technology[31]
+Viprinet's Multichannel VPN Bonding Technology[32]
+Synopi's Natiply Internet Bonding Technology[33]
+ComBOX Networks multi-wan bonding as a VPN service[34]
+More conventional methods to combine WAN links include load balancing and/or failover at the per-connection (session) level. Because existing download managers and other programs already use multiple connections to overcome throttling and overly pessimistic congestion control behavior, balancing connections over different WAN links is sufficient to make use of their bandwidths.
+Wi-Fi
+[edit]
+Further information on channel bonding: Super G (wireless networking)
+On IEEE 802.11 (Wi-Fi), channel bonding is used in Super G technology, referred to as 108 Mbit/s. It bonds two channels of standard IEEE 802.11g, which has 54 Mbit/s data signaling rate per channel.
+On IEEE 802.11n, a mode with a channel width of 40 MHz is specified. This is not channel bonding, but a single channel with double the older 20 MHz channel width, thus using two adjacent 20 MHz bands. This allows direct doubling of the PHY data rate from a single 20 MHz channel.
+IEEE 802.11be (Wi-Fi 7) allows bonding two different bands, Multi-link Operation (MLO).
+See also
+[edit]
+FlexE
+Inverse multiplexer
+MIMO
+Spanning Tree Protocol
+References
+[edit]
+<a href=\"./Link_aggregation#cite_note-Cisco_802.3ad-2\" id=\"mwAew\"><span class=\"mw-reflink-text\" id=\"mwAe0\"><span class=\"cite-bracket\" id=\"mwAe4\">[</span>2<span class=\"cite-bracket\" id=\"mwAe8\">]</span></span></a></sup>\n<sup about=\"#mwt118\" class=\"mw-ref reference\" rel=\"dc:references\" typeof=\"mw:Extension/ref\" id=\"mwAfA\" data-mw='{\"name\":\"ref\",\"attrs\":{\"name\":\"Guijarro\"},\"body\":{\"id\":\"mw-reference-text-cite_note-Guijarro-1\"}}'><a href=\"./Link_aggregation#cite_note-Guijarro-1\" id=\"mwAfE\"><span class=\"mw-reflink-text\" id=\"mwAfI\"><span class=\"cite-bracket\" id=\"mwAfM\">[</span>1<span class=\"cite-bracket\" id=\"mwAfQ\">]</span></span></a></sup>\n<sup about=\"#mwt121\" class=\"mw-ref reference\" rel=\"dc:references\" typeof=\"mw:Extension/ref\" id=\"mwAfU\" data-mw='{\"name\":\"ref\",\"attrs\":{\"name\":\"Cisco Nexus 5000\"},\"body\":{\"id\":\"mw-reference-text-cite_note-Cisco_Nexus_5000-3\"}}'><a href=\"./Link_aggregation#cite_note-Cisco_Nexus_5000-3\" id=\"mwAfY\"><span class=\"mw-reflink-text\" id=\"mwAfc\"><span class=\"cite-bracket\" id=\"mwAfg\">[</span>3<span class=\"cite-bracket\" id=\"mwAfk\">]</span></span></a></sup>\n"}}'>1 2 Guijarro, Manuel; Ruben Gaspar; et al. (2008). "Experience and Lessons learnt from running High Availability Databases on Network Attached Storage". Journal of Physics: Conference Series. Conference Series. 119 (4) 042015. IOP Publishing. Bibcode:2008JPhCS.119d2015G. doi:10.1088/1742-6596/119/4/042015. Network bonding (also known as port trunking) consists of aggregating multiple network interfaces into a single logical bonded interface that correspond to a single IP address.
+↑ "IEEE 802.3ad Link Bundling". Cisco Systems. 27 February 2007. Archived from the original on 19 April 2012. Retrieved 15 March 2012.
+↑ "Cisco Nexus 5000 Series NX-OS Software Configuration Guide - Configuring Port Channels [Cisco Nexus 5000 Series Switches]". Cisco. Retrieved 25 October 2019.
+1 2 "IEEE 802 Trunking Tutorial". 11 November 1997. Archived from the original on 7 December 2013. Retrieved 13 August 2013.
+↑ "IEEE 802.3ad Link Aggregation Task Force". www.ieee802.org. Archived from the original on 27 October 2017. Retrieved 9 May 2018.
+↑ Law, David (13 November 2006). "IEEE 802.3 Maintenance" (PDF). p. 9. Archived (PDF) from the original on 7 October 2008. Retrieved 18 August 2009. Proposal to move Link Aggregation to IEEE 802.1 •It is an 802.3 sublayer but it has to go above IEEE Std 802.1x
+↑ "IEEE 802.3ax (IEEE P802.1AX) Link Aggregation Project Authorization Request (approved)" (PDF). 22 March 2007. p. 3. Archived from the original (PDF) on 16 November 2010. Retrieved 10 January 2018. It has been concluded between 802.1 and 802.3 that future development of Link Aggregation would be more appropriate as an 802.1 standard
+↑ "IEEE SA - 802.1AX-2008 - IEEE Standard for Local and metropolitan area networks--Link Aggregation". Archived from the original on 7 August 2013. Retrieved 13 August 2013.
+↑ "IEEE Standards Association". IEEE Standards Association - IEEE 802.1AX-2020. Retrieved 4 February 2025.
+↑ "IEEE Standard for Local and Metropolitan Area Networks--Link Aggregation". IEEE STD 802.1AX-2020 (Revision of IEEE STD 802.1AX-2014): 1–333. 29 May 2020. doi:10.1109/IEEESTD.2020.9105034. ISBN 978-1-5044-6428-4.{{cite journal}}: CS1 maint: periodical has ISBN (link)
+↑ "What Is LACP?". Retrieved 5 March 2020.
+↑ "Link aggregation on Dell servers" (PDF). Archived from the original (PDF) on 13 March 2012.
+↑ "Connectify commercializes Speedify channel bonding service - FierceWireless". www.fiercewireless.com. Archived from the original on 28 June 2016. Retrieved 9 May 2018.
+1 2 3 The Linux Foundation: Bonding Archived 2010-12-28 at the Wayback Machine
+↑ "Understanding NIC Bonding with Linux". 2 December 2009.
+1 2 "Linux Ethernet Bonding Driver HOWTO". kernel.org. 27 April 2011. Retrieved 4 November 2024.
+↑ "libteam by jpirko". www.libteam.org. Archived from the original on 14 September 2017. Retrieved 9 May 2018.
+↑ "IEEE 802.3ad Link Aggregation (LAG) what it is, and what it is not" (PDF). Archived (PDF) from the original on 29 November 2007. Retrieved 14 May 2007.[unreliable source?]
+1 2 Mechanisms for Optimizing Link Aggregation Group (LAG) and Equal-Cost Multipath (ECMP) Component Link Utilization in Networks. IETF. doi:10.17487/RFC7424. RFC 7424.
+↑ "Outbound Traffic Distribution Across Trunked Links". Procurve 2910al Management and Configuration Guide. Hewlett Packard. February 2009.
+↑ Intel Advanced Networking Services Archived 2007-01-24 at the Wayback Machine
+↑ Archiveddocs (8 October 2009). "RandomAdapter: Core Services". technet.microsoft.com. Archived from the original on 25 April 2016. Retrieved 9 May 2018.
+↑ "Norton Internet Security™ - PC Protection". www.pctools.com. Archived from the original on 1 April 2017. Retrieved 9 May 2018.
+↑ Broadcom Windows Management Applications Archived 2012-08-01 at the Wayback Machine, visited 8 July 2012
+↑ "What's New in vSphere 5.1 networking" (PDF). June 2012. Archived from the original (PDF) on 23 January 2014.
+↑ 
+Jielin Dong, ed. (2007). Network Dictionary. ITPro collection. Javvin Technologies Inc. p. 95. ISBN 978-1-60267-000-6. Retrieved 7 August 2013. Channel bonding, sometimes also called redundant array of independent network interfaces (RAIN), is an arrangement in which two or more network interfaces on a host computer are combined for redundancy or increased throughput.
+↑ DOCSIS 3.0 Physical Interface Specification
+↑ DOCSIS 3.1 Physical Interface Specification
+↑ "Broadband bonding offers high-speed alternative". engineeringbook.net. Archived from the original on 7 July 2012. Retrieved 5 April 2013.
+↑ Connectify's Speedify Service
+↑ Peplink's SpeedFusion Bonding Technology 
+↑ Viprinet's Multichannel VPN Bonding Technology 
+↑ Synopi's Natiply Internet Bonding Technology
+↑ comBOX multi-wan services Broadband bonding
+External links
+[edit]
+"Chapter 5.4: Link Aggregation Control Protocol (LACP)". IEEE Std 802.1AX-2008 IEEE Standard for Local and Metropolitan Area Networks — Link Aggregation (PDF). IEEE Standards Association. 3 November 2008. p. 30. doi:10.1109/IEEESTD.2008.4668665. ISBN 978-0-7381-5794-8. Archived from the original (PDF) on 15 February 2010.
+IEEE P802.3ad Link Aggregation Task Force
+Mikrotik link Aggregation / Bonding Guide
+v
+t
+e
+IEEE standards
+Current
+488
+693
+730
+754
+Revision
+854
+828
+829
+896
+1003
+1014
+1016
+1076
+1149.1
+1154
+1164
+1275
+1278
+1284
+1355
+1394
+1451
+1497
+1516
+1541
+1547
+1584
+1588
+1596
+1603
+1613
+1619
+1666
+1667
+1675
+1685
+1722
+1733
+1800
+1801
+1815
+1849
+1850
+1855
+1900
+1901
+1902
+1904
+1905
+2030
+2050
+11073
+12207
+14764
+16085
+16326
+29148
+42010
+802 series
+802
+.2
+.4
+.5
+.6
+.7
+.8
+.9
+.10
+.12
+.14
+.16
+WiMAX · d · e
+.17
+.18
+.20
+.21
+.22
+.24
+802.1
+D
+p
+Q
+Qav
+Qat
+Qay
+Qaz
+Qbb
+w
+X
+AB
+ad
+AE
+ag
+ah
+ak
+aq
+AS
+AX (LACP)
+BA
+802.3 
+(Ethernet)
+-1983
+a
+b
+d
+e
+i
+j
+u
+x
+y
+z
+ab
+ac
+ad
+ae
+af
+ah
+ak
+an
+aq
+at
+au
+av
+az
+ba
+bt
+bu
+by
+bz
+ca
+cb
+cc
+cd
+ce
+cg
+ch
+ck
+cm
+cn
+cp
+cq
+cr
+cs
+ct
+cu
+cv
+cw
+cx
+cy
+cz
+da
+db
+dd
+de
+df
+802.11 
+(Wi-Fi)
+-1997
+legacy mode
+a
+b
+c
+d
+e
+f
+g
+h
+i
+j
+k
+n (Wi-Fi 4)
+p
+r
+s
+u
+v
+w
+y
+z
+aa
+ac (Wi-Fi 5)
+ad (WiGig)
+ae
+af
+ah
+ai
+aj
+ak
+aq
+ax (Wi-Fi 6)
+ay
+az
+ba
+bb
+bc
+bd
+be (Wi-Fi 7)
+bf
+bh
+bi
+bk
+bn (Wi-Fi 8)
+802.15
+.1 (Bluetooth)
+.2
+.3
+.4 (Zigbee)
+.4a
+.4b
+.4c
+.4d
+.4e
+.4f
+.4g
+.4z
+.5
+.6
+.7
+Proposed
+P1363
+P1699
+P1823
+P1906.1
+Superseded
+754-1985
+830
+1219
+1233
+1362
+1364
+1471
+ Category
+Retrieved from "https://en.wikipedia.org/w/index.php?title=Link_aggregation&oldid=1379678014"
+ Categories: Ethernet
+Link protocols
+Bonding protocols
+Network performance
+Network architecture
+Hidden categories: Articles with short description
+Short description is different from Wikidata
+Use dmy dates from November 2024
+All articles with unsourced statements
+Articles with unsourced statements from September 2020
+Articles containing potentially dated statements from 2000
+All articles containing potentially dated statements
+CS1 maint: periodical has ISBN
+Webarchive template wayback links
+All articles lacking reliable references
+Articles lacking reliable references from January 2013
+Articles with unsourced statements from May 2012
+Articles with unsourced statements from September 2023
+Search
+ Search
+ Link aggregation
+20 languages
+Add topic

@@ -1,0 +1,50 @@
+$ python3 l2_edital.py
+ed_71          OK    Prova Discursiva - Estudo de Caso 01
+ed_75          OK    A Prova Discursiva-Estudo de Caso reger-se-á conforme o disposto no Capítulo 1
+ed_111         OK    A Prova Discursiva-Estudo de Caso será aplicada no mesmo dia e período da apli
+ed_112         OK    Serão corrigidas as Provas Discursivas-Estudo de Caso dos candidatos habilitad
+ed_113         OK    Os candidatos não incluídos no limite estabelecido no item 11.2 acima, serão e
+ed_114         OK    A Prova Discursiva-Estudo de Caso, de caráter eliminatório e classificatório e
+ed_115         OK    Também não será permitida a utilização de lápis, lapiseira, marca-textos, líqu
+ed_116         OK    O tema versará sobre conteúdo pertinente aos Conhecimentos Específicos e as di
+ed_117         OK    A Prova Discursiva-Estudo de Caso destinar-se-á a avaliar o domínio de conteúd
+ed_118         OK    será avaliada na escala de 0 (zero) a 100 (cem) pontos.
+ed_119         OK    Será considerado habilitado na Prova Discursiva-Estudo de Caso o candidato que
+ed_122         OK    acrescidas da nota da Prova Discursiva – Estudo de Caso
+ed_71b         OK    4h30
+ed_812         OK    munido de caneta esferográfica de material transparente de tinta preta ou azul
+ed_821         OK    O candidato não poderá adentrar nem permanecer no recinto das provas portando 
+ed_1110        OK    A nota será prejudicada, proporcionalmente, caso ocorra abordagem tangencial, 
+ed_1111        OK    deverão os candidatos valer-se das normas ortográficas em vigor
+ed_1112        OK    Será atribuída nota ZERO à Prova Discursiva-Estudo de Caso nos seguintes casos
+ed_1113        OK    Será desconsiderado, com risco de perda de pontos, qualquer trecho que: a) apr
+ed_1114        OK    qualquer fragmento de texto escrito fora do espaço reservado para o texto defi
+ed_1115        OK    Respostas que apresentarem trechos reproduzidos de textos já divulgados em fon
+ed_1116        OK    deverá ser rigorosamente observado o limite de linhas estabelecidos na questão
+ed_1117        OK    A folha para rascunho no Caderno de Provas é de preenchimento facultativo. Em 
+ed_1118        OK    O candidato deverá atentar para o espaço destinado ao rascunho e ao espaço des
+ed_1119        OK    Eventuais marcações nos enunciados das questões, que não excedam a palavras su
+ed_1120        OK    A grade de correção (espelho de correção/máscara de critérios) contendo a abor
+ed_1121        OK    O candidato não habilitado na Prova Discursiva-Estudo de Caso, conforme item 1
+ed_112b        OK    48ª (quadragésima oitava)
+ed_1242        OK    a) obtido maior nota na Prova Discursiva-Estudo de Caso; b) obtido maior nota 
+ed_820f        OK    ausentar-se do local de provas antes de decorridas 3 (três) horas do início da
+ed_820m        OK    estiver fazendo uso de qualquer espécie de relógio
+ed_1112a       OK    a) fugir ao tema proposto;
+ed_1112b       OK    b) apresentar textos sob forma não articulada verbalmente (apenas com desenhos
+ed_1112c       OK    c) apresentar qualquer sinal, marca, risco, desenho, rubrica, assinatura ou no
+ed_1112d       OK    d) estiver em branco;
+ed_1112e       OK    e) apresentar letra ilegível e/ou incompreensível;
+ed_1112f       OK    f) for assinada fora do local apropriado;
+ed_1112g       OK    g) não atender aos requisitos definidos na grade de correção/critérios de corr
+ed_crono_alt   OK    Cronograma sujeito a alterações.
+ed_crono_res   OK    Publicação do Resultado Preliminar das Provas Objetivas e Discursivas 19/03/20
+ed_crono_data  OK    Aplicação das Provas Objetivas e Discursivas 17/01/2027
+
+41 trechos do edital encontrados, 0 falhas.
+
+Ocorrencias da palavra "linhas" no capitulo 11 do edital:
+  ...nho, rubrica, assinatura ou nome, feito pelo candidato, nas linhas destinadas à resposta definitiva que, de alguma forma, poss...
+  ...tudo de Caso deverá ser rigorosamente observado o limite de linhas estabelecidos na questão, sob pena de perda de pontos a ser...
+Numero de linhas fixado no capitulo 11 (padrao "N (extenso) linhas"): nenhum
+Conclusao: o limite vem do enunciado da questao (item 11.16); o numero nao esta no edital.

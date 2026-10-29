@@ -1,0 +1,42 @@
+$ python3 l3_casos_reais.py
+== r1 (TRF-4 2019, Analista Judiciário, Sistemas de TI: Questão 1 (Segurança da Informação))
+  enunciado      OK    Considere a seguinte situação hipotética:
+  enunciado      OK    Requisita-se a um Analista do TRF4 a implantação de processos de segur
+  enunciado      OK    Tendo em vista essa pesquisa, pede-se:
+  comando a1     OK    Relacione os nomes e os tipos de chave dos processos de criptografia.
+  comando a2     OK    Explique, sucintamente, como funciona cada um desses processos de crip
+  comando b      OK    Identifique procedimentos que devem ser estabelecidos para prevenir o 
+  comando c      OK    Identifique procedimentos para proteger a confidencialidade, autentici
+  comando d      OK    Descreva, sucintamente, o funcionamento de uma rede privada virtual e 
+  trecho citado  OK    Para aprimorar seu ambiente computacional no que diz respeito à segura
+== r2 (TRF-4 2019, Analista Judiciário, Sistemas de TI: Questão 2 (Programação PHP))
+  enunciado      OK    No papel de Programador(a), apresente:
+  comando a      OK    O código faltante na lacuna I para receber nos arquivos cadastra.php e
+  comando b      OK    O código faltante na lacuna II para incluir os dados recebidos no méto
+  comando c      OK    O código faltante na lacuna III para fazer com que somente o usuário q
+  comando d      OK    O código para fazer a conexão com o Banco de Dados usando MySQLi.
+  (o resumo do enunciado da Q2 e AUTORAL e nao foi conferido contra o texto: foi declarado como resumo)
+== r3 (TRT-20 2024, Analista Judiciário, Tecnologia da Informação (nuvem, DevSecOps e rede))
+  enunciado      OK    Um Tribunal de Justiça Trabalhista está modernizando sua infraestrutur
+  enunciado      OK    Desafios:
+  enunciado      OK    Migração para a nuvem: O Tribunal precisa de uma solução que permita f
+  enunciado      OK    Desenvolvimento web e mobile: É necessário entregar novos sistemas e a
+  enunciado      OK    Interação de segurança (DevSecOps): A solução deve incluir automação e
+  enunciado      OK    Performance da rede: A rede com os 3 switches precisa de redundância d
+  enunciado      OK    Nesse cenário, diante dos desafios apresentados, considere que um Anal
+  comando a      OK    o modelo de serviço em nuvem que atenda às necessidades do Tribunal.
+  comando b      OK    a solução mais adequada de integração continua e entrega continua com 
+  comando c      OK    a solução mais adequada para resolver o problema da tempestade de broa
+  trecho citado  OK    É necessário informar na sua resposta, obrigatoriamente, a letra do it
+
+Itens de edital das provas reais:
+  trf4_ed103   OK    10.3 A Prova Estudo de Caso destinar-se-á a avaliar o domínio de conte
+  trf4_ed109   OK    10.9 Na Prova Estudo de Caso, deverá ser rigorosamente observado o lim
+  trf4_ed1011  OK    10.11 A grade de correção/máscara de critérios contendo a abordagem/re
+  trf4_ed105   OK    Cada uma das questões será avaliada na escala de 0 (zero) a 10 (dez) p
+  trt20_ed     OK    11.2 A prova discursiva Estudo de caso constará de 01 (uma) questão pr
+  trt20_prova  OK    FCC - TRT 20 - Analista Judiciário - Área Tecnologia da Informação - 2
+  trt20_lim    OK    11.12 Na Prova Discursiva-Estudo de Caso, deverá ser rigorosamente obs
+
+32 conferencias, 0 falhas.
+Ressalva: o PDF da prova e o texto da pagina vieram de agregadores, nao do site da banca; o espelho oficial nao foi localizado.

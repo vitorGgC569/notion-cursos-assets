@@ -1,0 +1,319 @@
+                                                            PROVA ESTUDO DE CASO
+Instruções Gerais:
+Conforme Edital publicado, Capítulo 10: 10.3 A Prova Estudo de Caso destinar-se-á a avaliar o domínio de conteúdo dos temas abordados, a
+experiência prévia do candidato e sua adequabilidade quanto às atribuições do cargo e especialidade. 10.4 A Prova Estudo de Caso constará de 02
+(duas) questões práticas, para os quais o candidato deverá apresentar, por escrito, as soluções. Os temas versarão sobre conteúdo pertinente a
+Conhecimentos Específicos, conforme programa constante do Anexo II deste Edital, adequados às atribuições do cargo/área/especialidade para o
+qual o candidato se inscreveu [...] 10.5 A Prova Estudo de Caso terá caráter eliminatório e classificatório. Cada uma das questões será avaliada na
+escala de 0 (zero) a 10 (dez) pontos, considerando-se habilitado o candidato que tiver obtido, no conjunto das duas questões, média igual ou superior a
+5 (cinco). 10.6 Na aferição do critério de correção gramatical, por ocasião da avaliação do desempenho na Prova Estudo de Caso a que se refere este
+Capítulo, deverão os candidatos valer-se das normas ortográficas em vigor, implementadas pelo Decreto Presidencial no 6.583, de 29 de setembro de
+2008, e alterado pelo Decreto no 7.875, de 27 de dezembro de 2012, que estabeleceu o Acordo Ortográfico da Língua Portuguesa. 10.7 Será atribuída
+nota ZERO à Prova Estudo de Caso nos seguintes casos: 10.7.1 fugir ao tema proposto; 10.7.2 apresentar textos sob forma não articulada
+verbalmente (apenas com desenhos, números e palavras soltas ou em versos) ou qualquer fragmento de texto escrito fora do local apropriado; 10.7.3
+for assinada fora do local apropriado; 10.7.4 apresentar qualquer sinal que, de alguma forma, possibilite a identificação do candidato; 10.7.5 estiver em
+branco; 10.7.6 apresentar letra ilegível e/ou incompreensível; 10.7.7 não atender aos requisitos definidos na grade de correção/máscara de critérios
+definidos pela Banca Examinadora. 10.8 Não será permitida nenhuma espécie de consulta, nem a utilização de livros, códigos, manuais, impressos ou
+quaisquer anotações. 10.9 Na Prova Estudo de Caso, deverá ser rigorosamente observado o limite máximo de 20 (vinte) linhas, sob pena de perda de
+pontos a serem atribuídos ao Estudo de Caso. 10.10 A folha para rascunho no Caderno de Provas é de preenchimento facultativo. Em hipótese alguma
+o rascunho elaborado pelo candidato será considerado na correção da Prova Estudo de Caso pela Banca Examinadora. 10.11 A grade de
+correção/máscara de critérios contendo a abordagem/requisitos de respostas definida pela Banca Examinadora, as respostas apresentadas pelo
+candidato e a pontuação obtida pelo candidato serão divulgadas por ocasião da Vista da Prova Estudo de Caso.
+
+
+QUESTÃO 1 − SEGURANÇA DA INFORMAÇÃO
+Considere a seguinte situação hipotética:
+Requisita-se a um Analista do TRF4 a implantação de processos de segurança da informação no ambiente do Tribunal. Para isso,
+vem pesquisando algumas bases a respeito de sistemas de criptografia, infraestrutura de chaves públicas, assinatura e certificação
+digital, protocolos criptográficos, VPN e SSL.
+Tendo em vista essa pesquisa, pede-se:
+a. No que diz respeito aos tipos de algoritmos utilizados:
+         a1. Relacione os nomes e os tipos de chave dos processos de criptografia.
+         a2. Explique, sucintamente, como funciona cada um desses processos de criptografia.
+Para aprimorar seu ambiente computacional no que diz respeito à segurança lógica e física da informação, o processo de melhoria
+deve ser conduzido e orientado com base nas melhores práticas e em normas de segurança internacionalmente aceitas. Para tanto,
+deve-se implementar e implantar um Sistema de Gestão de Segurança da Informação − SGSI.
+Para isso, pede-se:
+b. Identifique procedimentos que devem ser estabelecidos para prevenir o acesso não autorizado aos sistemas e aplicações.
+c. Identifique procedimentos para proteger a confidencialidade, autenticidade e/ou integridade da informação.
+d. Descreva, sucintamente, o funcionamento de uma rede privada virtual e os benefícios de seu uso no ambiente de redes do TRF4.
+
+                                                   (Utilize as linhas abaixo para rascunho)
+
+     1
+
+     2
+
+     3
+
+     4
+
+     5
+
+     6
+
+     7
+
+     8
+
+     9
+
+ 10
+
+ 11
+
+ 12
+
+ 13
+
+ 14
+
+
+14                                                                                                               TRF4R-An.Jud.-Sist.Tec.-Informação-4
+                                       Caderno de Prova ’04’, Tipo 001
+
+
+
+ 15
+
+ 16
+
+ 17
+
+ 18
+
+ 19
+
+ 20
+
+
+
+
+TRF4R-An.Jud.-Sist.Tec.-Informação-4                                                         15
+                                                                         Via @carla_gabola
+                                            Caderno de Prova ’04’, Tipo 001
+QUESTÃO 2 − PROGRAMAÇÃO PHP
+Um Analista apresentou a um(a) Programador(a) a parte de acesso (login) de uma aplicação PHP para que ele completasse alguns
+trechos faltantes do código, marcados com I, II e III. O Analista informou que a aplicação é iniciada pelo arquivo index.php que
+apresenta um formulário com os campos para o preenchimento do nome do usuário e da senha, um botão Entrar em um link para o
+usuário se cadastrar, caso ainda não seja cadastrado. O código fonte desta página index.php é apresentado abaixo.
+<?php
+session_start();
+$_SESSION = array();
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+ <head>
+  <meta charset="utf-8"/>
+  <title>Acesso ao sistema</title>
+ </head>
+ <body>
+  <form method="post" action="recebe.php">
+   <p><label for="usu"> Usuário</label> <input type="text" name="usuario" id="log"></p>
+   <p><label for="sen"> Senha</label><input type="password" name="senha" id="sen"></p>
+   <input type="submit" value="Entrar"> <a href="cadastrar.html">Cadastre-se</a>
+  </form>
+ </body>
+</html>
+
+Caso o usuário ainda não esteja cadastrado, ao clicar no link Cadastre-se será direcionado para a página cadastrar.html, para
+realizar o cadastramento de seus dados. O código fonte desta página é apresentado a seguir.
+
+<html>
+ <head>
+  <title>Cadastro de usuário</title>
+  <meta charset="UTF-8">
+ </head>
+ <body>
+  <form method="post" action="cadastra.php">
+   <p><label for="nom"> Nome* : </label> <input type="text" name="nome" id="nom" required></p>
+   <p><label for="eml"> E-mail : </label> <input type="email" name="email" id="eml"></p>
+   <p><label   for="log">  Usuário*   :   </label>   <input  type="text"   name="usuario"   id="log"
+    required></p>
+   <p><label for="sen"> Senha* : </label><input type="password" name="senha" id="sen" required></p>
+   <input type="submit" value="Salvar"> <span> * preenchimento obrigatório.</span>
+  </form>
+ </body>
+</html>
+
+Ao clicar no botão Salvar os dados do usuário são submetidos ao arquivo cadastra.php,                   que usa duas classes:
+Usuario.php e UsuarioDAO.php. O código do arquivo cadastra.php é mostrado a seguir.
+
+<?php
+include_once 'Usuario.php';
+include_once 'UsuarioDAO.php';
+ I
+
+$usu = new Usuario;
+$usu->Nome = $nome;
+$usu->Email = $email;
+$usu->Usuario = $usuario;
+$usu->Senha = $senha;
+$usuarioDao = new UsuarioDAO();
+$status = $usuarioDao->inserir($usu);
+if ($status == 1) {
+    echo 'Cadastro realizado com sucesso';
+    echo "<a href='index.php'> Logar </a>";
+} else if ($status == 23000) {
+    echo 'Usuário já foi cadastrado anteriormente';
+    echo "<a href='cadastrar.html'> Voltar </a>";
+} else {
+    echo 'Erro ' . $status . '. Entre em contato com o administrador do site.';
+    echo "<a href='index.php'> Voltar </a>";
+}
+
+16                                                                                            TRF4R-An.Jud.-Sist.Tec.-Informação-4
+                                                Caderno de Prova ’04’, Tipo 001
+
+O código fonte da classe Usuario.php é mostrado a seguir.
+
+<?php
+class Usuario {
+    public $Nome;
+    public $Email;
+    public $Usuario;
+    public $Senha;
+    function __construct() {
+    }
+    function getNome() {
+        return $this->Nome;
+    }
+    function getEmail() {
+        return $this->Email;
+    }
+    function getUsuario() {
+        return $this->Usuario;
+    }
+    function getSenha() {
+        return $this->Senha;
+    }
+    function setNome($Nome) {
+        $this->Nome = $Nome;
+    }
+    function setEmail($Email) {
+        $this->Email = $Email;
+    }
+    function setUsuario($Usuario) {
+        $this->Usuario = $Usuario;
+    }
+    function setSenha($Senha) {
+        $this->Senha = $Senha;
+    }
+}
+
+O código fonte da classe UsuarioDAO.php é mostrado a seguir.
+
+<?php
+include_once 'Usuario.php';
+class UsuarioDAO {
+ public function inserir($User) {
+ try {
+  $conn = new PDO("mysql:host=localhost;dbname=acesso", "root", "");
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    II
+    
+    return 1;
+    } catch (PDOException $e) {
+      return $e->getCode();
+    }
+ }
+ public function buscar($User) {
+  try {
+   $conn = new PDO("mysql:host=localhost;dbname=acesso", "root", "");
+   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   $stmt = $conn->prepare("SELECT * FROM Usuarios WHERE usuario=? AND senha=?");
+   $stmt->execute([$User->Usuario, $User->Senha]);
+   $u = $stmt->fetch();
+   $userFound = new Usuario;
+   $userFound->Nome = $u['nome'];
+   $userFound->Email = $u['email'];
+   $userFound->Usuario = $u['usuario'];
+   $userFound->Senha = $u['senha'];
+   return $userFound;
+  } catch (PDOException $e) {
+   return null;
+  }
+ }
+}
+
+TRF4R-An.Jud.-Sist.Tec.-Informação-4                                               17
+                                             Caderno de Prova ’04’, Tipo 001
+
+Se na tela de acesso ou login (index.php) o visitante inserir seu nome de usuário e senha e clicar no botão Entrar, os dados são
+enviados para o arquivo recebe.php, cujo código fonte é mostrado a seguir.
+
+<?php
+session_start();
+include_once 'Usuario.php';
+include_once 'UsuarioDAO.php';
+if ($_SERVER["REQUEST_METHOD"] != "POST") {
+    header("location: index.php");
+    exit();
+}
+ I
+
+$usu = new Usuario;
+$usu->Usuario = $usuario;
+$usu->Senha = $senha;
+$usuarioDao = new UsuarioDAO();
+$userFound = $usuarioDao->buscar($usu);
+if (isset($userFound->Usuario)&& isset($userFound->Senha)) {
+    $_SESSION['usuario'] = $usuario;
+    $_SESSION['time'] = time();
+    header("Location: p1.php");
+} else {
+    header("Location: index.php");
+}
+
+Se o nome do usuário e a senha existem cadastradas no Banco de Dados, o usuário é direcionado para a página p1.php, cujo código
+fonte é mostrado a seguir.
+
+<?php
+III
+
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+ <head>
+  <meta charset="utf-8"/>
+  <title>PG1</title>
+  </head>
+  <body>
+    <h1>Página 1</h1>
+    Usuário=<?php echo $_SESSION['usuario'] . " " . date("d/m/Y H:i:s", $_SESSION['time']) ; ?><br>
+    <b>Pág1</b> | <a href="p2.php">Pag2</a> | <a href="index.php">Home</a> |
+   </body>
+</html>
+
+Considere a existência de um banco de dados MySQL chamado acesso, cuja tabela foi criada pelo comando abaixo.
+
+CREATE TABLE `acesso`.`usuarios` ( `nome` VARCHAR(50) NOT NULL , `email` VARCHAR(30) NOT NULL ,
+`usuario` VARCHAR(50) NOT NULL , `senha` VARCHAR(100) NOT NULL , PRIMARY KEY (`usuario`(50),
+`senha`(100))) ENGINE = InnoDB;
+
+No papel de Programador(a), apresente:
+a. O código faltante na lacuna I para receber nos arquivos cadastra.php e recebe.php os dados dos formulários filtrando-os
+   (por meio de sanitize filters) para evitar os efeitos nocivos de caracteres especiais usados muitas vezes em ataques de hackers.
+b. O código faltante na lacuna II para incluir os dados recebidos no método inserir na tabela do banco de dados.
+c. O código faltante na lacuna III para fazer com que somente o usuário que tenha efetuado o login possa acessar a página
+   p1.php, evitando o acesso direto de usuário sem sessão.
+d. O código para fazer a conexão com o Banco de Dados usando MySQLi.
+
+
+
+
+18                                                                                               TRF4R-An.Jud.-Sist.Tec.-Informação-4
+                                                                                                 Via @carla_gabola
+                                              Caderno de Prova ’04’, Tipo 001
+
+                                       (Utilize as linhas abaixo para rascunho)
+
+  1
+
+  2
+
+  3
+
+  4
+
+  5

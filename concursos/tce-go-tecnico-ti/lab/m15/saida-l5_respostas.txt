@@ -1,0 +1,15 @@
+$ python3 l5_respostas.py
+caso tipo    soma  itens  letras linhas90 linhas70  chars
+a1   AUTORAL   100   8/8     3/3       12      14    860  OK
+a2   AUTORAL   100   6/6     3/3       10      13    759  OK
+a3   AUTORAL   100   7/7     3/3       10      12    790  OK
+a4   AUTORAL   100   7/7     3/3       12      15    910  OK
+a5   AUTORAL   100   6/6     3/3        9      12    750  OK
+s1   AUTORAL   100   7/7     3/3       10      13    768  OK
+r1   REAL     100   5/5     5/5       14      17    984  OK
+r2   REAL     100   4/4     4/4        8      12    630  OK
+r3   REAL     100   4/4     3/3       11      14    823  OK
+
+9 casos, 0 falhas. Linhas estimadas a 90 e a 70 caracteres por linha (sua letra pode ocupar mais).
+Limites: casos autorais e simulado 15 linhas; TRF-4 2019 20 linhas; TRT-20 2024 15 linhas.
+Aviso: o espelho e a resposta-modelo sao AUTORAIS, inclusive nos 3 casos reais; nao e o espelho da banca.

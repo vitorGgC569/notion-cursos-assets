@@ -1,0 +1,578 @@
+
+ PHP: isset - Manual
+Updated PHP Windows builds for Brotli security fix
+ print_r »
+ « is_string 
+ Preface
+ Function Reference
+ Variable and Type Related Extensions
+ Variable handling
+ Variable handling Functions
+ Change language:
+ English
+ German
+ Spanish
+ French
+ Italian
+ Japanese
+ Brazilian Portuguese
+ Russian
+ Turkish
+ Ukrainian
+ Chinese (Simplified)
+ Other
+ isset
+ (PHP 4, PHP 5, PHP 7, PHP 8)
+isset — Determine if a variable is declared and is different than null
+ Description
+ function isset(mixed $var, mixed ...$vars): bool
+ Determine if a variable is considered set,
+ this means if a variable is declared and is different than null.
+ If a variable has been unset with the unset()
+ function, it is no longer considered to be set.
+ isset() will return false when checking a
+ variable that has been assigned to null.
+ Also note that a null character ("\0") is not
+ equivalent to the PHP null constant.
+ If multiple parameters are supplied then isset()
+ will return true only if all of the parameters are considered set.
+ Evaluation goes from left to right and stops as soon as an unset
+ variable is encountered.
+ Parameters
+ var
+ The variable to be checked.
+ vars
+ Further variables.
+ Return Values
+ Returns true if var exists and has
+ any value other than null. false otherwise.
+ Examples
+ Example #1 isset() Examples
+<?php
+$var = '';
+// This will evaluate to TRUE so the text will be printed.
+if (isset($var)) {
+ echo "This var is set so I will print.", PHP_EOL;
+}
+// In the next examples we'll use var_dump to output
+// the return value of isset().
+$a = "test";
+$b = "anothertest";
+var_dump(isset($a)); // TRUE
+var_dump(isset($a, $b)); // TRUE
+unset ($a);
+var_dump(isset($a)); // FALSE
+var_dump(isset($a, $b)); // FALSE
+$foo = NULL;
+var_dump(isset($foo)); // FALSE
+?>
+ This also work for elements in arrays:
+ Example #2 Example of isset() with array elements
+<?php
+$a = array ('test' => 1, 'hello' => NULL, 'pie' => array('a' => 'apple'));
+var_dump(isset($a['test'])); // TRUE
+var_dump(isset($a['foo'])); // FALSE
+var_dump(isset($a['hello'])); // FALSE
+// The key 'hello' equals NULL so is considered unset
+// If you want to check for NULL key values then try: 
+var_dump(array_key_exists('hello', $a)); // TRUE
+// Checking deeper array values
+var_dump(isset($a['pie']['a'])); // TRUE
+var_dump(isset($a['pie']['b'])); // FALSE
+var_dump(isset($a['cake']['a']['b'])); // FALSE
+?>
+ Example #3 isset() on String Offsets
+<?php
+$expected_array_got_string = 'somestring';
+var_dump(isset($expected_array_got_string['some_key']));
+var_dump(isset($expected_array_got_string[0]));
+var_dump(isset($expected_array_got_string['0']));
+var_dump(isset($expected_array_got_string[0.5]));
+var_dump(isset($expected_array_got_string['0.5']));
+var_dump(isset($expected_array_got_string['0 Mostel']));
+?>
+ The above example will output:
+bool(false)
+bool(true)
+bool(true)
+bool(true)
+bool(false)
+bool(false)
+ Notes
+ Warning
+ isset() only works with variables as passing anything
+ else will result in a parse error. For checking if 
+ constants are set use the 
+ defined() function.
+ Note: Because this is a
+language construct and not a function, it cannot be called using
+variable functions,
+or named arguments.
+ Note: 
+ When using isset() on inaccessible object properties,
+ the __isset()
+ overloading method will be called, if declared.
+ See Also
+ empty() - Determine whether a variable is empty
+ __isset()
+ unset() - unset a given variable
+ defined() - Checks whether a constant with the given name exists
+ the type comparison tables
+ array_key_exists() - Checks if the given key or index exists in the array
+ is_null() - Finds whether a variable is null
+ the error control @ operator
+ Found A Problem?
+ Learn How To Improve This Page
+ •
+ Submit a Pull Request
+ •
+ Report a Bug
+ ＋add a note
+ User Contributed Notes 18 notes
+ up
+ down
+ 121
+ p_ignorethis_lbowers at gmail dot com ¶10 years ago
+I, too, was dismayed to find that isset($foo) returns false if ($foo == null). Here's an (awkward) way around it.
+unset($foo);
+if (compact('foo') != array()) {
+ do_your_thing();
+}
+Of course, that is very non-intuitive, long, hard-to-understand, and kludgy. Better to design your code so you don't depend on the difference between an unset variable and a variable with the value null. But "better" only because PHP has made this weird development choice.
+In my thinking this was a mistake in the development of PHP. The name ("isset") should describe the function and not have the desciption be "is set AND is not null". If it was done properly a programmer could very easily do (isset($var) || is_null($var)) if they wanted to check for this!
+A variable set to null is a different state than a variable not set - there should be some easy way to differentiate. Just my (pointless) $0.02.
+ up
+ down
+ 47
+ kurdtpage at gmail dot com ¶9 years ago
+The new (as of PHP7) 'null coalesce operator' allows shorthand isset. You can use it like so:
+<?php
+// Fetches the value of $_GET['user'] and returns 'nobody'
+// if it does not exist.
+$username = $_GET['user'] ?? 'nobody';
+// This is equivalent to:
+$username = isset($_GET['user']) ? $_GET['user'] : 'nobody';
+// Coalescing can be chained: this will return the first
+// defined value out of $_GET['user'], $_POST['user'], and
+// 'nobody'.
+$username = $_GET['user'] ?? $_POST['user'] ?? 'nobody';
+?>
+Quoted from http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
+ up
+ down
+ 44
+ a dot schaffhirt at sedna-soft dot de ¶18 years ago
+You can safely use isset to check properties and subproperties of objects directly. So instead of writing
+ isset($abc) && isset($abc->def) && isset($abc->def->ghi)
+or in a shorter form
+ isset($abc, $abc->def, $abc->def->ghi)
+you can just write
+ isset ($abc->def->ghi)
+without raising any errors, warnings or notices.
+Examples
+<?php
+ $abc = (object) array("def" => 123);
+ var_dump(isset($abc)); // bool(true)
+ var_dump(isset($abc->def)); // bool(true)
+ var_dump(isset($abc->def->ghi)); // bool(false)
+ var_dump(isset($abc->def->ghi->jkl)); // bool(false)
+ var_dump(isset($def)); // bool(false)
+ var_dump(isset($def->ghi)); // bool(false)
+ var_dump(isset($def->ghi->jkl)); // bool(false)
+ var_dump($abc); // object(stdClass)#1 (1) { ["def"] => int(123) }
+ var_dump($abc->def); // int(123)
+ var_dump($abc->def->ghi); // null / E_NOTICE: Trying to get property of non-object
+ var_dump($abc->def->ghi->jkl); // null / E_NOTICE: Trying to get property of non-object
+ var_dump($def); // null / E_NOTICE: Trying to get property of non-object
+ var_dump($def->ghi); // null / E_NOTICE: Trying to get property of non-object
+ var_dump($def->ghi->jkl); // null / E_NOTICE: Trying to get property of non-object
+?>
+ up
+ down
+ 30
+ yaogzhan at gmail dot com ¶21 years ago
+If you have 
+<?PHP
+class Foo
+{
+ protected $data = array('bar' => null);
+ function __get($p)
+ {
+ if( isset($this->data[$p]) ) return $this->data[$p];
+ }
+}
+?>
+and
+<?PHP
+$foo = new Foo;
+echo isset($foo->bar);
+?>
+will always echo 'false'. because the isset() accepts VARIABLES as it parameters, but in this case, $foo->bar is NOT a VARIABLE. it is a VALUE returned from the __get() method of the class Foo. thus the isset($foo->bar) expreesion will always equal 'false'.
+ up
+ down
+ 27
+ beuc at beuc dot net ¶19 years ago
+"empty() is the opposite of (boolean) var, except that no warning is generated when the variable is not set."
+So essentially
+<?php
+if (isset($var) && $var)
+?>
+is the same as
+<?php
+if (!empty($var))
+?>
+doesn't it? :)
+!empty() mimics the chk() function posted before.
+ up
+ down
+ 17
+ mandos78 AT mail from google ¶18 years ago
+Careful with this function "ifsetfor" by soapergem, passing by reference means that if, like the example $_GET['id'], the argument is an array index, it will be created in the original array (with a null value), thus causing posible trouble with the following code. At least in PHP 5.
+For example:
+<?php
+$a = array();
+print_r($a);
+ifsetor($a["unsetindex"], 'default');
+print_r($a);
+?>
+will print 
+Array
+(
+)
+Array
+(
+ [unsetindex] => 
+)
+Any foreach or similar will be different before and after the call.
+ up
+ down
+ 17
+ soywiz at php dot net ¶20 years ago
+Sometimes you have to check if an array has some keys. To achieve it you can use "isset" like this: isset($array['key1'], $array['key2'], $array['key3'], $array['key4'])
+You have to write $array all times and it is reiterative if you use same array each time.
+With this simple function you can check if an array has some keys:
+<?php
+function isset_array() {
+ if (func_num_args() < 2) return true;
+ $args = func_get_args();
+ $array = array_shift($args);
+ if (!is_array($array)) return false;
+ foreach ($args as $n) if (!isset($array[$n])) return false;
+ return true;
+}
+?>
+Use: isset_array($array, 'key1', 'key2', 'key3', 'key4')
+First parameter has the array; following parameters has the keys you want to check.
+ up
+ down
+ 14
+ Cuong Huy To ¶15 years ago
+1) Note that isset($var) doesn't distinguish the two cases when $var is undefined, or is null. Evidence is in the following code.
+<?php
+unset($undefined);
+$null = null;
+if (true === isset($undefined)){echo 'isset($undefined) === true'} else {echo 'isset($undefined) === false'); // 'isset($undefined) === false'
+if (true === isset($null)){echo 'isset($null) === true'} else {echo 'isset($null) === false'); // 'isset($null) === false'
+?>
+2) If you want to distinguish undefined variable with a defined variable with a null value, then use array_key_exist
+<?php
+unset($undefined);
+$null = null;
+if (true !== array_key_exists('undefined', get_defined_vars())) {echo '$undefined does not exist';} else {echo '$undefined exists';} // '$undefined does not exist'
+if (true === array_key_exists('null', get_defined_vars())) {echo '$null exists';} else {echo '$null does not exist';} // '$null exists'
+?>
+ up
+ down
+ 5
+ ayyappan dot ashok at gmail dot com ¶10 years ago
+Return Values :
+Returns TRUE if var exists and has value other than NULL, FALSE otherwise.
+<?php
+$a=NULL;
+$b=FALSE; //The out put was TRUE. 
+$c=TRUE;
+$d='';
+$e="";
+if(isset($b)):
+echo "TRUE";
+else:
+echo "FALSE"; 
+endif;
+?>
+Could any one explain me in clarity.
+ up
+ down
+ 10
+ packard_bell_nec at hotmail dot com ¶18 years ago
+Note: isset() only checks variables as anything else will result in a parse error. In other words, the following will not work: isset(trim($name)). 
+isset() is the opposite of is_null($var) , except that no warning is generated when the variable is not set.
+ up
+ down
+ 3
+ Hayley Watson ¶9 years ago
+If you regard isset() as indicating whether the given variable has a value or not, and recall that NULL is intended to indicate that a value is _absent_ (as said, somewhat awkwardly, on its manual page), then its behaviour is not at all inconsistent or confusing.
+It's not just to check for uninitialised variables - a lot of the time those are just due to sloppy coding. There are other ways a variable could fail to have a value (e.g., it's meant to hold the value returned from a function call but the function didn't have a value to return) where uninitialising the variable would not be an option nor even make sense (e.g., depending on what was to be done with the returned value).
+ up
+ down
+ 9
+ Andrew Penry ¶21 years ago
+The following is an example of how to test if a variable is set, whether or not it is NULL. It makes use of the fact that an unset variable will throw an E_NOTICE error, but one initialized as NULL will not. 
+<?php
+function var_exists($var){
+ if (empty($GLOBALS['var_exists_err'])) {
+ return true;
+ } else {
+ unset($GLOBALS['var_exists_err']);
+ return false;
+ }
+}
+function var_existsHandler($errno, $errstr, $errfile, $errline) {
+ $GLOBALS['var_exists_err'] = true;
+}
+$l = NULL;
+set_error_handler("var_existsHandler", E_NOTICE);
+echo (var_exists($l)) ? "True " : "False ";
+echo (var_exists($k)) ? "True " : "False ";
+restore_error_handler();
+?>
+Outputs:
+True False
+The problem is, the set_error_handler and restore_error_handler calls can not be inside the function, which means you need 2 extra lines of code every time you are testing. And if you have any E_NOTICE errors caused by other code between the set_error_handler and restore_error_handler they will not be dealt with properly. One solution:
+<?php
+function var_exists($var){
+ if (empty($GLOBALS['var_exists_err'])) {
+ return true;
+ } else {
+ unset($GLOBALS['var_exists_err']);
+ return false;
+ }
+}
+function var_existsHandler($errno, $errstr, $errfile, $errline) {
+ $filearr = file($errfile);
+ if (strpos($filearr[$errline-1], 'var_exists') !== false) {
+ $GLOBALS['var_exists_err'] = true;
+ return true;
+ } else {
+ return false;
+ }
+}
+$l = NULL;
+set_error_handler("var_existsHandler", E_NOTICE);
+echo (var_exists($l)) ? "True " : "False ";
+echo (var_exists($k)) ? "True " : "False ";
+is_null($j);
+restore_error_handler();
+?>
+Outputs:
+True False
+Notice: Undefined variable: j in filename.php on line 26
+This will make the handler only handle var_exists, but it adds a lot of overhead. Everytime an E_NOTICE error happens, the file it originated from will be loaded into an array.
+ up
+ down
+ -1
+ muravikov+phpnet at gmail dot com ¶3 months ago
+раньше isset была самая безопасная функция, не приводящая ни каким ошибкам, чтобы ей не передавали. теперь зрз 8.5 ошибка, грустно. 
+isset($array[null])
+кому писать, чтоб оставили святой isset() не вызывающим ошибок не знаю.
+ up
+ down
+ 4
+ francois vespa ¶15 years ago
+Now this is how to achieve the same effect (ie, having isset() returning true even if variable has been set to null) for objects and arrays
+<?php
+// array
+$array=array('foo'=>null);
+return isset($array['foo']) || array_key_exists('foo',$array) 
+ ? true : false ; // return true
+return isset($array['inexistent']) || array_key_exists('inexistent',$array) 
+ ? true : false ; // return false
+// static class
+class bar
+{
+ static $foo=null;
+}
+return isset(bar::$foo) || array_key_exists('foo',get_class_vars('bar'))
+ ? true : false ; // return true
+return isset(bar::$inexistent) || array_key_exists('inexistent',get_class_vars('bar'))
+ ? true : false ; // return false
+// object
+class bar
+{
+ public $foo=null;
+}
+$bar=new bar();
+return isset($bar->foo) || array_key_exists('foo',get_object_vars($bar)) 
+ ? true : false ; // return true
+return isset($bar->inexistent) || array_key_exists('inexistent',get_object_vars($bar)) 
+ ? true : false ; // return true
+// stdClass
+$bar=new stdClass;
+$bar->foo=null;
+return isset($bar->foo) || array_key_exists('foo',get_object_vars($bar)) 
+ ? true : false ; // return true
+return isset($bar->inexistent) || array_key_exists('inexistent',get_object_vars($bar)) 
+ ? true : false ; // return true
+?>
+ up
+ down
+ 4
+ Ashus ¶17 years ago
+Note that array keys are case sensitive.
+<?php
+$ar['w'] = true;
+var_dump(isset($ar['w']),
+ isset($ar['W']));
+?>
+will report:
+bool(true) bool(false)
+ up
+ down
+ 2
+ Anl zselgin ¶17 years ago
+Note: Because this is a language construct and not a function, it cannot be called using variable functions.
+So why it is under "Variable handling Functions". Maybe there should be some good documentation field for language constructs.
+ up
+ down
+ 0
+ andreasonny83 at gmail dot com ¶11 years ago
+Here is an example with multiple parameters supplied
+<?php
+$var = array();
+$var['val1'] = 'test';
+$var['val2'] = 'on';
+if ( isset( $var['val1'], $var['val2'] ) && $var['val2'] === 'on' ) {
+ unset( $var['val1'] );
+}
+print_r( $var );
+?>
+This will output:
+Array
+(
+ [val2] => on
+)
+The following code does the same calling "isset" 2 times:
+<?php
+$var = array();
+$var['val1'] = 'test';
+$var['val2'] = 'on';
+if ( isset( $var['val1'] ) && isset( $var['val2'] ) && $var['val2'] === 'on' ) {
+ unset( $var['val1'] );
+}
+print_r( $var );
+?>
+ up
+ down
+ -1
+ eckoson at gmail dot com ¶3 years ago
+If you are annoyed by the behavior of isset() concerning null values, here is a handy function for you. its similar to array_key_exists but, its a lot more flexible and can check for multiple array keys across multiple arrays.
+Not recursive!
+Tested on php 8.1.6, linux
+<?php
+/**
+* is_set
+* @author DJ Eckoson
+* @link @eckosongh Facebook Page
+* checks whether variable names are set within the global space or they exists as an key and return if they are set (even if their values are null)
+* @param string $var_name
+* name of the first variable to check
+* @param array|null|string
+* optional array to check for key (if null, checks from $GLOBALS) OR
+* other variable names to check OR
+* other variable names and their associated arrays to their right (use null for global variables, optional if its the last parameter)
+* check examples below
+*/
+function is_set(string $var_name, array|null|string ... $args): bool {
+ $vars[$var_name] = null;
+ if (array_key_exists(0, $args)) {
+ if (is_array($args[0])) {
+ $vars[$var_name] = $args[0];
+ } elseif (is_string($args[0])) {
+ goto main;
+ }
+ unset($args[0]);
+ }
+ main:
+ if ($args) {
+ $args = array_reverse($args);
+ $cur_array = null;
+ array_walk($args, function ($value) use (&$cur_array, &$vars): void {
+ if (!is_string($value)) {
+ $cur_array = $value;
+ } else {
+ $vars[$value] = $cur_array;
+ }
+ });
+ }
+ foreach ($vars as $name => $array) {
+ if (!array_key_exists($name, $array??$GLOBALS)) return false;
+ }
+ return true;
+}
+// Examples
+$arr1 = range(0, 5);
+$arr2 = [
+ 'a' => 1,
+ 'b' => 2,
+ 'c' => 'hELLO wORLD!'
+];
+$gender = 'male';
+$age = 12;
+var_dump(is_set('age')); // true
+var_dump(is_set('age', null)); // true
+var_dump(is_set('age', $arr1)); // false
+var_dump(is_set('age', array())); // false
+var_dump(is_set('age', array('age' => 48))); // true
+var_dump(is_set('age', 'arr1', null, 'b', $arr2, 0, 3, 4, $arr1, 'gender')); // true
+var_dump(is_set('age', 'arr1', null, 'b', $arr2, 0, 3, 4, $arr1, 'gender', null)); // true
+$c=$d=$e=$a=2;
+$arr = [1,4];
+var_dump(is_set('a', 'c', null, 0, 1, $arr)); // true
+var_dump(is_set('a', 'c', null, 0, 4, $arr)); // false
+?>
+ Note:
+ it won't work for variables declared locally inside a function;
+ however you can use it for checking if array keys exists inside a function
+＋add a note
+ Variable handling Functions
+ boolval
+ debug_​zval_​dump
+ doubleval
+ empty
+ floatval
+ get_​debug_​type
+ get_​defined_​vars
+ get_​resource_​id
+ get_​resource_​type
+ gettype
+ intval
+ is_​array
+ is_​bool
+ is_​callable
+ is_​countable
+ is_​double
+ is_​float
+ is_​int
+ is_​integer
+ is_​iterable
+ is_​long
+ is_​null
+ is_​numeric
+ is_​object
+ is_​real
+ is_​resource
+ is_​scalar
+ is_​string
+ isset
+ print_​r
+ serialize
+ settype
+ strval
+ unserialize
+ unset
+ var_​dump
+ var_​export
+ ↑ and ↓ to navigate •
+ Enter to select •
+ Esc to close • / to open
+ Press Enter without
+ selection to search using Google

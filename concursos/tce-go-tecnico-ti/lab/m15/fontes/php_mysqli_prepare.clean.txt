@@ -1,0 +1,729 @@
+
+ PHP: mysqli::prepare - Manual
+Updated PHP Windows builds for Brotli security fix
+ mysqli::query »
+ « mysqli::poll 
+ Preface
+ Function Reference
+ Database Extensions
+ Vendor Specific Database Extensions
+ MySQL
+ MySQLi
+ mysqli
+ Change language:
+ English
+ German
+ Spanish
+ French
+ Italian
+ Japanese
+ Brazilian Portuguese
+ Russian
+ Turkish
+ Ukrainian
+ Chinese (Simplified)
+ Other
+ mysqli::prepare
+ mysqli_prepare
+ (PHP 5, PHP 7, PHP 8)
+mysqli::prepare -- mysqli_prepare — Prepares an SQL statement for execution
+ Description
+ Object-oriented style
+ public function mysqli::prepare(string $query): mysqli_stmt|false
+ Procedural style
+ function mysqli_prepare(mysqli $mysql, string $query): mysqli_stmt|false
+ Prepares the SQL query, and returns a statement handle to be used for further
+ operations on the statement. The query must consist of a single SQL statement.
+ The statement template can contain zero or more question mark
+ (?) parameter markers⁠—also called placeholders.
+ The parameter markers must be bound to application variables using
+ mysqli_stmt_bind_param() before executing the statement.
+ Parameters
+mysql
+Procedural style only: A mysqli object
+returned by mysqli_connect() or mysqli_init()
+ query
+ The query, as a string. It must consist of a single SQL statement.
+ The SQL statement may contain zero or more parameter markers
+ represented by question mark (?) characters
+ at the appropriate positions.
+ Note: 
+ The markers are legal only in certain places in SQL statements.
+ For example, they are permitted in the VALUES()
+ list of an INSERT statement (to specify column
+ values for a row), or in a comparison with a column in a
+ WHERE clause to specify a comparison value.
+ However, they are not permitted for identifiers (such as table or
+ column names).
+ Return Values
+ mysqli_prepare() returns a statement object or false if an error occurred.
+ Errors/Exceptions
+If mysqli error reporting is enabled (MYSQLI_REPORT_ERROR) and the requested operation fails,
+a warning is generated. If, in addition, the mode is set to MYSQLI_REPORT_STRICT,
+a mysqli_sql_exception is thrown instead.
+ Examples
+ Example #1 mysqli::prepare() example
+ Object-oriented style
+<?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$mysqli = new mysqli("localhost", "my_user", "my_password", "world");
+$city = "Amersfoort";
+/* create a prepared statement */
+$stmt = $mysqli->prepare("SELECT District FROM City WHERE Name=?");
+/* bind parameters for markers */
+$stmt->bind_param("s", $city);
+/* execute query */
+$stmt->execute();
+/* bind result variables */
+$stmt->bind_result($district);
+/* fetch value */
+$stmt->fetch();
+printf("%s is in district %s\n", $city, $district);
+ Procedural style
+<?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$link = mysqli_connect("localhost", "my_user", "my_password", "world");
+$city = "Amersfoort";
+/* create a prepared statement */
+$stmt = mysqli_prepare($link, "SELECT District FROM City WHERE Name=?");
+/* bind parameters for markers */
+mysqli_stmt_bind_param($stmt, "s", $city);
+/* execute query */
+mysqli_stmt_execute($stmt);
+/* bind result variables */
+mysqli_stmt_bind_result($stmt, $district);
+/* fetch value */
+mysqli_stmt_fetch($stmt);
+printf("%s is in district %s\n", $city, $district);
+ The above examples will output:
+Amersfoort is in district Utrecht
+ See Also
+ mysqli_stmt_execute() - Executes a prepared statement
+ mysqli_stmt_fetch() - Fetch results from a prepared statement into the bound variables
+ mysqli_stmt_bind_param() - Binds variables to a prepared statement as parameters
+ mysqli_stmt_bind_result() - Binds variables to a prepared statement for result storage
+ mysqli_stmt_get_result() - Gets a result set from a prepared statement as a mysqli_result object
+ mysqli_stmt_close() - Closes a prepared statement
+ Found A Problem?
+ Learn How To Improve This Page
+ •
+ Submit a Pull Request
+ •
+ Report a Bug
+ ＋add a note
+ User Contributed Notes 20 notes
+ up
+ down
+ 212
+ timchampion dot NOSPAM at gmail dot com ¶14 years ago
+Just wanted to make sure that all were aware of get_result.
+In the code sample, after execute(), perform a get_result() like this:
+<?php
+// ... document's example code:
+ /* bind parameters for markers */
+ $stmt->bind_param("s", $city);
+ /* execute query */
+ $stmt->execute();
+ /* instead of bind_result: */
+ $result = $stmt->get_result();
+ /* now you can fetch the results into an array - NICE */
+ while ($myrow = $result->fetch_assoc()) {
+ // use your $myrow array as you would with any other fetch
+ printf("%s is in district %s\n", $city, $myrow['district']);
+ }
+?>
+This is much nicer when you have a dozen or more fields coming back from your query. Hope this helps.
+ up
+ down
+ 57
+ Darren ¶14 years ago
+I wrote this function for my personal use and figured I would share it. I am not sure if this is the appropriate forum but I wish I had this when I stumbled on to mysqli::prepare. The function is an update of the function I posted previously. The previous function could not handle multiple queries.
+For queries:
+Results of single queries are given as arrays[row#][associated Data Array]
+Results of multiple queries are given as arrays[query#][row#][associated Data Array]
+For queries which return an affected row#, affected rows are returned instead of (array[row#][associated Data Array])
+Code and example are below:
+<?php
+function mysqli_prepared_query($link,$sql,$typeDef = FALSE,$params = FALSE){
+ if($stmt = mysqli_prepare($link,$sql)){
+ if(count($params) == count($params,1)){
+ $params = array($params);
+ $multiQuery = FALSE;
+ } else {
+ $multiQuery = TRUE;
+ } 
+ if($typeDef){
+ $bindParams = array(); 
+ $bindParamsReferences = array();
+ $bindParams = array_pad($bindParams,(count($params,1)-count($params))/count($params),""); 
+ foreach($bindParams as $key => $value){
+ $bindParamsReferences[$key] = &$bindParams[$key]; 
+ }
+ array_unshift($bindParamsReferences,$typeDef);
+ $bindParamsMethod = new ReflectionMethod('mysqli_stmt', 'bind_param');
+ $bindParamsMethod->invokeArgs($stmt,$bindParamsReferences);
+ }
+ $result = array();
+ foreach($params as $queryKey => $query){
+ foreach($bindParams as $paramKey => $value){
+ $bindParams[$paramKey] = $query[$paramKey];
+ }
+ $queryResult = array();
+ if(mysqli_stmt_execute($stmt)){
+ $resultMetaData = mysqli_stmt_result_metadata($stmt);
+ if($resultMetaData){ 
+ $stmtRow = array(); 
+ $rowReferences = array(); 
+ while ($field = mysqli_fetch_field($resultMetaData)) { 
+ $rowReferences[] = &$stmtRow[$field->name]; 
+ } 
+ mysqli_free_result($resultMetaData);
+ $bindResultMethod = new ReflectionMethod('mysqli_stmt', 'bind_result'); 
+ $bindResultMethod->invokeArgs($stmt, $rowReferences);
+ while(mysqli_stmt_fetch($stmt)){
+ $row = array();
+ foreach($stmtRow as $key => $value){
+ $row[$key] = $value; 
+ }
+ $queryResult[] = $row;
+ }
+ mysqli_stmt_free_result($stmt);
+ } else {
+ $queryResult[] = mysqli_stmt_affected_rows($stmt);
+ }
+ } else {
+ $queryResult[] = FALSE;
+ } 
+ $result[$queryKey] = $queryResult;
+ }
+ mysqli_stmt_close($stmt); 
+ } else {
+ $result = FALSE;
+ }
+ if($multiQuery){
+ return $result;
+ } else {
+ return $result[0];
+ }
+}
+?>
+Example(s):
+For a table of firstName and lastName:
+John Smith
+Mark Smith
+Jack Johnson
+Bob Johnson
+<?php
+//single query, single result
+$query = "SELECT * FROM names WHERE firstName=? AND lastName=?";
+$params = array("Bob","Johnson");
+mysqli_prepared_query($link,$query,"ss",$params)
+/*
+returns array(
+0=> array('firstName' => 'Bob', 'lastName' => 'Johnson')
+)
+*/
+//single query, multiple results
+$query = "SELECT * FROM names WHERE lastName=?";
+$params = array("Smith");
+mysqli_prepared_query($link,$query,"s",$params)
+/*
+returns array(
+0=> array('firstName' => 'John', 'lastName' => 'Smith')
+1=> array('firstName' => 'Mark', 'lastName' => 'Smith')
+)
+*/
+//multiple query, multiple results
+$query = "SELECT * FROM names WHERE lastName=?";
+$params = array(array("Smith"),array("Johnson"));
+mysqli_prepared_query($link,$query,"s",$params)
+/*
+returns array(
+0=>
+array(
+0=> array('firstName' => 'John', 'lastName' => 'Smith')
+1=> array('firstName' => 'Mark', 'lastName' => 'Smith')
+)
+1=>
+array(
+0=> array('firstName' => 'Jack', 'lastName' => 'Johnson')
+1=> array('firstName' => 'Bob', 'lastName' => 'Johnson')
+)
+)
+*/
+?>
+Hope it helps =)
+ up
+ down
+ 7
+ kritz at hrz dot tu-chemnitz dot de ¶9 years ago
+I wasn't able to fully test the following since the server I am currently working on is missing the PHP module that allows me to call get_result on mysqli_stmt but maybe this could be helpful for someone:
+<?php
+/**
+ * Custom {@link \mysqli} class with additional functions.
+ */
+class CustomMysqli extends \mysqli
+{
+ /**
+ * Creates a prepared query, binds the given parameters and returns the result of the executed
+ * {@link \mysqli_stmt}.
+ * @param string $query
+ * @param array $args
+ * @return bool|\mysqli_result
+ */
+ public function queryPrepared($query, array $args)
+ {
+ $stmt = $this->prepare($query);
+ $params = [];
+ $types = array_reduce($args, function ($string, &$arg) use (&$params) {
+ $params[] = &$arg;
+ if (is_float($arg)) $string .= 'd';
+ elseif (is_integer($arg)) $string .= 'i';
+ elseif (is_string($arg)) $string .= 's';
+ else $string .= 'b';
+ return $string;
+ }, '');
+ array_unshift($params, $types);
+ call_user_func_array([$stmt, 'bind_param'], $params);
+ $result = $stmt->execute() ? $stmt->get_result() : false;
+ $stmt->close();
+ return $result;
+ }
+}
+$db = new CustomMysqli('host', 'user', 'password', 'database', 3306);
+$result = $db->queryPrepared(
+ 'SELECT * FROM table WHERE something = ? AND someotherthing = ? AND elsewhat = ?',
+ [
+ 'dunno',
+ 1,
+ 'dontcare'
+ ]
+);
+if (isset($result) && $result instanceof \mysqli_result) {
+ while (null !== ($row = $result->fetch_assoc())) {
+ echo '<pre>'.var_debug($row, true).'</pre>';
+ }
+}
+?>
+NOTE: If you want to use this with a PHP version below 5.4 you have to use the old ugly array() syntax for arrays instead of the short [] syntax.
+ up
+ down
+ 10
+ admin at xorath dot com ¶19 years ago
+Performance note to those who wonder. I performed a test where first of all inserted about 30,000 posts with one PK:id and a varchar(20), where the varchar data was md5-hash for the current iterator value just to fill with some data.
+The test was performed on a dedicated ubuntu 7.04 server with apache2/php5/mysql5.0 running on Athlon 64 - 3000+ with 512MB of RAM. The queries where tested with a for-loop from 0 to 30000 first with:
+<?php
+for ( $i = 0; $i <= 30000; ++$i )
+{
+ $result = $mysqli->query("SELECT * FROM test WHERE id = $i");
+ $row = $result->fetch_row();
+ echo $row[0]; //prints id
+}
+?>
+which gave a page-load time of about 3.3seconds avarage, then with this loop:
+<?php
+$stmt = $mysqli->prepare("SELECT * FROM test WHERE id = ?");
+for ( $i = 0; $i <= 30000; ++$i )
+{
+ $stmt->bind_param("i", $i);
+ $stmt->execute();
+ $stmt->bind_result($id, $md5);
+ $stmt->fetch();
+ echo $id;
+}
+$stmt->close();
+?>
+and the avarage page-load was lowered by 1.3sec, which means about 2.0 sec avarage! Guess the performance difference could be even greater on a more complex/larger table and more complex SQL-queries.
+ up
+ down
+ 9
+ Codeguy ¶15 years ago
+The actual purpose to use a prepared statement in sql is to cut the cost of processing queries; NOT to separate data from query. That's how it's being used w/ php NOW, not how it was designed to be used in the first place. With SQL you cut the cost of executing multiple similar queries down by using a prepared statement.. Doing so cuts out the parsing, validation and most often generates an execution plan for said query up front. Which is why they run faster in a loop, than their IMMEDIATE Query cousins do. Do not assume that just because someone uses php and this function this way does not mean that it is THE way, or only way to do it. Although it is more secure than general queries but they are also more limited in what they can do or more precisely how you can go about doing it.
+ up
+ down
+ 2
+ Bernie van&#39;t Hof ¶14 years ago
+Prepared statements are confusing in the beginning ..
+mysqli->prepare() returns a so-called statement object which is used for subsequent operations eg execute, bind_param, store_result, bind_result, fetch, etc.
+The statement object has private properties which update as each statement operation is carried out. I found these useful for understanding what is going on when writing a prepared statement function: 
+affected_rows
+insert_id
+num_rows
+param_count
+field_count
+errno
+error
+sqlstate
+id
+But it took a little time to get my head around accessing them:
+<?php
+$stmt = $mysqli->prepare($query);
+// .. $stmt-> operations ..
+var_dump($stmt); // shows null values
+var_dump($stmt->errno); // note literal, displays value 
+// .. $stmt-> operations ..
+// to keep a copy ..
+// get_object_properties() won't work
+// clone() won't work
+$properties = array();
+foreach ($stmt as $name => $priv){
+ $properties[$name] = $stmt->$name; // works
+ // $properties[$name] = $priv; // won't work, foreach can't access private properties
+}
+$stmt->close();
+// var_dump($stmt->errno) // won't work, $stmt is closed
+?>
+ up
+ down
+ 6
+ omidbahrami1990 at gmail dot com ¶8 years ago
+This Is A Secure Way To Use mysqli::prepare
+--------------------------------------------------------
+<?php
+function secured_signup($username,$password)
+{ 
+$connection = new mysqli($dbhost,$dbusername,$dbpassword,$dbname); 
+if ($connection->connect_error) 
+die("Secured");
+$prepared = $connection->prepare("INSERT INTO `users` ( `username` , `password` ) VALUES ( ? , ? ) ; ");
+if($prepared==false)
+die("Secured");
+$result=$prepared->bind_param("ss",$username,$password);
+if($result==false)
+die("Secured");
+$result=$prepared->execute(); 
+if($result==false)
+die("Secured");
+$prepared->close();
+$connection->close(); 
+}
+/*
+$dbhost ---> DataBase IP Address
+$dbusername ---> DataBase Username
+$dbpassword ---> DataBase Password
+$dbname ---> DataBase Name
+*/
+?>
+ up
+ down
+ 7
+ cdtreeks at gmail dot com ¶11 years ago
+When executing a prepared MySQL, by default if there's an error then you'll simply get FALSE returned from your call to prepare().
+To get the full MySQL error back create a statement object before preparing your query as such:
+<?php
+$mysqli = new mysqli("localhost", "my_user", "my_password", "world");
+/* check connection */
+if (mysqli_connect_errno()) {
+ printf("Connect failed: %s\n", mysqli_connect_error());
+ exit();
+}
+$city = "Amersfoort";
+/* create a prepared statement */
+$statement = $mysqli->stmt_init();
+if ($statement->prepare("SELECT District FROM City WHERE Name=?")) {
+ /* bind parameters for marker(s) */
+ $statement->bind_param("s", $city);
+ /* execute query */
+ if (!$statement->execute()) {
+ trigger_error('Error executing MySQL query: ' . $statement->error);
+ }
+ /* bind result variables */
+ $statement->bind_result($district);
+ /* fetch value */
+ $statement->fetch();
+ printf("%s is in district %s\n", $city, $district);
+ /* close statement */
+ $statement->close();
+}
+/* close connection */
+$mysqli->close();
+?>
+ up
+ down
+ 2
+ urso at email dot cz ¶3 years ago
+Unfortunately, the use "/* bind result variables */ $stmt->bind_result($district);" is obsolete and condemned.
+<?php
+$mysqli = new mysqli("localhost", "test", "test", "test");
+if ($mysqli->character_set_name()!="utf8mb4") { $mysqli->set_charset("utf8mb4"); }
+$secondname = "Ma%";
+$types = "s";
+$parameters = array($secondname);
+$myquery = "select * from users where secondname like ?";
+if ($stmt = $mysqli->prepare($myquery)) { 
+ $stmt->bind_param($types, ...$parameters);
+ $stmt->execute();
+ $result = $stmt->get_result();
+ $stmt->close();
+ $numrows = $result->num_rows;
+ while($row = $result->fetch_assoc()) {
+ echo $row['firstname']." ".$row['secondname']."<br />";
+ }
+}
+$mysqli->close();
+?>
+Also, instead of '$stmt->bind_param("s", $city);', use "$stmt->bind_param($types, ...$parameters);" with array. Here the advantage of using an array ($parameters) is already obvious, instead of 5 variables, one array of 5 elements is used.
+<?php
+$mysqli = new mysqli("localhost", "test", "test", "test");
+if ($mysqli->character_set_name()!="utf8mb4") { $mysqli->set_charset("utf8mb4"); }
+$uid = intval($_POST['uid']);
+$length=15; $account = mb_substr(trim($_POST['account']),0,$length,"utf-8"); $account=strip_tags($account);
+$length=50; $password = mb_substr(trim($_POST['password']),0,$length,"utf-8"); $password = password_hash($password, PASSWORD_DEFAULT);
+$length=25; $prijmeni = mb_substr(trim($_POST['prijmeni']),0,$length,"utf-8"); $prijmeni=strip_tags($prijmeni);
+$length=25; $firstname = mb_substr(trim($_POST['firstname']),0,$length,"utf-8"); $firstname=strip_tags($firstname); $firstname = str_replace(array(">","<",'"'), array("","",""), $firstname); 
+$dotaz = "UPDATE users SET account = ?, password = ?, secname = ?, firstname = ? WHERE uid = ?";
+$types = "ssssi";
+$parameters = array($account,$password,$prijmeni,$firstname,$uid);
+if ($stmt = $mysqli->prepare($dotaz)) {
+ $stmt->bind_param($types, ...$parameters);
+ $stmt->execute();
+ echo $stmt->affected_rows;
+ $stmt->close();
+}
+$mysqli->close();
+?>
+ up
+ down
+ 5
+ David Kramer ¶20 years ago
+I don't think these are good examples, because the primary use of prepared queries is when you are going to call the same query in a loop, plugging in different values each time. For instance, if you were generating a report and needed to run the same query for each line, tweaking the values in the WHERE clause, or importing data from another system.
+ up
+ down
+ 4
+ REz ¶11 years ago
+There is no reference that all data must be fetched before a new prepare call to msqli, the only help is in a 6 years old comment!
+You have to myslqi_stmt::fetch() data until NULL is returned before you can call mysqli::prepare() again without having FALSE and no error at all in mysqli::$errno and mysqli::$error
+ up
+ down
+ 3
+ Darren ¶14 years ago
+For those learning mysqli::prepare and mysqli_stmt::bind_params for the first time, here is a commented block of code which executes prepared queries and returns data in a similar format to the return values of mysqli_query. I tried to minimize unnecessary classes, objects, or overhead for two reasons:
+1) facilitate learning
+2) allow relativity interchangeable use with mysqli_query
+My goal is to lower the learning curve for whoever is starting out with these family of functions. I am by no means an expert coder/scripter, so I am sure there are improvements and perhaps a few bugs, but I hope not =)
+<?php
+/*
+Function: mysqli_prepared_query()
+ Executes prepared querys given query syntax, and bind parameters
+ Returns data in array format
+Arguments:
+ mysqli_link
+ mysqli_prepare query
+ mysqli_stmt_bind_param argmuent list in the form array($typeDefinitinonString, $var1 [, mixed $... ])
+Return values:
+ When given SELECT, SHOW, DESCRIBE or EXPLAIN statements: returns table data in the form resultArray[row number][associated field name]
+ Returns number of rows affacted when given other queries
+ Returns FALSE on error 
+*/
+function mysqli_prepared_query($link,$sql,$bindParams = FALSE){
+ if($stmt = mysqli_prepare($link,$sql)){
+ if ($bindParams){ 
+ $bindParamsMethod = new ReflectionMethod('mysqli_stmt', 'bind_param'); //allows for call to mysqli_stmt->bind_param using variable argument list 
+ $bindParamsReferences = array(); //will act as arguments list for mysqli_stmt->bind_param 
+ $typeDefinitionString = array_shift($bindParams);
+ foreach($bindParams as $key => $value){
+ $bindParamsReferences[$key] = &$bindParams[$key]; 
+ }
+ array_unshift($bindParamsReferences,$typeDefinitionString); //returns typeDefinition as the first element of the string 
+ $bindParamsMethod->invokeArgs($stmt,$bindParamsReferences); //calls mysqli_stmt->bind_param suing $bindParamsRereferences as the argument list
+ }
+ if(mysqli_stmt_execute($stmt)){
+ $resultMetaData = mysqli_stmt_result_metadata($stmt);
+ if($resultMetaData){ 
+ $stmtRow = array(); //this will be a result row returned from mysqli_stmt_fetch($stmt) 
+ $rowReferences = array(); //this will reference $stmtRow and be passed to mysqli_bind_results 
+ while ($field = mysqli_fetch_field($resultMetaData)) { 
+ $rowReferences[] = &$stmtRow[$field->name]; 
+ } 
+ mysqli_free_result($resultMetaData);
+ $bindResultMethod = new ReflectionMethod('mysqli_stmt', 'bind_result'); 
+ $bindResultMethod->invokeArgs($stmt, $rowReferences); //calls mysqli_stmt_bind_result($stmt,[$rowReferences]) using object-oriented style
+ $result = array();
+ while(mysqli_stmt_fetch($stmt)){
+ foreach($stmtRow as $key => $value){ //variables must be assigned by value, so $result[] = $stmtRow does not work (not really sure why, something with referencing in $stmtRow)
+ $row[$key] = $value; 
+ }
+ $result[] = $row;
+ }
+ mysqli_stmt_free_result($stmt);
+ } else {
+ $result = mysqli_stmt_affected_rows($stmt);
+ }
+ mysqli_stmt_close($stmt);
+ } else {
+ $result = FALSE;
+ }
+ } else {
+ $result = FALSE;
+ }
+ return $result;
+}
+?>
+Here's hoping the PHP gods don't smite me.
+ up
+ down
+ 3
+ Adam ¶20 years ago
+The purpose of prepared statements is to not include data in your SQL statements. Including them in your SQL statements is NOT safe. Always use prepared statements. They are cleaner to use (code easier to read) and not prone to SQL injections.
+Escaping strings to include in SQL statements doesn't work very well in some locales hence it is not safe.
+ up
+ down
+ 4
+ codeFiend <aeontech at gmail dot com> ¶20 years ago
+Note that single-quotes around the parameter markers _will_ prevent your statement from being prepared correctly.
+Ex:
+<?php
+$stmt = $mysqli->prepare("INSERT INTO City (District) VALUES ('?')");
+echo $stmt->param_count." parameters\n";
+?>
+will print 0 and fail with "Number of variables doesn't match number of parameters in prepared statement" warning when you try to bind the variables to it.
+But
+<?php
+$stmt = $mysqli->prepare("INSERT INTO City (District) VALUES (?)");
+echo $stmt->param_count." parameters\n";
+?>
+will print 1 and function correctly.
+Very annoying, took me an hour to figure this out.
+ up
+ down
+ 2
+ wapharshitsingh at gmail dot com ¶5 years ago
+just wanted to share here, how we can use prepare statement with the combination of ... operator effectively .
+<?php
+class Database{
+ private function getTypeofValues($string, $value){
+ if(is_float($value)){
+ $string .= "d";
+ }elseif(is_integer($value)){
+ $string .= "i";
+ }elseif(is_string($value)){
+ $string .= "s";
+ }else{
+ $string .= "b";
+ }
+ return $string;
+ }
+ public function makeQuery($query, array $values){
+ $stmt = $this->connection->prepare($query);
+ $type = array_reduce($values, array($this, "getTypeOfValues"));
+ $stmt->bind_param($type, ...$values);
+ $stmt->execute();
+ $result = $stmt->get_result();
+ return $result;
+ }
+}
+?>
+ up
+ down
+ -1
+ @runspired ¶13 years ago
+I don't think this is a bug, just an unexpected behavior. While building an API I discovered that passing INT 0 instead of STRING '0' into a prepared statement caused my script to run out of memory and produce a 500error on the webpage.
+A simplified example of this issue is below: ($_DB is a global reference to a mysqli connection)
+<?php
+function getItem( $ID ) {
+ $_STATEMENT = $_DB->prepare("SELECT item_user, item_name, item_description FROM item WHERE item_id = ?;");
+ $_STATEMENT->bind_param( 'i' , $ID );
+ $_STATEMENT->execute();
+ $_STATEMENT->store_result();
+ $_STATEMENT->bind_result( $user , $name , $description);
+ $result = $_STATEMENT->fetch();
+ $_STATEMENT->free_result();
+ $_STATEMENT->close();
+ return $result;
+}
+getItem(0); //fails!
+getItem('0'); //works!
+?>
+The best I can guess is that an INT 0 gets translated as BOOLEAN , and if this is indeed the case it should be documented above, but all efforts to get error information (via the php script) have failed.
+ up
+ down
+ -4
+ Zeebuck ¶15 years ago
+I think that the purpose that it was originally built for, and the purpose that people use it for today, have diverged. But why dwell on the original purpose? Obviously more code has been put into prepared statements today to allow it to be used to prevent sql injections, so it is now part of the design purpose today, as well as performance on repeatable statements.
+ up
+ down
+ -2
+ rafael at stiod dot com ¶18 years ago
+All data must be fetched before a new statement prepare
+ up
+ down
+ -3
+ marmstro at gmail dot com ¶13 years ago
+If your IDE isn't recognizing $stmt as an object of type mysqli_stmt when you use the traditional perpare:
+$stmt = mysqli_prepare($link, $query);
+The following works and is IDE friendly:
+$stmt = new mysqli_stmt($link, $query);
+ up
+ down
+ -3
+ sdepouw at NOSPAM dot com ¶17 years ago
+I don't know how obvious this was for anyone else, but if you attempt to prepare a query for a table that doesn't exist in the database the connection currently points to (or if your query is invalid in some other way, I suppose), an object will not be returned. I only noticed this after doing some digging when I kept getting a fatal error saying that my statement variable was not an set to an instance of an object (it was probably null).
+Replace NOSPAM with nimblepros to e-mail me.
+＋add a note
+ mysqli
+ $affected_​rows
+ autocommit
+ begin_​transaction
+ change_​user
+ character_​set_​name
+ close
+ commit
+ $connect_​errno
+ $connect_​error
+ _​_​construct
+ debug
+ dump_​debug_​info
+ $errno
+ $error
+ $error_​list
+ escape_​string
+ execute_​query
+ $field_​count
+ get_​charset
+ $client_​info
+ $client_​version
+ get_​connection_​stats
+ $host_​info
+ $protocol_​version
+ $server_​info
+ $server_​version
+ get_​warnings
+ $info
+ $insert_​id
+ more_​results
+ multi_​query
+ next_​result
+ options
+ poll
+ prepare
+ query
+ quote_​string
+ real_​connect
+ real_​escape_​string
+ real_​query
+ reap_​async_​query
+ release_​savepoint
+ rollback
+ savepoint
+ select_​db
+ set_​charset
+ set_​opt
+ $sqlstate
+ ssl_​set
+ stat
+ stmt_​init
+ store_​result
+ $thread_​id
+ thread_​safe
+ use_​result
+ $warning_​count
+ Deprecated
+ init
+ kill
+ ping
+ refresh
+ ↑ and ↓ to navigate •
+ Enter to select •
+ Esc to close • / to open
+ Press Enter without
+ selection to search using Google

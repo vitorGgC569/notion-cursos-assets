@@ -1,0 +1,231 @@
+
+ PHP: filter_input - Manual
+Updated PHP Windows builds for Brotli security fix
+ filter_input_array »
+ « filter_id 
+ Preface
+ Function Reference
+ Variable and Type Related Extensions
+ Filter
+ Filter Functions
+ Change language:
+ English
+ German
+ Spanish
+ French
+ Italian
+ Japanese
+ Brazilian Portuguese
+ Russian
+ Turkish
+ Ukrainian
+ Chinese (Simplified)
+ Other
+ filter_input
+ (PHP 5 >= 5.2.0, PHP 7, PHP 8)
+filter_input — Gets a specific external variable by name and optionally filters it
+ Description
+ function filter_input(
+ int $type,
+ string $var_name,
+ int $filter = FILTER_DEFAULT,
+ array|int $options = 0
+): mixed
+ Parameters
+ type
+ One of the INPUT_* constants.
+ Warning
+ The content of the superglobal that is being filtered is the original
+ "raw" content provided by the SAPI,
+ prior to any user modification to the superglobal.
+ To filter a modified superglobal use
+ filter_var() instead.
+ var_name
+ Name of a variable to filter inside the corresponding
+ type superglobal.
+ filter
+ The filter to apply.
+ Can be a validation filter by using one of the
+ FILTER_VALIDATE_*
+ constants, a sanitization filter by using one of the
+ FILTER_SANITIZE_*
+ or FILTER_UNSAFE_RAW, or a custom filter by using
+ FILTER_CALLBACK.
+ Note: 
+ The default is FILTER_DEFAULT,
+ which is an alias of FILTER_UNSAFE_RAW.
+ This will result in no filtering taking place by default.
+ options
+ Either an associative array of options,
+ or a bitmask of filter flag constants
+ FILTER_FLAG_*.
+ If the filter accepts options,
+ flags can be provided by using the "flags" field of array.
+ Return Values
+ Value of the requested variable on success,
+ false if the filter fails,
+ or null if the var_name variable is not set.
+ If the flag FILTER_NULL_ON_FAILURE is used,
+ it returns false if the variable is not set
+ and null if the filter fails.
+ Examples
+ Example #1 A filter_input() example
+<?php
+$search_html = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
+$search_url = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_ENCODED);
+echo "You have searched for $search_html.\n";
+echo "<a href='?search=$search_url'>Search again.</a>";
+?>
+ The above example will output
+something similar to:
+You have searched for Me &#38; son.
+<a href='?search=Me%20%26%20son'>Search again.</a>
+ See Also
+ filter_input_array() - Gets external variables and optionally filters them
+ filter_var() - Filters a variable with a specified filter
+ filter_var_array() - Gets multiple variables and optionally filters them
+ Validation filters
+ FILTER_VALIDATE_*
+ Sanitization filters
+ FILTER_SANITIZE_*
+ Found A Problem?
+ Learn How To Improve This Page
+ •
+ Submit a Pull Request
+ •
+ Report a Bug
+ ＋add a note
+ User Contributed Notes 9 notes
+ up
+ down
+ 101
+ CertaiN ¶12 years ago
+This function provides us the extremely simple solution for type filtering.
+Without this function...
+<?php
+if (!isset($_GET['a'])) {
+ $a = null;
+} elseif (!is_string($_GET['a'])) {
+ $a = false;
+} else {
+ $a = $_GET['a'];
+}
+$b = isset($_GET['b']) && is_string($_GET['b']) ? $_GET['b'] : '';
+?>
+With this function...
+<?php
+$a = filter_input(INPUT_GET, 'a');
+$b = (string)filter_input(INPUT_GET, 'b');
+?>
+Yes, FILTER_REQUIRE_SCALAR seems to be set as a default option. 
+It's very helpful for eliminating E_NOTICE, E_WARNING and E_ERROR. 
+This fact should be documented.
+ up
+ down
+ 46
+ anthony dot parsons at manx dot net ¶19 years ago
+FastCGI seems to cause strange side-effects with unexpected null values when using INPUT_SERVER and INPUT_ENV with this function. You can use this code to see if it affects your server:
+<?php
+var_dump($_SERVER);
+foreach ( array_keys($_SERVER) as $b ) {
+ var_dump($b, filter_input(INPUT_SERVER, $b));
+}
+echo '<hr>';
+var_dump($_ENV);
+foreach ( array_keys($_ENV) as $b ) {
+ var_dump($b, filter_input(INPUT_ENV, $b));
+}
+?>
+If you want to be on the safe side, using the superglobal $_SERVER and $_ENV variables will always work. You can still use the filter_* functions for Get/Post/Cookie without a problem, which is the important part!
+ up
+ down
+ 39
+ rimelek at rimelek dot hu ¶12 years ago
+If your $_POST contains an array value:
+<?php
+$_POST = array(
+ 'var' => array('more', 'than', 'one', 'values')
+);
+?>
+you should use FILTER_REQUIRE_ARRAY option:
+<?php
+var_dump(filter_input(INPUT_POST, 'var', FILTER_DEFAULT , FILTER_REQUIRE_ARRAY));
+?>
+Otherwise it returns false.
+ up
+ down
+ 31
+ ss23 at ss23 dot geek dot nz ¶16 years ago
+Note that this function doesn't (or at least doesn't seem to) actually filter based on the current values of $_GET etc. Instead, it seems to filter based off the original values.
+<?php
+$_GET['search'] = 'foo'; // This has no effect on the filter_input
+$search_html = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
+$search_url = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_ENCODED);
+echo "You have searched for $search_html.\n";
+echo "<a href='?search=$search_url'>Search again.</a>";
+?>
+If you need to set a default input value and filter that, use filter_var on your required input variable instead
+ up
+ down
+ 25
+ Stefan Weinzierl ¶12 years ago
+Here is an example how to work with the options-parameter. Notice the 'options' in the 'options'-Parameter!
+<?php
+$options=array('options'=>array('default'=>5, 'min_range'=>0, 'max_range'=>9));
+$priority=filter_input(INPUT_GET, 'priority', FILTER_VALIDATE_INT, $options);
+?>
+$priority will be 5 if the priority-Parameter isn't set or out the given range.
+ up
+ down
+ 11
+ chris at chlab dot ch ¶14 years ago
+To use a class method for a callback function, as usual, provide an array with an instance of the class and the method name.
+Example:
+<?php
+class myValidator
+{
+ public function username($value)
+ {
+ // return username or boolean false
+ }
+}
+$myValidator = new myValidator;
+$options = array('options' => array($myValidator, 'username'));
+$username = filter_input(INPUT_GET, 'username', FILTER_CALLBACK, $options);
+var_dump($username);
+?>
+ up
+ down
+ 6
+ travismowens at gmail dot com ¶16 years ago
+I wouldn't recommend people use this function to store their data in a database. It's best not to encode data when storing it, it's better to store it raw and convert in upon the time of need.
+One main reason for this is because if you have a short CHAR(16) field and the text contains encoded characters (quotes, ampersand) you can easily take a 12 character entry which obviously fits, but because of encoding it no longer fits.
+Also, while not as common, if you need to use this data in another place, such as a non webpage (perhaps in a desktop app, or to a cell phone SMS or to a pager) the HTML encoded data will appear raw, and now you have to decode the data.
+In summary, the best way to architect your system, is to store data as raw, and encode it only the moment you need to. So this means in your PHP upon doing a SQL query, instead of merely doing an echo $row['title'] you need to run htmlentities() on your echos, or better yet, an abstract function.
+ up
+ down
+ 3
+ akshay dot leadindia at gmail dot com ¶13 years ago
+The beauty of using this instead of directly using filter_var( $_GET['search'] ) is that you don't need to check if( isset( $_GET['search'] ) ) as if you pass that to filter_var and the key is not set then it will result in a warning. This function simplifies this and will return the relevant result to you (as per your options set) if the key has not been set in the user input. 
+If the type of filter you are using also supports a 'default' argument then this function will also stuff your missing input key with that value, again saving your efforts
+ up
+ down
+ -2
+ HonzaZ ¶4 years ago
+In fastcgi sapi implementations, filter_input(INPUT_SERVER) can return empty results.
+In my case (8.1.9 64bit php-cgi) it was caused by auto_globals_jit enabled . When disabled (in php.ini on php startup), filter_input(INPUT_SERVER) works correctly.
+php-fpm sapi isn't affected.
+＋add a note
+ Filter Functions
+ filter_​has_​var
+ filter_​id
+ filter_​input
+ filter_​input_​array
+ filter_​list
+ filter_​var
+ filter_​var_​array
+ ↑ and ↓ to navigate •
+ Enter to select •
+ Esc to close • / to open
+ Press Enter without
+ selection to search using Google

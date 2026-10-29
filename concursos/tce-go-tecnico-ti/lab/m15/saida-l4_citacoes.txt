@@ -1,0 +1,60 @@
+$ python3 l4_citacoes.py
+aes              OK    fips197.txt              The AES algorithm is a symmetric block cipher that can encry
+anpd_6           OK    anpd15.clean.txt         Art. 6º A comunicação de incidente de segurança à ANPD dever
+anpd_6p1         OK    anpd15.clean.txt         O prazo a que se refere o caput será contado do conhecimento
+bond_8023ad      OK    linux_bonding.clean.txt  IEEE 802.3ad Dynamic link aggregation. Creates aggregation g
+gl_scan          OK    gitlab_appsec.clean.txt  During development, scans run automatically as part of CI/CD
+ipsec            OK    rfc4301.txt              which is designed to provide security services for traffic a
+jk_plugins       OK    jenkins_plugins.clean.txt Plugins are the primary means of enhancing the functionality
+jwt_def          OK    rfc7519.txt              JSON Web Token (JWT) is a compact, URL-safe means of represe
+jwt_exp          OK    rfc7519.txt              The "exp" (expiration time) claim identifies the expiration 
+l14133_117       OK    lei14133_senado.txt      Art. 117. A execução do contrato deverá ser acompanhada e fi
+l14133_117p1     OK    lei14133_senado.txt      O fiscal do contrato anotará em registro próprio todas as oc
+l14133_117p2     OK    lei14133_senado.txt      O fiscal do contrato informará a seus superiores, em tempo h
+l14133_18        OK    lei14133_senado.txt      I – a descrição da necessidade da contratação fundamentada e
+l14133_18p1      OK    lei14133_senado.txt      deverá evidenciar o problema a ser resolvido e a sua melhor 
+l14133_18p1i     OK    lei14133_senado.txt      I – descrição da necessidade da contratação, considerado o p
+l14133_18p1iii   OK    lei14133_senado.txt      III – requisitos da contratação;
+l14133_18x       OK    lei14133_senado.txt      X – a análise dos riscos que possam comprometer o sucesso da
+l14133_etp       OK    lei14133_senado.txt      XX – estudo técnico preliminar: documento constitutivo da pr
+l14133_tr        OK    lei14133_senado.txt      XXIII – termo de referência: documento necessário para a con
+l14133_trA       OK    lei14133_senado.txt      a) definição do objeto, incluídos sua natureza, os quantitat
+lgpd_46          OK    lgpd.clean.txt           Os agentes de tratamento devem adotar medidas de segurança, 
+lgpd_48          OK    lgpd.clean.txt           Art. 48. O controlador deverá comunicar à autoridade naciona
+lgpd_48p         OK    lgpd.clean.txt           A comunicação será feita em prazo razoável, conforme definid
+lgpd_6i          OK    lgpd.clean.txt           I - finalidade: realização do tratamento para propósitos leg
+lgpd_6iii        OK    lgpd.clean.txt           III - necessidade: limitação do tratamento ao mínimo necessá
+lgpd_6vii        OK    lgpd.clean.txt           VII - segurança: utilização de medidas técnicas e administra
+nist_iaas        OK    nist800145.txt           Infrastructure as a Service (IaaS). The capability provided 
+nist_iaas2       OK    nist800145.txt           The consumer does not manage or control the underlying cloud
+nist_paas        OK    nist800145.txt           Platform as a Service (PaaS). The capability provided to the
+nist_saas        OK    nist800145.txt           Software as a Service (SaaS). The capability provided to the
+owasp_fast       OK    owasp_pwd.clean.txt      Fast hashing algorithms such as SHA‑256 are not suitable for
+owasp_prep       OK    owasp_sqli.clean.txt     Prepared statements treat bound values as data rather than S
+owasp_priv       OK    owasp_sqli.clean.txt     DO NOT ASSIGN DBA OR ADMIN TYPE ACCESS TO YOUR APPLICATION A
+owasp_pwd        OK    owasp_pwd.clean.txt      Passwords should never be stored in plain text.
+owasp_pwd2       OK    owasp_pwd.clean.txt      they must be protected using strong, slow hashing algorithms
+owasp_salt       OK    owasp_pwd.clean.txt      A unique salt must be added to each password to prevent atta
+owasp_sqli       OK    owasp_sqli.clean.txt     SQL injection occurs when untrusted data becomes part of a q
+pg_dump          OK    pg_dump_doc.clean.txt    Dumps created by pg_dump are internally consistent, meaning,
+pg_pitr          OK    pg_pitr.clean.txt        this technique supports point-in-time recovery: it is possib
+pg_test          OK    pg_pitr.clean.txt        you should set up and test your procedure for archiving WAL 
+pg_wal           OK    pg_pitr.clean.txt        you need a continuous sequence of archived WAL files that ex
+php_construct    OK    php_mysqli_construct.clean.txt Opens a connection to the MySQL Server.
+php_filter_input OK    php_filter_input.clean.txt filter_input — Gets a specific external variable by name and
+php_hash         OK    php_password_hash.clean.txt password_hash() creates a new password hash using a strong o
+php_isset        OK    php_isset.clean.txt      Determine if a variable is considered set, this means if a v
+php_prepare      OK    php_mysqli_prepare.clean.txt The statement template can contain zero or more question mar
+php_special      OK    php_filter_sanitize.clean.txt This filter HTML-encodes ', ", <, >, & and characters with a
+py_inject        OK    py_sqlite3.clean.txt     Always use placeholders instead of string formatting to bind
+py_never         OK    py_sqlite3.clean.txt     an attacker can simply close the single quote and inject OR 
+rfc9110_401      OK    rfc9110.txt              The 401 (Unauthorized) status code indicates that the reques
+rsa              OK    rfc8017.txt              This document provides recommendations for the implementatio
+wiki_lacp_std    OK    wiki_lacp.clean.txt      Link Aggregation Control Protocol (LACP) for Ethernet, defin
+wiki_lag         OK    wiki_lacp.clean.txt      Link aggregation increases total bandwidth beyond what a sin
+wiki_rstp        OK    wiki_stp.clean.txt       RSTP provides significantly faster recovery in response to n
+wiki_stp_block   OK    wiki_stp.clean.txt       The spanning-tree algorithm then blocks forwarding on redund
+wiki_stp_loop    OK    wiki_stp.clean.txt       However, this connection configuration creates a switching l
+
+56 citacoes encontradas, 0 falhas.
+Normalizacao: espacos e quebras de linha unificados, aspas e apostrofos tipograficos trocados por retos. Texto da Lei 14.133: edicao do Senado Federal (6a edicao, atualizada ate julho de 2026); LGPD: portal da Camara dos Deputados (texto atualizado).

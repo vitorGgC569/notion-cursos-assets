@@ -26,7 +26,7 @@ K.match=function(){
   var D=K.data(),root=K.$('#app'),key='tcegoti:'+D.id+':best',cur=0,ans=[],done=false;
   function draw(){
     if(cur>=D.items.length){var sc=ans.filter(function(a,j){return a===D.items[j].ok}).length,pct=Math.round(100*sc/D.items.length);K.store.set(key,{score:sc,pct:pct});
-      root.innerHTML='<div class="card"><p class="kicker">Resultado</p><h2 style="margin-top:0">'+sc+' de '+D.items.length+' ('+pct+'%)</h2><p>'+(pct>=80?'Muito bom. Você já separa bem as quatro funções.':'Releia a seção das quatro funções e tente de novo.')+'</p><div class="row"><button class="btn primary" id="again" type="button">Jogar de novo</button></div></div>'+
+      root.innerHTML='<div class="card"><p class="kicker">Resultado</p><h2 style="margin-top:0">'+sc+' de '+D.items.length+' ('+pct+'%)</h2><p>'+(pct>=80?'Muito bom. Você já separa bem as categorias.':'Releia a seção correspondente da Teoria e tente de novo.')+'</p><div class="row"><button class="btn primary" id="again" type="button">Jogar de novo</button></div></div>'+
       D.items.map(function(it,j){var ok=ans[j]===it.ok;return '<details><summary><span class="pill '+(ok?'ok':'bad')+'">'+(ok?'Certa':'Errada')+'</span> '+K.esc(it.t)+'</summary><div class="in"><div class="note '+(ok?'ok':'acc')+'"><b>'+K.esc(D.labels[it.ok])+'.</b> '+K.esc(it.exp)+'</div></div></details>'}).join('');
       K.$('#again').onclick=function(){cur=0;ans=[];draw()};return}
     var it=D.items[cur];

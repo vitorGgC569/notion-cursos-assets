@@ -1,0 +1,35 @@
+$ python3 l1_fontes.py
+arquivo                        bytes palavras  sha256       origem
+anpd15.clean.txt               25227     3712  65b1ca0c97a8 https://bibliotecadigital.mj.gov.br/bitstream/1/12879/2/RES_ANPD_2024_15.html
+edital_cap11_12.txt            10933     1330  0191b19fb7c6 Edital 01/2026, capitulos 11 e 12
+edital_cap7.txt                 3155      240  af3fecbd4875 Edital 01/2026 do TCE-GO, capitulo 7 (PDF oficial; trecho copiado)
+edital_cap8.txt                 6922      933  92525bf188a6 Edital 01/2026, capitulo 8 (trechos 8.12, 8.20, 8.21, 8.33)
+edital_cronograma.txt           3069      275  4b2657cf5dba Edital 01/2026, Anexo III (cronograma previsto)
+fips197.txt                    71379    12867  72d2de901c24 https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf
+gitlab_appsec.clean.txt         2785      368  95d88821e262 https://docs.gitlab.com/ee/user/application_security/
+gran2024_pagina.txt             4766      681  9fe14b871c31 TRT-20 2024, questao 3558872: texto da pagina do agregador Gran Questoes (enunciado e itens do edital)
+jenkins_plugins.clean.txt      17621     2853  3016fa52d0d0 https://www.jenkins.io/doc/book/managing/plugins/
+lei14133_senado.txt           291628    40763  52fbd5e20dfd https://www2.senado.leg.br/jspui/bitstream/id/962232/1/Lei_licitacoes_contratos_administrativos_6ed_2026.pdf
+lgpd.clean.txt                 84078    12849  a8ded5d3178f https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709-14-agosto-2018-787077-normaatualizada-pl.html
+linux_bonding.clean.txt       108311    17985  a6fd76d184c6 https://www.kernel.org/doc/html/latest/networking/bonding.html
+nist800145.txt                 13018     1584  38bbb9b3db15 https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf
+owasp_pwd.clean.txt            20294     3286  feb23019bb0f https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+owasp_sqli.clean.txt            9813     1479  6c1b30dd8edf https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+pg_dump_doc.clean.txt           9995     1669  716a1ec544b1 https://www.postgresql.org/docs/current/backup-dump.html
+pg_pitr.clean.txt              43830     7380  b9f100d6a86a https://www.postgresql.org/docs/current/continuous-archiving.html
+php_filter_input.clean.txt      8189     1244  f70ff27f0cbb https://www.php.net/manual/en/function.filter-input.php
+php_filter_sanitize.clean.txt      4829      608  577bf9278ef7 https://www.php.net/manual/en/filter.constants.sanitization.php
+php_isset.clean.txt            18828     2801  56d2c3a6bc95 https://www.php.net/manual/en/function.isset.php
+php_mysqli_construct.clean.txt     11490     1649  5b00a5e956bc https://www.php.net/manual/en/mysqli.construct.php
+php_mysqli_prepare.clean.txt     26067     3510  fa685104b17a https://www.php.net/manual/en/mysqli.prepare.php
+php_password_hash.clean.txt     17704     2756  e9e114013d4e https://www.php.net/manual/en/function.password-hash.php
+py_sqlite3.clean.txt           71039    10851  7031e1eebd76 https://docs.python.org/3/library/sqlite3.html
+rfc4301.txt                   262123    36799  a2411e90515f https://www.rfc-editor.org/rfc/rfc4301.txt
+rfc7519.txt                    63039     8647  fecd930e9ccf https://www.rfc-editor.org/rfc/rfc7519.txt
+rfc8017.txt                   154696    20330  1e72dc473d18 https://www.rfc-editor.org/rfc/rfc8017.txt
+rfc9110.txt                   502941    72969  21c1cdce6ab0 https://www.rfc-editor.org/rfc/rfc9110.txt
+trf4_2019_prova.txt            12597     1695  afffb1f6d72c Prova Estudo de Caso, TRF-4 2019, caderno 04 tipo 001 (PDF do agregador eticaconcursos.com.br), paginas 16 e 17 e o edital citado na capa
+wiki_lacp.clean.txt            32273     5178  e74d3c123859 https://en.wikipedia.org/wiki/Link_aggregation
+wiki_stp.clean.txt             45607     7758  2aa13d04adeb https://en.wikipedia.org/wiki/Spanning_Tree_Protocol
+
+31 arquivos. Baixados em 28/10/2026 (fetch.sh). Paginas web mudam: o conteudo vale para essa data. Os PDFs originais nao foram copiados para o repositorio.

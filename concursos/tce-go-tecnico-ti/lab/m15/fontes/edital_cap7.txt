@@ -1,0 +1,33 @@
+
+    7.             DAS PROVAS
+    7.1            O Concurso constará das seguintes provas, número de questões, pesos, caráter e duração das provas:
+
+          Código                                                                                Número                               Duração
+            de           Cargo/Especialidade                          Provas                       de    Peso         Caráter          das
+          Opção                                                                                 Questões                             Provas
+                                                       Provas Objetivas:
+                     Técnico de Controle Externo –     - Conhecimentos Gerais                      25         1    Habilitatório e
+                                                                                                                                      4h30
+            A01      Especialidade: Técnico                                                                        Classificatório
+                     Administrativo                    - Conhecimentos Específicos                 45         2
+                                                       Prova Discursiva - Redação                  01
+                                                       Provas Objetivas:
+                     Técnico de Controle Externo –     - Conhecimentos Gerais                      25         1    Habilitatório e
+                                                                                                                                      4h30
+            B02      Especialidade: Tecnologia da                                                                  Classificatório
+                     Informação                        - Conhecimentos Específicos                 45         2
+                                                       Prova Discursiva - Estudo de Caso           01
+
+    7.2            Para todos os Cargos/Especialidades, as Provas Objetivas de Conhecimentos Gerais e de Conhecimentos Específicos
+                   constarão de questões objetivas de múltipla escolha (com cinco alternativas cada questão), de caráter habilitatório e
+                   classificatório, e versarão sobre os conteúdos programáticos constantes do Anexo II do presente Edital.
+    7.3            Cada questão das provas poderá avaliar habilidades que vão além do mero conhecimento memorizado, abrangendo
+                   compreensão, aplicação, análise, com o intuito de valorizar a capacidade de raciocínio, e contemplar mais de um objeto de
+                   avaliação.
+    7.4            A Prova Discursiva-Redação reger-se-á conforme o disposto no Capítulo 10 deste Edital e será realizada no mesmo dia e
+                   período da aplicação das Provas Objetivas.
+    7.5            A Prova Discursiva-Estudo de Caso reger-se-á conforme o disposto no Capítulo 11 deste Edital e será realizada no
+                   mesmo dia e período da aplicação das Provas Objetivas.
+
+
+    8.             DA PRESTAÇÃO DAS PROVAS
