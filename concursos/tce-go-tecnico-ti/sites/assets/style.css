@@ -236,3 +236,4 @@ textarea.ans.big{min-height:260px;font-size:15.5px}
 .crit{border-top:1px solid var(--line);padding:9px 0}.crit label{display:flex;gap:8px;align-items:flex-start;font-size:14.5px}
 .timer{font-size:22px}
 .embedded textarea.ans.big{min-height:170px}
+.nav button.flag{box-shadow:inset 0 -3px 0 var(--ink)}

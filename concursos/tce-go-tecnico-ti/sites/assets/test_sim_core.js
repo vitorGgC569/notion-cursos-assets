@@ -1,0 +1,15 @@
+var S=require('./simulado-core.js'),assert=require('assert');
+var disc=[{id:'a',nome:'A',g:'G',w:1},{id:'b',nome:'B',g:'E',w:2}];
+var qs=[{n:1,d:'a',ok:'A'},{n:2,d:'a',ok:'B'},{n:3,d:'b',ok:'C'},{n:4,d:'b',ok:'D'}];
+assert.strictEqual(S.maxPoints(qs,disc),6);
+var r=S.score(qs,disc,{1:'A',2:'C',3:'C'});
+assert.strictEqual(r.pts,3);assert.strictEqual(r.g.pts,1);assert.strictEqual(r.e.pts,2);assert.strictEqual(r.blank,1);assert.strictEqual(r.ok,2);
+assert.strictEqual(S.cutPoints(115,60),69);assert.strictEqual(S.cutPoints(115,75),87);assert.strictEqual(S.cutPoints(100,60),60);
+assert.strictEqual(S.status(68,115,60,75),'abaixo');assert.strictEqual(S.status(69,115,60,75),'corte');assert.strictEqual(S.status(87,115,60,75),'meta');
+assert.strictEqual(S.fmtHMS(16200),'4:30:00');assert.strictEqual(S.fmtHMS(59),'0:00:59');
+assert.strictEqual(S.timeLeft(0,270,1000*60*10),260*60);assert.strictEqual(S.timeLeft(0,270,1e12),0);
+assert.strictEqual(S.caseScore([{p:30},{p:20},{p:50}],[true,false,true],10,false),70);
+assert.strictEqual(S.caseScore([{p:30}],[true],0,true),0);
+assert.deepStrictEqual(S.finalVerdict('corte',50,50),{obj:true,caso:true,all:true});
+assert.deepStrictEqual(S.finalVerdict('abaixo',80,50),{obj:false,caso:true,all:false});
+console.log('simulado-core: todos os testes passaram');
