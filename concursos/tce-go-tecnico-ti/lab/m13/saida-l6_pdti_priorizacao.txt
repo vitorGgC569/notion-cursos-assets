@@ -1,0 +1,33 @@
+$ python l6_pdti_priorizacao.py
+Tabela 2 (sem custo): codigos distintos encontrados: 48 de A1 a A48
+Tabela 3 (com custo): codigos distintos encontrados: 35 de C1 a C35
+
+notas de prioridade lidas na Tabela 2: 43 valores; maior 105.0; menor 32.5
+em ordem decrescente? True (o texto diz que a lista segue a ordem de prioridade)
+
+criterios discretos (CP02 a CP07): 729 combinacoes, 18 somas distintas, de 15.0 a 60.0
+CP01 vai de 1 a 50 (nota dada pela Presidencia). Soma teorica: minimo 16.0, maximo 110.0
+nota  105.0: compativel com a soma? sim (CP01 possiveis: 45 a 50)
+nota   95.0: compativel com a soma? sim (CP01 possiveis: 35 a 50)
+nota   87.5: compativel com a soma? sim (CP01 possiveis: 35 a 50)
+nota   85.0: compativel com a soma? sim (CP01 possiveis: 25 a 50)
+nota   80.0: compativel com a soma? sim (CP01 possiveis: 20 a 50)
+nota   75.0: compativel com a soma? sim (CP01 possiveis: 15 a 50)
+nota   72.5: compativel com a soma? sim (CP01 possiveis: 20 a 50)
+nota   70.0: compativel com a soma? sim (CP01 possiveis: 10 a 50)
+nota   67.5: compativel com a soma? sim (CP01 possiveis: 15 a 50)
+nota   65.0: compativel com a soma? sim (CP01 possiveis: 5 a 50)
+nota   60.0: compativel com a soma? sim (CP01 possiveis: 5 a 45)
+nota   57.5: compativel com a soma? sim (CP01 possiveis: 5 a 40)
+nota   55.0: compativel com a soma? sim (CP01 possiveis: 5 a 40)
+nota   52.5: compativel com a soma? sim (CP01 possiveis: 5 a 35)
+nota   50.0: compativel com a soma? sim (CP01 possiveis: 5 a 35)
+nota   47.5: compativel com a soma? sim (CP01 possiveis: 5 a 30)
+nota   45.0: compativel com a soma? sim (CP01 possiveis: 5 a 30)
+nota   37.5: compativel com a soma? sim (CP01 possiveis: 5 a 20)
+nota   35.0: compativel com a soma? sim (CP01 possiveis: 5 a 20)
+nota   32.5: compativel com a soma? sim (CP01 possiveis: 5 a 15)
+
+notas incompativeis com a soma de numeros inteiros em CP01: nenhuma
+Teste fraco: como CP01 varia de 1 a 50, quase toda nota cabe em alguma combinacao.
+Observacao: compatibilidade nao prova a formula. O PDTI nao traz formula escrita; a calculadora do curso e um modelo didatico.

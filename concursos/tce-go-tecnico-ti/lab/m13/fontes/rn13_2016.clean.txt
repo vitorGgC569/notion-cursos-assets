@@ -1,0 +1,453 @@
+RESOLUÇÃO NORMATIVA Nº 13/2016
+Texto Compilado
+TRIBUNAL DE CONTAS DO ESTADO DE GOIÁS
+RESOLUÇÃO NORMATIVA Nº 13/2016
+-Vide Portaria nº348/2026-GPRES, de 04-05-2026, DEC de 22-05-2026.
+-Vide Portaria nº 59/2023-GPRES, de 13-01-2023
+, 
+DEC 16-01-2023.
+-Alterada pela Resolução Administrativa nº 19, de 6-10-2022,
+DEC 11-10-2022.
+-Vide Portaria nº 66/2021-GPRES, de 4-02-2021
+, 
+D.E.C. 5-02-2021
+.
+-Vide Portaria nº 68/2019-GPRES, de 25-01-2019
+, 
+D.E.C. 29-01-2019
+.
+-Vide Portaria 237/2018-GPRES, de 09-04-2018
+, 
+D.E.C. 11-04-2018
+.
+-Vide Portaria nº 115/2017-GPRES, de 10-02-2017
+, 
+DEC 24-03-2017
+.
+-Vide Portaria 753/2016-GPRES, de 24-11-2016
+, 
+D.E.C. de 25-11-2016.
+ Processo nº 
+201600047001404
+Institui o Comitê Estratégico de Tecnologia da Informação e dá outras providências.
+O TRIBUNAL DE CONTAS DO ESTADO DE GOIÁS, pelos Membros que integram o Tribunal Pleno, nos termos do art. 10, inc. III e art. 14, incs. II e XI da
+ Resolução nº 22, de 4/9/2008
+ (RITCE), e
+CONSIDERANDO a necessidade de consolidar as atribuições, políticas e diretrizes de organização da TI, bem como para atividades relacionadas ao provimento, à gestão e ao uso de soluções de tecnológicas, viabilizando o estabelecimento da governança corporativa de tecnologia da informação;
+CONSIDERANDO a necessidade de se viabilizar o estabelecimento da governança corporativa de tecnologia da informação, implementar parâmetros e diretrizes destas ações para assegurar o cumprimento do propósito e das políticas institucionais do Tribunal, seguindo as melhores práticas aplicáveis neste sentido;
+CONSIDERANDO a 
+Resolução Normativa nº 02/2016
+ que instituiu e aprovou o Plano Diretor de Tecnologia da Informação (PDTI) para o triênio 2016-2018, bem como as diretrizes aprovadas e priorizadas no Planejamento Estratégico 2014-2020 do TCE-GO e seu desdobramento em iniciativas e ações, especialmente o Plano Diretor 2016 para a Gerência de Tecnologia da Informação;
+CONSIDERANDO ainda, o resultado da avaliação do Marco de Medição de Desempenho – MMD instituído pela ATRICON e o objetivo desta Corte de Contas de adotar iniciativas e desenvolver ações que contribuam para o crescente atendimento dos critérios ali estabelecidos;
+RESOLVE:
+CAPÍTULO I
+DA INSTITUIÇÃO DO COMITÊ ESTRATÉGICO DE TI
+Art. 1º Instituir, no âmbito do TCE-GO, o Comitê Estratégico de Tecnologia de Informação (CETI), órgão colegiado de natureza consultiva e caráter permanente, com responsabilidades de cunho estratégico e executivo, visando à avaliação da governança e gestão do uso de TI, à coordenação, articulação e priorização das ações e investimentos em Tecnologia da Informação, bem como ao monitoramento do estado atual dos projetos e resolução de conflito de recursos.
+§1º Em virtude do caráter consultivo do Comitê, suas decisões serão expedidas em forma de recomendações acerca das matérias apreciadas e votadas ou em orientações complementares às normas já existentes;
+§2º As recomendações que ensejarem a emissão de atos normativos ou alterações de normas existentes, serão encaminhadas para a Presidência do Tribunal para que avalie as providências cabíveis;
+Art. 2º Compete ao Comitê Estratégico de Tecnologia de Informação:
+I - coordenar a formulação de estratégias, diretrizes, objetivos e políticas de Tecnologia da Informação (TI), promovendo sua aprovação;
+II - avaliar e ajustar os planos e os indicadores de desempenho de TI, bem como manifestar-se sobre a implementação das ações planejadas e a mensuração dos resultados obtidos;
+III - validar a alocação dos recursos orçamentários destinados à TI, bem como alterações posteriores que provoquem impacto significativo sobre a alocação inicial;
+IV - priorizar, com base em critérios objetivos, as demandas que tratem do provimento de novas soluções de TI de natureza corporativa, e de demandas de manutenção com impacto significativo sobre os planos de TI;
+V - avaliar periodicamente a situação da governança, gestão e uso de TI no âmbito do TCE-GO, bem assim as propostas de melhorias e ajustes necessários, além de promover a adequada publicidade e transparência dessas informações, em especial sobre:
+a) a execução dos planos e das ações corporativas relativos a TI;
+b) a evolução dos indicadores de desempenho de TI;
+c) o tratamento de riscos relacionados a TI;
+d) a capacidade e a disponibilidade de recursos de TI;
+VI - avaliar periodicamente a situação da Segurança da Informação, no âmbito do TCE-GO, bem assim as propostas de melhorias e ajustes necessários.
+VII - requerer às unidades do TCE-GO informações que considerar necessárias à realização de suas atividades;
+VIII - Criar grupos de trabalho com a finalidade de examinar e propor soluções de Tecnologia da Informação suscitadas pelo TCE-GO;
+IX - Avaliar os sistemas de informação e propor suas atualizações, revisões e desativações;
+X - expedir manifestações em sua respectiva área de atuação, bem como praticar atos administrativos necessários ao funcionamento ou exercício das competências do Comitê;
+XI – Elaborar e divulgar planos de trabalho e cronogramas de atividades e de reuniões do Comitê;
+XII - desenvolver outras atividades inerentes à sua finalidade.
+§1º Os planos de que trata este artigo serão publicados no portal institucional do TCE-GO.
+§2º O Comitê Estratégico de Tecnologia da Informação poderá instituir grupos de trabalho com a finalidade de examinar e propor soluções de Tecnologia da Informação para temas específicos.
+§3º As deliberações do Comitê Estratégico de Tecnologia da Informação terão como subsídios trabalhos e estudos preliminares desenvolvidos pela Gerência de Tecnologia da Informação.
+SEÇÃO I
+DA COMPOSIÇÃO DO COMITÊ DE TI
+-Vide Portaria nº 59/2023-GPRES, de 13-01-2023
+, 
+DEC 16-01-2023.
+-Vide Portaria nº 66/2021-GPRES, de 4-02-2021
+, 
+D.E.C. 5-02-2021
+.
+-Vide Portaria nº 68/2019-GPRES, de 25-01-2019
+, 
+D.E.C. 29-01-2019
+.
+-Vide Portaria 237/2018-GPRES, de 09-04-2018
+, 
+D.E.C. 11-04-2018
+.
+-Vide Portaria nº 115/2017-GPRES, de 10-02-2017
+, 
+DEC 24-03-2017
+.
+-Vide Portaria 753/2016-GPRES, de 24-11-2016
+, 
+D.E.C. de 25-11-2016.
+Art. 3º O Comitê será composto por até 11 (dez) membros, sendo 7 (sete) titulares e 4 (quatro) suplentes.
+§1º Para compor o Comitê, o servidor deverá obedecer aos seguintes pré-requisitos:
+I - ser efetivo do Quadro Permanente ou exercer cargo de direção ou chefia no Tribunal;
+II - não estar submetido à sindicância e/ou respondendo Processo Administrativo Disciplinar – PAD;
+III - ter, pelo menos, 1 (um) ano de efetivo exercício no Tribunal.
+§2º A composição do Comitê deverá contemplar os seguintes critérios:
+I – o comitê será composto por titulares ocupantes de cargos de direção representantes das seguintes unidades:
+a) Secretaria Administrativa;
+b) Secretaria de Controle Externo;
+c) Secretaria Geral;
+d) Gerência de Tecnologia da Informação;
+e) Diretoria de Planejamento;
+II – os demais membros serão indicados pela Presidência do Tribunal através de ato de constituição, contemplando os nomes dos titulares e dos respectivos suplentes.
+Art. 4º O Comitê Estratégico de Tecnologia de Informação será presidido por membro titular indicado pela Presidência do Tribunal.
+§1º Os membros do Comitê Estratégico de Tecnologia de Informação, em seus afastamentos ou impedimentos legais, serão representados por seus respectivos suplentes.
+§2º O trabalho como membro do Comitê Estratégico de Tecnologia de Informação se dará sem prejuízo das atribuições ordinárias do servidor e não implica, em nenhuma hipótese ou a qualquer título, remuneração complementar.
+Art. 5º O Presidente do Comitê designará um servidor como secretário do Comitê a fim de auxiliá-lo na coordenação, orientação e supervisão das atividades.
+SEÇÃO II
+DAS ATRIBUIÇÕES DOS MEMBROS DO COMITÊ DE TI
+Art. 6º São atribuições do Presidente do Comitê Estratégico de Tecnologia da Informação:
+I - Coordenar, orientar e supervisionar as atividades do Comitê;
+II - Definir datas e pautas para as convocações, convocar, abrir, presidir, suspender, prorrogar e encerrar as reuniões;
+III - Representar o Comitê, nos atos em que for necessário;
+IV - Expedir normas específicas de funcionamento do Comitê Estratégico de Tecnologia da Informação, desde que previamente aprovadas por seus membros e assinar expedientes em nome do Comitê;
+V - Decidir em caso de empate, utilizando o voto de qualidade;
+VI - Indicar membros para grupos de trabalhos, visando realização de estudos, levantamentos, investigações e emissão de pareceres necessários à consecução da finalidade do Comitê, bem como relatores das matérias a serem apreciadas;
+Art. 7º Compete ao secretário do Comitê Estratégico de Tecnologia da Informação:
+I - auxiliar o Presidente na coordenação, orientação e supervisão das atividades do Comitê;
+II - organizar o calendário de reuniões;
+III - elaborar e apresentar as pautas de reunião, bem como outros documentos do Comitê;
+IV - organizar e distribuir documentos correlatos às pautas de reunião;
+V - lavrar atas das reuniões e encaminhá-las ao presidente e demais representantes;
+VI - organizar, manter e disponibilizar os documentos correlatos ao Comitê.
+Art. 8º São atribuições dos membros do Comitê Estratégico de Tecnologia da Informação:
+I – participar das reuniões ordinárias e extraordinárias do Comitê;
+II – analisar, debater e votar os assuntos em discussão;
+III – realizar estudos e pesquisas necessários ao desenvolvimento das atividades do Comitê Estratégico de Tecnologia da Informação;
+IV – propor e requerer informações para auxílio nas tomadas de decisões;
+V – propor inclusão de assuntos nas pautas das reuniões;
+VI – propor convocação de reuniões extraordinárias.
+SEÇÃO III
+DO FUNCIONAMENTO DO COMITÊ DE TI
+Art. 9º O CETI seguirá as seguintes diretrizes de funcionamento:
+I - indicação, pelo presidente do Comitê, de um servidor para secretariar a reunião;
+II - quórum mínimo de 4 (quatro) membros para início da reunião e votação;
+III - vedação de abstenção de voto pelos membros presentes às reuniões do CETI;
+IV - participação nas reuniões do CETI, de todos os membros titulares e suplentes, por meio de convocação pelo seu Presidente, que terá prerrogativa de manifestação de assuntos de seu interesse;
+V - publicidade das reuniões, vedada a manifestação de terceiros durante os assuntos tratados.
+Art. 10. O membro que estiver impedido ou julgar-se em condição de suspeição, em conformidade com a legislação pertinente, deverá informar previamente ao presidente do Comitê, com as devidas justificativas, cabendo a este a devida análise e aprovação.
+Parágrafo único. Em caso de ser declarado o impedimento ou suspeição do membro titular, o respectivo suplente deverá ser convocado para participar da reunião.
+Art. 11. A convocação para reunião do CETI ocorrerá com, no mínimo, 5 (cinco) dias de antecedência, salvo em casos de reuniões extraordinárias para tratar de matérias urgentes.
+Parágrafo único. O Comitê deverá estabelecer planejamento de reuniões ordinárias a serem realizadas periodicamente.
+Art. 12. As reuniões ordinárias serão realizadas periodicamente conforme deliberação do Presidente do Comitê, e extraordinariamente a pedido de qualquer dos membros, mediante convocação de seu Presidente.
+§1º Qualquer membro do Comitê Estratégico de Tecnologia da Informação pode solicitar a inclusão de matéria em pauta, devendo o pedido ser encaminhado ao Presidente, até o dia anterior à reunião do Comitê.
+§2º Para fins de acompanhamento da atuação do Comitê Estratégico de Tecnologia da Informação, as pautas e atas das reuniões serão publicadas no Portal do TCE-GO.
+§3º A critério do Presidente ou da maioria dos membros presentes poderão ser propostas matérias relevantes e urgentes, não expressamente consignadas na pauta da reunião ordinária, cabendo ao proponente relatá-la por escrito ou verbalmente.
+§4º A data das reuniões extraordinárias deverá ser informada aos membros do Comitê Estratégico de Tecnologia da Informação com, no mínimo, 02 (dois) dias de antecedência.
+§5º A pauta de qualquer reunião extraordinária será constituída exclusivamente por matérias que motivaram sua convocação.
+Art. 13. O quórum requerido para a realização das reuniões do Comitê Estratégico de Tecnologia da Informação será de será de 50% (cinquenta por cento) mais um do total de seus membros.
+Art. 14. As decisões do Comitê Estratégico de TI serão tomadas privilegiando-se o consenso, ficando a votação como recurso acessório, na qual o Presidente terá o voto de qualidade, em caso de empate.
+Parágrafo único. Em caso de votação, as decisões do Comitê Estratégico de Tecnologia da Informação serão tomadas por maioria simples, considerando o voto convergente de seus membros titulares e suplentes quando em substituição, observado o quórum mínimo de 04 membros.
+Art. 15. Poderão ser indicados e convidados servidores ou pessoas físicas e jurídicas externas que possam contribuir para esclarecer, bem como subsidiar assuntos constantes da pauta ou desenvolvimento das atividades do Comitê Estratégico de Tecnologia da Informação.
+Parágrafo único. A indicação de que trata o caput deste artigo deverá ser comunicada com a devida antecedência para o Presidente.
+Art. 16. Os trabalhos durante as reuniões terão a seguinte sequência:
+I – instalação:
+a) verificação da presença e de existência de quórum para início dos trabalhos; e
+b) leitura e confirmação de encaminhamento da pauta aos membros, se reunião ordinária, ou da convocação, no caso de reunião extraordinária.
+II – expediente:
+a) apresentação e discussão de matérias a serem discutidas;
+b) debates gerais;
+c) deliberações;
+d) encerramento.
+Art. 17. A cada reunião será elaborada ata constando identificação, síntese das matérias analisadas, resultados das votações, a qual deverá ser encaminhada para cada membro por meio eletrônico a ser objeto de deliberação e aprovação na próxima reunião ordinária.
+Art. 18. As deliberações do Comitê de TI observarão o disposto nos parágrafos 1º e 2º do artigo 1º desta resolução.
+Art. 19. Demandas para provimento de novas soluções de TI deverão ser submetidas ao Comitê Estratégico de Tecnologia da Informação pela unidade demandante acompanhada das seguintes informações:
+I - descrição sumária da solução, com indicação das principais funcionalidades e dos produtos a serem gerados;
+II - justificativa da oportunidade ou necessidade de negócio a ser atendida e benefícios esperados;
+III - indicação das iniciativas do respectivo instrumento de planejamento estratégico com as quais a solução contribuirá;
+IV - estimativa preliminar de custo, esforço e tempo necessários à implantação da solução e, quando for o caso, a disponibilidade orçamentária;
+V - principais riscos identificados, inclusive quanto a custo de oportunidade;
+§1º O Comitê Estratégico de Tecnologia da Informação poderá solicitar estudos adicionais às unidades demandantes sempre que isso for necessário para subsidiar a decisão sobre a viabilidade da solução de TI.
+§2º As demandas serão consolidadas e analisadas semestralmente ou, em caso de urgência, a qualquer momento.
+§3º A aprovação da demanda pelo Comitê Estratégico de Tecnologia da Informação é indispensável para o início das atividades de provimento de novas soluções, salvo os casos que o Comitê entender desnecessário o exame prévio.
+Art. 20. Os casos omissos e as eventuais dúvidas na aplicação da presente resolução serão dirimidos pelo Comitê Estratégico de Tecnologia da Informação em consonância com os interesses estratégicos do Tribunal de Contas do Estado de Goiás.
+CAPÍTULO II
+DAS COMPETÊNCIAS DE TECNOLOGIA DA INFORMAÇÃO
+Art. 21. Ficam estabelecidas as atribuições da Gerência de Tecnologia da Informação, bem como dos seus serviços subordinados, definindo a cada um suas competências, sem prejuízo de outras que lhe forem conferidas:
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+SEÇÃO I
+DAS ATRIBUIÇÕES DA GERÊNCIA DE TECNOLOGIA DA INFORMAÇÃO
+Art. 22. Compete à Gerência de Tecnologia da Informação:
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+I - estabelecer normas, regulamentos, procedimentos e manuais relativos ao funcionamento das atividades e dos processos de trabalho relativos à TI, Segurança de TI e gestão de Riscos;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+II - propor a formulação de estratégias, diretrizes, políticas e iniciativas relativas à gestão e governança de TI alinhadas às estratégias institucionais do Tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+III - coordenar, acompanhar e avaliar as ações de governança de TI que assegurem a padronização de controles e o alinhamento dos objetivos com as políticas, padrões, regras e regulamentos pertinentes;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+IV - auxiliar o Comitê Estratégico de Tecnologia da Informação na elaboração, monitoramento, avaliação e cumprimento de metas dos respectivos instrumentos de planejamento das ações relacionadas à TI;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+V - apoiar o Comitê Estratégico de Tecnologia da Informação na tomada de decisão sobre gestão e governança de TI;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VI - coordenar, supervisionar e promover a integração de unidades subordinadas nas ações de TI do Tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VII - manter o planejamento, acompanhamento e controle dos trabalhos de TI em execução;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VIII - apoiar os processos de contratação para fornecimento de bens e serviços relacionados à TI;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+IX - gerenciar o fornecimento de bens e serviços de tecnologia da informação, realizando o planejamento prévio, fiscalização e acompanhamento regulares dos bens e serviços contratados;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+X - planejar, coordenar e supervisionar programas e projetos relacionados a TI, sejam elas de iniciativa do próprio Tribunal ou originadas no âmbito de parcerias e programas;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XI - auxiliar a Assessoria de Comunicação Social na produção e publicação de conteúdos e documentos no site institucional e seus subportais;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XII - representar institucionalmente o Tribunal em assuntos de Tecnologia da Informação.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XII - apoiar o Tribunal no estabelecimento de contratos e convênios com órgãos e entidades visando ao intercâmbio de dados disponíveis em sistemas de informação e viabilizar sua implementação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XIII - apoiar as unidades da Secretaria de Controle Externo no planejamento e execução de fiscalizações que demandem conhecimentos especializados na área de sistemas e de tecnologia da informação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XIV - planejar, coordenar e supervisionar a renovação e atualização dos recursos de Tecnologia da Informação, mantendo sob sua guarda e controle de licenças, certificados de garantia e manuais;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XV - apoiar e coordenar os procedimentos relacionados à segurança de informação no Tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XVI - apoiar a elaboração e execução do orçamento do Tribunal, quanto as rubricas relativas à tecnologia da informação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XVII - propor ao ILB, plano de capacitação dos servidores de TI alinhado às competências necessárias as suas atividades.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XVIII - assumir as tarefas anteriormente atribuídas à extinta Divisão de Processamento de Dados;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XIX - desenvolver outras atividades inerentes a sua finalidade.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+§1° Cabe ao Gerente de TI, responder pela unidade e baixar ordens de serviço sobre assuntos tratados neste artigo;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+§2° A Gerência de TI apoiará as ações necessárias ao alcance de metas das demais unidades do TCE, observadas as medidas de outras áreas essenciais para o cumprimento de suas atividades.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+SEÇÃO II
+DAS ATRIBUIÇÕES DO SERVIÇO DE SISTEMAS DE INFORMAÇÃO
+Art. 23. Compete ao Serviço de Sistema de Informação:
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+I - prospectar, selecionar, planejar, construir, testar, homologar, implantar, documentar e disponibilizar soluções baseadas em sistemas de informação otimizados para atender necessidades do TCE-GO;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+II - elaborar e manter o Portfólio de Sistemas de TI definindo o objetivo de cada sistema, a área de negócio e o servidor responsável pela comunicação e fornecimento de requisitos do respectivo sistema;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+III - prover a melhoria contínua dos serviços de TI entregues pela unidade, mantendo a comunicação das atividades realizadas aos envolvidos;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+IV - manter atualizados os sistemas informatizados em face de alterações de normas legais ou regulamentares, comunicando de imediato à administração superior do Tribunal sobre mudanças efetivadas ou necessárias;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+V - coordenar e promover a manutenção dos sistemas existentes no Tribunal, bem como o desenvolvimento de novas funcionalidades relativas aos mesmos;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VI - promover capacitações relacionadas às atividades inerentes ao Serviço de Sistema de Informação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VII - planejar e coordenar a execução de atividades e ações de TI necessárias ao funcionamento das equipes que compõem o Serviço de Sistemas de Informação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VIII - apoiar a Gerência de Tecnologia da Informação na elaboração de metodologias, estratégias, diretrizes, políticas, iniciativas e padrões, viabilizando sua implementação por meio de sistemas de informação quando necessário;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+IX - apoiar a Gerência de Tecnologia da Informação no planejamento, gerenciamento e fiscalização de contratações para fornecimento de bens e serviços relacionados ao fornecimento de soluções de TI;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+X - propor contratação de ferramentas e soluções necessárias à atuação do Serviço de Sistema de Informação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XI - manter alinhamento com as iniciativas, padrões e metodologias estabelecidos pela Gerência de Tecnologia da Informação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XII - participar de iniciativas que tratem de assuntos relacionados a sistemas de informação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XIII - fiscalizar o cumprimento dos acordos de níveis de serviços prestados através de contratação relacionados à área de atuação da unidade;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XIV - promover a integração das soluções de TI implementadas nas diversas unidades do Tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XV - planejar e executar a gestão do ciclo de vida, arquitetura e processos de software, a gerência de configuração e controle de mudanças dos sistemas de informação e manter plano de garantia de qualidade de software para os projetos de sistemas;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XVI - gerenciar os modelos e bases de dados, bem como os sistemas gerenciadores de banco de dados dos sistemas de informação, realizando procedimentos de segurança das aplicações e cópias de segurança de bases de dados;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XVII - manter os processos e procedimentos do Serviço de Sistemas de Informação no Portal de Gestão de Conhecimento;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XVIII - manter padrão de interface de portais definido para utilização pelo Tribunal e coordenar a utilização de aplicativos de gestão de conteúdo dos mesmos;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XIX - planejar e implementar controles nos sistemas de informação para garantir a integridade, disponibilidade e confiabilidade da comunicação de dados nas redes;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XX - apoiar a Gerência de TI nas atividades de sustentação dos recursos de datacenter e infraestrutura de redes do tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XXI - desenvolver outras atividades inerentes a sua finalidade.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+§1° O Serviço de Sistemas de informação assistirá a Gerência de TI em assuntos relacionados às suas atribuições e em outras atividades que lhe forem delegadas.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+§2° Cabe ao Chefe da unidade planejar e executar as atividades necessárias ao exercício das competências descritas neste artigo, promovendo a adequada distribuição dos recursos e de tarefas aos servidores subordinados.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+SEÇÃO II
+DAS ATRIBUIÇÕES DO SERVIÇO DE SUPORTE TÉCNICO E INFRAESTRUTURA
+Art. 24. Compete ao Serviço de Suporte Técnico e Infraestrutura:
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+I - planejar, coordenar e controlar a execução das atividades e das ações de TI necessárias à atuação das equipes sob sua responsabilidade;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+II - planejar, organizar, coordenar e supervisionar as ações de assistência e suporte técnico aos usuários internos, bem como a manutenção dos equipamentos de TI pertencentes ao patrimônio do Tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+III - formular estratégias de relacionamento com os usuários e prestadores de serviços no Serviço de Suporte Técnico e Infraestrutura;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+IV - apoiar a Gerência de Tecnologia da Informação no planejamento, gerenciamento e fiscalização de contratações para fornecimento de bens e serviços relacionados ao fornecimento de soluções de TI;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+V - implementar e monitorar a conformidade do uso de recursos de TI com as políticas, normas e regulamentos existentes;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VI - fornecer suporte tecnológico e de audiovisual em eventos internos e externos promovidos pelo TCE;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VII - prover suporte técnico à infraestrutura de TI e gravação de som e imagem na realização de Sessões Plenárias e demais solenidades;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+VIII - gerenciar e promover o acesso de usuários internos e externos aos sistemas, aplicativos, equipamentos e demais serviços relacionados à tecnologia da informação oferecidos pelo Tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+IX - prover assistência técnica e demais procedimentos necessários à continuidade do funcionamento da infraestrutura tecnológica do Tribunal;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+X - disseminar e incentivar o uso de soluções de tecnologia da informação adotadas pelo Tribunal, prestando orientação e suporte aos usuários na instalação, configuração e uso de computadores, sistemas, aplicativos e demais serviços a ela relacionados;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XI - realizar capacitações e treinamentos relacionados às atividades inerentes a sua área de atuação;
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+XII - desenvolver outras atividades inerentes a sua finalidade.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+§1° O Serviço de Suporte Técnico e Infraestrutura assistirá a Gerência de TI em assuntos relacionados às suas atribuições e em outras atividades que lhe forem delegadas.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+§2° Cabe ao Chefe da unidade planejar e executar as atividades necessárias ao exercício das competências descritas neste artigo, promovendo a adequada distribuição dos recursos e de tarefas aos servidores subordinados.
+-Revogado pela Resolução Administrativa nº 19, de 6-10-2022
+, 
+DEC 11-10-2022
+CAPÍTULO III
+DAS DISPOSIÇÕES FINAIS
+Art. 25. Esta Resolução altera as disposições da 
+Resolução Normativa nº 009, de 22 de novembro de 2012
+, com a redação dada pela 
+Resolução Normativa 7/2015
+, promovendo adequações no âmbito da Gerência de Tecnologia da Informação.
+Art. 26. Ficam revogadas a 
+Resolução Normativa Nº 006/2001
+ e outras disposições em contrário.
+Art. 27. Fica a Presidência do Tribunal autorizada a expedir os atos necessários à complementar esta Resolução.
+Art. 28. Esta Resolução entra em vigor na data de sua publicação.
+À Secretaria-Geral para providenciar a publicação.
+Presentes os Conselheiros: Kennedy de Sousa Trindade (Presidente), Saulo Marques Mesquita(Relator), Sebastião Joaquim Pereira Neto Tejota, Edson José Ferrari e Celmar Rech.
+Representante do Ministério Público de Contas: Eduardo Luz Gonçalves.
+Sessão Plenária Extraordinária Administrativa Nº 19/2016.
+Resolução aprovada em 23/11/2016.
+Este texto não substitui o publicado no Diário Eletrônico de Contas - Ano - V - Número 182, em 25 de novembro de 2016.

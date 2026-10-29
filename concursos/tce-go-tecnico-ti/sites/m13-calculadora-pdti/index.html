@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><link rel="icon" href="data:,"><meta name="robots" content="noindex">
+<title>Calculadora didática de priorização do PDTI · TCE-GO 2026 · Técnico de Controle Externo, TI</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#app">Ir para o conteúdo</a>
+<div class="wrap"><div class="topbar"><div class="crumbs"><span class="dot"></span><strong style="color:var(--ink)">TCE-GO 2026 · Técnico de Controle Externo, TI</strong><span class="sep">/</span><a href="../">Atividades</a><span class="sep">/</span><span>Módulo 13</span></div><a href="" target="_blank" rel="noopener" id="full" style="color:var(--muted)">Abrir em tela cheia ↗</a></div>
+<p class="kicker">Módulo 13 · Legislação Aplicada à TI</p><h1>Calculadora didática de priorização do PDTI</h1><p class="lead">Compare duas demandas pelos 7 critérios da Tabela 1 do PDTI 2025-2026 do TCE-GO. Modelo didático: o plano não traz a fórmula por escrito.</p>
+<script src="pdti.js"></script>
+<style>.rg-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin:0 0 14px}.rg-ctl label{display:block;font-size:13px;color:var(--muted);margin:8px 0 3px}.rg-ctl select,.rg-ctl input{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line,#ccd);border-radius:8px;background:transparent;color:inherit}.rg-out{font-size:18px;line-height:1.6}</style>
+<div class="rg-ctl" id="cols"></div><div class="card"><p class="kicker">Resultado</p><p class="rg-out" id="out" aria-live="polite"></p></div>
+<div class="card" style="margin-top:18px"><p class="kicker">Limites desta calculadora</p><p class="muted" style="font-size:14px">É um modelo didático. O PDTI 2025-2026 define os 7 critérios e seus valores na Tabela 1 e lista as iniciativas por ordem de prioridade, mas não traz, no texto lido, a fórmula que transforma os critérios em nota. A soma usada aqui é compatível com as notas publicadas (laboratório L6), o que não prova que seja a regra oficial; o teste é fraco porque o CP01 varia de 1 a 50. CP05, CP06 e CP07 pontuam de forma inversa: quanto maior a complexidade ou a escala, menor a pontuação. Não use para decidir prioridade real.</p></div>
+<script>(function(){var $=function(i){return document.getElementById(i)};
+var CRIT=[['cp02','CP02 Impacto da não realização ou da descontinuidade',['Alto (10)','Médio (5)','Baixo (2,5)']],['cp03','CP03 Público-alvo',['Todas as áreas (10)','2 a 3 áreas (5)','Uma área (2,5)']],['cp04','CP04 Maturidade dos requisitos de negócio',['Alta (10)','Média (5)','Baixa (2,5)']],['cp05','CP05 Complexidade na coleta de requisitos (inverso)',['Alta (2,5)','Média (5)','Baixa (10)']],['cp06','CP06 Complexidade técnica (inverso)',['Alta (2,5)','Média (5)','Baixa (10)']],['cp07','CP07 Escala do projeto em homem-dia (inverso)',['Alta (2,5)','Média (5)','Baixa (10)']]];
+var V=['alta','media','baixa'],DEF={A:{cp01:40,cp02:'alta',cp03:'alta',cp04:'media',cp05:'media',cp06:'baixa',cp07:'media'},B:{cp01:20,cp02:'media',cp03:'baixa',cp04:'alta',cp05:'baixa',cp06:'alta',cp07:'alta'}};
+var h='';['A','B'].forEach(function(k){h+='<div class="card"><p class="kicker">Demanda '+k+'</p><label for="'+k+'cp01">CP01 Alinhamento às prioridades da gestão (1 a 50)</label><input type="number" id="'+k+'cp01" min="1" max="50" value="'+DEF[k].cp01+'">';
+CRIT.forEach(function(c){h+='<label for="'+k+c[0]+'">'+c[1]+'</label><select id="'+k+c[0]+'">'+c[2].map(function(t,i){return '<option value="'+V[i]+'"'+(V[i]===DEF[k][c[0]]?' selected':'')+'>'+t+'</option>'}).join('')+'</select>'});h+='</div>'});
+$('cols').innerHTML=h;
+function lê(k){var n={};CRIT.forEach(function(c){n[c[0]]=$(k+c[0]).value});return pontos($(k+'cp01').value,n)}
+function fmt(x){return String(x).replace('.',',')}
+function go(){var a=lê('A'),b=lê('B');var q=a.total===b.total?'As duas empatam.':(a.total>b.total?'A demanda A tem prioridade maior.':'A demanda B tem prioridade maior.');
+$('out').innerHTML='Demanda A: <b>'+fmt(a.total)+'</b> pontos (CP01 '+fmt(a.cp01)+' + '+[a.cp02,a.cp03,a.cp04,a.cp05,a.cp06,a.cp07].map(fmt).join(' + ')+').<br>Demanda B: <b>'+fmt(b.total)+'</b> pontos (CP01 '+fmt(b.cp01)+' + '+[b.cp02,b.cp03,b.cp04,b.cp05,b.cp06,b.cp07].map(fmt).join(' + ')+').<br>'+q+' Teórico: mínimo 16, máximo 110.'}
+document.querySelectorAll('#cols input,#cols select').forEach(function(e){e.addEventListener('input',go)});go()})();</script>
+<div class="foot"><span>Módulo 13</span><span>Tudo roda no seu navegador. Seu progresso fica salvo só aqui, sem rastreamento.</span></div></div>
+<script src="../assets/app.js"></script><script type="application/json" id="data">{"id": "m13-calculadora-pdti"}</script>
+<script>(function(){var f=document.getElementById('full');if(f){f.href=location.href.split('?')[0]}if(window.top===window.self&&f)f.style.display='none'})();</script>
+</body></html>

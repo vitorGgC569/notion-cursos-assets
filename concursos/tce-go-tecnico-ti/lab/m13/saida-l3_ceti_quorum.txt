@@ -1,0 +1,21 @@
+$ python l3_ceti_quorum.py
+rn13a3 => Art. 3º O Comitê será composto por até 11 (dez) membros, sendo 7 (sete) titulares e 4 (quatro) suplentes.
+
+rn13a9ii => II - quórum mínimo de 4 (quatro) membros para início da reunião e votação;
+
+rn13a11 => Art. 11. A convocação para reunião do CETI ocorrerá com, no mínimo, 5 (cinco) dias de antecedência, salvo em casos de reuniões extraordinárias para tratar de matérias urgentes.
+
+rn13a13 => Art. 13. O quórum requerido para a realização das reuniões do Comitê Estratégico de Tecnologia da Informação será de será de 50% (cinquenta por cento) mais um do total de seus membros.
+
+rn13a19p3 => §3º A aprovação da demanda pelo Comitê Estratégico de Tecnologia da Informação é indispensável para o início das atividades de provimento de novas soluções, salvo os casos que o Comitê entender desnecessário o exame prévio.
+
+Art. 12. As reuniões ordinárias serão realizadas periodicamente conforme deliberação do Presidente do Comitê, e extraordinariamente a pedido de qualquer dos membros, mediante convocação de seu Presidente. §1º Qualquer membro do Comitê Estratégico de Tecnologia da Informação pode solicitar a inclusão de matéria em pauta, devendo o pedido ser encaminhado ao Presidente, até o dia anterior à reunião do Comitê. §2º Para fins de acompanhamento da atuação do Comitê Estratégico de Tecnologia da Informação, as pautas e atas
+
+Art. 14. As decisões do Comitê Estratégico de TI serão tomadas privilegiando-se o consenso, ficando a votação como recurso acessório, na qual o Presidente terá o voto de qualidade, em caso de empate. Parágrafo único. Em caso de votação, as decisões do Comitê Estratégico de Tecnologia da Informação serão tomadas por maioria simples, considerando o voto convergente de seus membros titulares e suplentes quando em substituição, observado o quórum mínimo de 04 membros. Art. 15. Poderão ser indicados e convidados servido
+
+composicao no art. 3: ate 11 (dez) membros; titulares=7, suplentes=4, soma=11
+regra de 50 por cento mais um sobre 7 titulares: 3,5 + 1 = 4,5, logo 5 membros
+regra de 50 por cento mais um sobre 11 membros: 5,5 + 1 = 6,5, logo 7 membros
+quorum minimo literal do art. 9, II e do art. 14, p. unico: 4 membros
+Conclusao: os numeros nao fecham entre si (4 e menor que 50 por cento mais um de 7 ou de 11).
+Na prova, responda pelo artigo que a questao pede; o texto vigente e o do link oficial (nao testado depois de 28/10/2026).

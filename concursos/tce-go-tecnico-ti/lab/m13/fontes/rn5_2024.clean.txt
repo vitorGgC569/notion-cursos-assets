@@ -1,0 +1,199 @@
+RESOLUÇÃO NORMATIVA Nº 5/2024
+Texto Compilado
+TRIBUNAL DE CONTAS DO ESTADO DE GOIÁS
+RESOLUÇÃO NORMATIVA Nº 5/2024
+O TRIBUNAL DE CONTAS DO ESTADO DE GOIÁS, no uso de suas competências, nos termos do § 6º, do art. 28 da 
+Constituição Estadual
+, do art. 2º da 
+Lei nº 16.168, de 11 de dezembro de 2007
+ (Lei Orgânica do Tribunal de Contas do Estado de Goiás) e do art. 3º do 
+Regimento Interno do Tribunal de Contas do Estado de Goiás
+, aprovado pela 
+Resolução nº 22, de 4 de setembro de 2008
+ e considerando o que consta do processo nº 
+202300047003045
+/019-01;
+Considerando os princípios constitucionais da inviolabilidade da intimidade, da vida privada, da honra e da imagem das pessoas, do direito do Acesso à Informação e da proteção de dados pessoais, previstos nos incisos X, XXXIII, e LXXIX, do art. 5° da 
+Constituição Federal
+;
+Considerando o disposto na 
+Lei Federal nº 12.527, de 18 de novembro de 2011 (Lei de Acesso à Informação – LAI)
+;
+Considerando o que dispõe a 
+Lei Federal nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados Pessoais- LGPD)
+ que dispõe sobre o tratamento de dados pessoais, especialmente no inciso II, do art. 7º, na alínea “a”, do inciso II, do art. 11, que estabelece que o tratamento de dados pessoais, e dados pessoais sensíveis, pelo Poder Público poderá ser realizado “para o cumprimento de obrigação legal ou regulatória pelo controlador”;
+Considerando o que dispõe o art. 23 da 
+Lei Federal nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados Pessoais- LGPD)
+, segundo o qual o tratamento de dados pessoais no setor público deverá ser realizado “com o objetivo de executar as competências legais ou cumprir as atribuições legais do serviço público”, observando-se o interesse público e o atendimento da finalidade pública do controlador;
+Considerando o Guia Orientativo para Definições dos Agentes de Tratamento de Dados Pessoais e do Encarregado, elaborado pela Autoridade Nacional de Proteção de Dados (ANPD) e os Guias de Elaboração de Inventário de Dados Pessoais e de Boas Práticas da Lei Geral de Proteção de Dados da Administração Pública Federal;
+Considerando o julgamento pelo Supremo Tribunal Federal do Recurso Extraordinário 1055941/SP e a aprovação do 
+Tema 990 de Repercussão Geral
+, bem como o 
+referendo na Medida Cautelar na Ação Direta de Inconstitucionalidade 6.387/DF
+;
+Considerando o disposto na 
+Lei Federal nº 14.534, de 11 de janeiro de 2023
+, que adota número único para os documentos que especifica e para estabelecer o Cadastro de Pessoas Físicas (CPF) como número suficiente para identificação do cidadão nos bancos de dados de serviços públicos;
+Considerando que o Tribunal de Contas do Estado de Goiás, no âmbito do Estado de Goiás e de suas competências, exerce funções e obrigações típicas de controlador de dados pessoais, atuando como operador dos dados pessoais, diretamente ou mediante contratação de pessoa jurídica, nos termos dos incisos VI, VII e IX, do art. 5º da 
+Lei Federal nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados Pessoais LGPD);
+Considerando a 
+Resolução Administrativa nº 11/2022, de 28 de abril de 2022
+, que dispõe sobre as diretrizes e normas gerais para Gestão da Segurança da Informação do Tribunal de Contas do Estado de Goiás;
+RESOLVE
+Art. 1º Fica regulamentada, nos termos do presente ato normativo a aplicação da 
+Lei Federal nº 13.709, de 14 de agosto de 2018 – (Lei Geral de Proteção de Dados Pessoais-LGPD)
+, visando o tratamento das informações relativas aos dados pessoais dos jurisdicionados e demais interessados nos processos, nas respectivas peças e nas publicações realizadas, no âmbito do Tribunal de Contas do Estado de Goiás (TCE-GO).
+CAPÍTULO I
+DISPOSIÇÕES GERAIS
+Art. 2º O tratamento de dados pessoais no âmbito do Tribunal de Contas do Estado de Goiás (TCE-GO), por conselheiros, procuradores de contas, auditores, servidores, estagiários, colaboradores e por unidades técnicas e administrativas observará as disposições deste ato normativo, bem como as disposições legais vigentes, especialmente as trazidas na 
+Lei Federal nº 12.527, de 18 de novembro de 2011 (Lei de Acesso à Informação – LAI)
+ e na 
+Lei Federal nº 13.709, de 14 de agosto de 2018 – (Lei Geral de Proteção de Dados Pessoais- LGPD)
+.
+Art. 3º A observância à 
+Lei Federal 13.709/2018(LGPD)
+ se dará sem prejuízo dos procedimentos de acesso à informação previstos no inciso XXXIII do art. 5º, no inciso II do § 3º do art. 37 e no § 2º do art. 216 da 
+Constituição Federal
+ e regulamentados por legislação específica.
+Art. 4º Para fins do disposto na 
+Lei Federal 13.709/2018(LGPD)
+ e neste ato normativo, considera-se:
+I - dado pessoal: informação relacionada a pessoa natural identificada ou identificável;
+II - dado pessoal sensível: dado pessoal sobre origem racial ou étnica, convicção religiosa, opinião política, filiação a sindicato ou a organização de caráter religioso, filosófico ou político, dado referente à saúde ou à vida sexual, dado genético ou biométrico, quando vinculado a uma pessoa natural;
+III - dado anonimizado: dado relativo a titular que não possa ser identificado, considerando a utilização de meios técnicos razoáveis e disponíveis na ocasião de seu tratamento;
+IV - banco de dados: conjunto estruturado de dados pessoais, estabelecido em um ou em vários locais, em suporte eletrônico ou físico;
+V - titular: pessoa natural a quem se referem os dados pessoais que são objeto de tratamento;
+VI - controlador: pessoa natural ou jurídica, de direito público ou privado, a quem competem as decisões referentes ao tratamento de dados pessoais;
+VII - encarregado: servidor do TCE-GO, formalmente designado pelo presidente, para atuar como canal de comunicação entre o Tribunal, os titulares dos dados e a Autoridade Nacional de Proteção de Dados (ANPD);
+VIII - tratamento: toda operação realizada com dados pessoais, como as que se referem a coleta, produção, recepção, classificação, utilização, acesso, reprodução, transmissão, distribuição, processamento, arquivamento, armazenamento, eliminação, avaliação ou controle da informação, modificação, comunicação, transferência, difusão ou extração;
+IX - anonimização: utilização de meios técnicos razoáveis e disponíveis no momento do tratamento, por meio dos quais um dado perde a possibilidade de associação, direta ou indireta, a um indivíduo;
+X - pseudonimização: tratamento por meio do qual um dado perde a possibilidade de associação, direta ou indireta, a um indivíduo, senão pelo uso de informação adicional mantida separadamente pelo TCE-GO em ambiente controlado e seguro;
+XI - consentimento: manifestação livre, informada e inequívoca pela qual o titular concorda com o tratamento de seus dados pessoais para uma finalidade determinada;
+XII - bloqueio: suspensão temporária de qualquer operação de tratamento, mediante guarda do dado pessoal ou do banco de dados;
+XIII - eliminação: exclusão de dado ou de conjunto de dados armazenados em banco de dados, independentemente do procedimento empregado;
+XIV - transferência internacional de dados: transferência de dados pessoais para país estrangeiro ou organismo internacional do qual o país seja membro;
+XV - uso compartilhado de dados: comunicação, difusão, transferência internacional, interconexão de dados pessoais ou tratamento compartilhado de bancos de dados pessoais por órgãos e entidades públicos no cumprimento de suas competências legais, ou entre esses e entes privados, reciprocamente, com autorização específica, para uma ou mais modalidades de tratamento permitidas por esses entes públicos, ou entre entes privados;
+XVI - Relatório de Impacto à Proteção de Dados Pessoais (RIPD): documentação do TCE-GO que contém a descrição dos processos de tratamento de dados pessoais que podem gerar riscos às liberdades civis e aos direitos fundamentais, bem como medidas, salvaguardas e mecanismos de mitigação de risco;
+XVII - Autoridade Nacional de Proteção de Dados (ANPD): órgão da administração pública responsável por zelar, implementar e fiscalizar o cumprimento da 
+Lei Federal 13.709/2018 (LGPD)
+ em todo o território nacional, e
+XVIII - colaborador: prestador de serviço terceirizado ou qualquer pessoa física ou jurídica com vínculo transitório com o TCE-GO e que tenha acesso, de forma autorizada, a seus bancos de dados ou às suas dependências.
+CAPÍTULO II
+TRATAMENTO DE DADOS PESSOAIS PELO TCE-GO
+Art. 5º O tratamento de dados pessoais, no âmbito do TCE-GO, será realizado para o atendimento de sua finalidade pública, na persecução do interesse público e no exercício do controle externo e das competências constitucionais, legais e regulamentares, bem como das suas atribuições administrativas.
+Art. 6º O tratamento de dados pessoais, mesmo quando sujeitos a acesso público, deverá observar a boa-fé e os princípios estabelecidos no art. 6º da 
+Lei Federal 13.709/2018 (LGPD)
+, devendo ocorrer em estrita observância às hipóteses legais autorizativas, não se justificando exclusivamente pela mera disponibilidade de banco de dados previamente estabelecido.
+Art. 7º O tratamento de dados pessoais sensíveis pelo TCE-GO observará, no que couber, o disposto no art. 11 da 
+Lei Federal 13.709/2018 (LGPD)
+.
+Art. 8º O tratamento de dados pessoais de crianças e de adolescentes, nas hipóteses reguladas por esta resolução, além de observar o disposto no artigo anterior, deve visar ao melhor interesse do menor, nos termos do art. 14 da 
+Lei Federal 13.709/2018(LGPD)
+ e da legislação pertinente.
+Art. 9º Observado o disposto nos arts.12 e 13 da 
+Lei Federal 13.709/2018 (LGPD)
+, o TCE-GO poderá adotar padrões e técnicas definidas pela Autoridade Nacional de Proteção de Dados (ANPD), processo de anonimização de dados pessoais ou, quando reversível ou passível de reversão, de pseudonimização, sempre que a medida se mostrar recomendável diante da natureza e dos objetivos do tratamento de dados ou, ainda, em ação de controle externo, quando não inviabilizar o seu resultado e não prejudicar a identificação de eventuais responsáveis e o exercício do contraditório e da ampla defesa pelas partes e a instrução processual.
+§1º Para fins do disposto no caput deste artigo, o número de inscrição no Cadastro de Pessoas Físicas (CPF) é considerado dado imprescindível ao exercício da competência do TCE-GO, estando apto a permitir a identificação inequívoca do responsável sujeito à jurisdição deste Tribunal.
+§2º Além das bases de dados, o número de inscrição no CPF deve constar, quando couber:
+I- dos Acórdãos expedidos pelo TCE-GO;
+II- dos processos, peças e instruções nos autos processuais, inclusive atos de pessoal sujeitos a registro;
+III - da lista de responsáveis com contas julgadas irregulares de que trata a alínea “g” do inciso I, do art. 1º, da 
+Lei Complementar Federal nº 64, de 18 de maio de 1990;
+IV - da lista de inabilitados para o exercício de cargo em comissão ou função de confiança no âmbito da administração pública estadual, de que trata o art. 114, da 
+Lei 16.168, de 11 de dezembro de 2007
+ (LOTCE); e
+V - dos demais documentos produzidos pelo TCE-GO.
+§ 3º O registro do CPF nas hipóteses previstas neste artigo deve ser realizado na sua integralidade, sem qualquer técnica de mascaramento ou de ocultação.
+Art. 10. Os dados pessoais obtidos pelo TCE-GO exclusivamente mediante consentimento do titular não poderão ser objeto de comunicação ou compartilhamento, exceto quando houver consentimento específico do titular para esse fim, ressalvadas as hipóteses de dispensa do consentimento previstas na 
+Lei Federal 13.709/2018 (LGPD).
+Art.11. O compartilhamento de dados pessoais a partir de bases próprias do TCE-GO se dará nas hipóteses previstas no art. 26 da 
+Lei Federal 13.709/2018 (LGPD)
+ e fica condicionado à declaração do destinatário dos dados de que o tratamento pretendido atende aos princípios de proteção de dados elencados no art. 6º da 
+Lei Federal 13.709/2018 (LGPD)
+, e depende da prévia celebração de acordo que contenha cláusula:
+I – que demonstre a legitimidade do interessado para tratar os dados, bem como a necessidade, a adequação e a finalidade lícita e específica do tratamento; e
+II – contendo a obrigação do interessado de adotar medidas de salvaguarda das informações, mesmo após o término do tratamento.
+Parágrafo único. O compartilhamento de dados pessoais pelo TCE-GO deve ser feito unicamente por meio de comunicações formais, com certificação do destinatário e estabelecimento de instrumentos efetivos de apuração e correção de eventuais desvios.
+ Art. 12. É vedada a transferência a entidades privadas de dados pessoais pelo TCEGO, exceto:
+I - em casos de execução descentralizada de atividade pública que exija a transferência, exclusivamente para esse fim específico e determinado, observado o disposto na 
+Lei Federal nº 12.527/2011 (Lei de Acesso à Informação)
+;
+II - nos casos em que os dados forem acessíveis publicamente, observadas as disposições da 
+Lei Federal 13.709/2018 (LGPD)
+ e deste normativo;
+III - quando houver previsão legal ou a transferência for respaldada em contratos, convênios ou instrumentos congêneres, observada, em qualquer caso, o disposto no art. 6º deste normativo; ou
+IV - na hipótese da transferência dos dados objetivar exclusivamente a prevenção de fraudes e irregularidades, ou proteger e resguardar a segurança e a integridade do titular dos dados, desde que vedado o tratamento para outras finalidades.
+Art. 13. Os dados pessoais serão conservados pelo TCE-GO mesmo após o término do tratamento, constituindo arquivo público, nos termos da 
+Lei Federal nº 8.159 de 8 de janeiro de 1991 
+e da regulamentação em vigor.
+§ 1º Os dados pessoais mencionados no caput deste artigo serão eliminados de acordo com a classificação arquivística de cada documento, definida na política interna de gestão documental, obedecendo-se aos prazos da tabela de temporalidade de documentos, conforme regulado em ato normativo próprio do TCE-GO.
+§ 2º Não se aplica o disposto neste artigo quando houver:
+I – comunicação do titular dos dados ou de seu responsável legal, no exercício de direito de revogação do consentimento, quando o tratamento tiver decorrido exclusivamente de seu consentimento prévio; e
+II – determinação da Autoridade Nacional de Proteção de Dados (ANPD), se identificada violação pelo TCE-GO de dispositivo da 
+Lei Federal 13.709/2018 (LGPD)
+.
+Art. 14. O TCE-GO adotará medidas para garantir a transparência do tratamento de dados pessoais baseado em seu legítimo interesse, inclusive por meio de Relatório de Impacto à Proteção de Dados Pessoais (RIPD), quando solicitado pela Autoridade Nacional de Proteção de Dados (ANPD).
+Art. 15. A avaliação do tratamento de dados no âmbito do TCE-GO ocorrerá de forma rotineira, e será realizada por membros, procuradores de contas, auditores, gestores das unidades responsáveis e servidores, com o objetivo de verificar se os dados utilizados são estritamente necessários à consecução de finalidade legalmente autorizada.
+Parágrafo único. Cabe aos membros, aos procuradores de contas, auditores, aos gestores das unidades responsáveis e aos servidores, darem ciência ao encarregado de tratamento de dados quando for necessário solicitar a adoção de providências, ou ainda, quando solicitado, prestarem informações relativas ao tratamento de dados pessoais no âmbito das áreas de suas respectivas competências.
+CAPÍTULO III
+ENCARREGADO PELO TRATAMENTO DE DADOS PESSOAIS NO TCE-GO
+Art. 16. O Presidente do TCE-GO indicará o encarregado pelo tratamento de dados pessoais.
+§1º A identidade e as informações de contato do encarregado de tratamento de dados serão disponibilizadas, permanentemente, no sítio eletrônico do Tribunal de Contas do Estado de Goiás.
+§ 2º As atividades do encarregado consistem, conforme art. 41 da 
+Lei Federal 13.709/2018 (LGPD)
+ e 
+Resolução Administrativa nº 11, de 28 de abril de 2022
+, em:
+I - aceitar reclamações e comunicações dos titulares, prestar esclarecimentos e adotar providências;
+II - receber comunicações da autoridade nacional e adotar providências;
+III - orientar os funcionários e os contratados da entidade a respeito das práticas a serem tomadas em relação à proteção de dados pessoais, e
+IV - executar as demais atribuições determinadas pelo controlador ou estabelecidas em normas complementares.
+§3º Não poderá atuar como encarregado o servidor:
+I - lotado em unidade responsável pela gestão financeira, de pessoas ou de tecnologia da informação ou em outra da qual possa resultar conflito de interesses, e
+II - que detenha competência para decidir sobre a finalidade e os meios de tratamento de dados pessoais.
+CAPÍTULO IV
+DIREITOS DO TITULAR PERANTE O TCE-GO
+Art. 17. As informações sobre o tratamento de dados pessoais pelo TCE-GO deverão ser disponibilizadas em seu sítio eletrônico e na Carta de Serviços Públicos, de forma clara e adequada, contendo, em especial, indicações sobre:
+I - a finalidade específica do tratamento;
+II - a forma e a duração do tratamento, ressalvados os dados sujeitos a sigilo, nos termos da legislação aplicável;
+III - as informações de contato;
+IV - as informações sobre o uso compartilhado de dados e a indicação das entidades públicas e privadas com as quais o TCE-GO realiza uso compartilhado de dados;
+V - a responsabilidade administrativa disciplinar e a legislação a que estão sujeitos os agentes que realizam o tratamento de dados pessoais, no âmbito do TCE-GO, em caso de inobservância aos ditames legais;
+VI - o direito de acesso facilitado pelo titular, com menção explícita ao art. 18 da 
+Lei Federal 13.709/2018 (LGPD);
+ e
+VII - a revogação do consentimento, nos termos do § 5º do art. 8º da 
+Lei Federal 13.709/2018 (LGPD)
+.
+Art. 18. Os direitos de que trata o art. 18 da Lei 
+Federal 13.709/2018 (LGPD)
+ serão exercidos, no que couber, mediante requerimento expresso do titular, devidamente identificado, ou de representante regularmente constituído e habilitado, perante os canais oficiais de atendimento da Ouvidoria do TCE-GO, que deverá manter mecanismos que garantam seu atendimento, e onde serão processados como solicitação, na forma de regulamento específico.
+§ 1º A confirmação de existência ou o acesso a dados pessoais serão providenciados mediante requisição do titular:
+I- em formato simplificado de forma imediata; ou
+II- por meio de declaração clara e completa, no prazo de até 15 (quinze) dias, contado da data do requerimento do titular.
+§ 2º Em caso de requisição de exclusão, quando couber, será respeitado o prazo de armazenamento mínimo de informações determinado pela legislação.
+§3º Será liminarmente indeferida a solicitação de qualquer dos direitos previstos no art. 18 da
+ Lei Federal 13.709/2018 (LGPD)
+, quando feita de maneira anônima ou quando não atender ao disposto no §1º, deste artigo.
+Art. 19. Quando o TCE-GO atuar como mero custodiante de dados pessoais que estejam contidos em bases de dados custodiadas, os direitos previstos na 
+Lei Federal 13.709/2018 (LGPD
+) devem ser exercidos pelo titular diretamente perante a organização pública ou privada responsável pelas informações.
+Parágrafo único. Para fins do disposto no caput deste artigo, o TCE-GO manterá relação atualizada no seu sítio eletrônico com indicação precisa das bases de dados custodiadas e da respectiva organização responsável pela informação, perante às quais o titular dos dados pessoais poderá exercer os direitos de que trata o art. 18 da 
+Lei Federal 13.709/2018 (LGPD)
+.
+Art. 20. Os direitos de que trata este Capítulo não excluem outros previstos em legislação específica e em ato normativo do TCE-GO.
+CAPÍTULO V
+DISPOSIÇÕES FINAIS
+Art. 21. O descumprimento do disposto na 
+Lei Federal 13.709/2018 (LGPD)
+ e neste ato normativo, assim como a violação de normas jurídicas ou técnicas pelos agentes relacionados no art. 2º deste normativo, poderá configurar a prática de infração administrativa, ética ou disciplinar, e ensejar a aplicação de penalidades, na forma da legislação pertinente, sem prejuízo da apuração de eventual responsabilidade civil ou criminal, nas esferas competentes.
+Art. 22. O TCE-GO utilizará o “Guia Orientativo para Tratamento de Dados Pessoais pelo Poder Público”, editado pela ANPD, como referencial norteador das ações pertinentes à observância da LGPD.
+Art. 23. Esta Resolução entra em vigor na data de sua publicação.
+Presentes os Conselheiros:
+Saulo Marques Mesquita (Presidente), Kennedy de Sousa Trindade (Relator), Sebastião Joaquim Pereira Neto Tejota, Edson José Ferrari, Celmar Rech e Helder Valin Barbosa.
+Representante do Ministério Público de Contas: Carlos Gustavo Silva Rodrigues.
+Sessão Plenária Extraordinária Administrativa Nº 8/2024 (Híbrida).
+Resolução aprovada em: 15/05/2024.
+Este texto não substitui o publicado no Diário Eletrônico de Contas - Ano XIII - Número 91, em 21 de maio de 2024,
+ com errata no
+Diário Eletrônico de Contas - Ano XIII - Número 95, em 28 de maio de 2024.

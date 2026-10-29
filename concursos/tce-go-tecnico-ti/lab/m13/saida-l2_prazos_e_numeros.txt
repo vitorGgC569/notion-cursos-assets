@@ -1,0 +1,43 @@
+$ python l2_prazos_e_numeros.py
+
+LGPD: 7 ocorrencias de "N (extenso) unidade"
+  art. 19    15 (quinze) dias OK
+  art. 52    6 (seis) meses OK
+  art. 52    6 (seis) meses OK
+  art. 55-D  4 (quatro) anos OK
+  art. 55-D  6 (seis) anos OK
+  art. 58-A  2 (dois) anos OK
+  art. 65    24 (vinte e quatro) meses OK
+
+Marco Civil: 4 ocorrencias de "N (extenso) unidade"
+  art. 13    1 (um) ano OK
+  art. 13    60 (sessenta) dias OK
+  art. 15    6 (seis) meses OK
+  art. 32    60 (sessenta) dias OK
+
+MP 2.200-2: 0 ocorrencias de "N (extenso) unidade"
+
+Lei 14.063: 0 ocorrencias de "N (extenso) unidade"
+
+RN 13/2016: 5 ocorrencias de "N (extenso) unidade"
+  art. 3     11 (dez) membros DIVERGE
+  art. 3     1 (um) ano OK
+  art. 9     4 (quatro) membros OK
+  art. 11    5 (cinco) dias OK
+  art. 12    02 (dois) dias OK
+
+RA 14/2024: 1 ocorrencias de "N (extenso) unidade"
+  art. 16    7 (sete) dias úteis OK
+
+RA 17/2024: 0 ocorrencias de "N (extenso) unidade"
+
+RA 14/2025: 1 ocorrencias de "N (extenso) unidade"
+  art. 99    8 (oito) anos OK
+
+RN 5/2024: 1 ocorrencias de "N (extenso) unidade"
+  art. 18    15 (quinze) dias OK
+
+LC 205/2025: 0 ocorrencias de "N (extenso) unidade"
+
+Total de ocorrencias: 19
+Divergencias entre numero e extenso: [('RN 13/2016', '3', '11', 'dez', 'membros')]
