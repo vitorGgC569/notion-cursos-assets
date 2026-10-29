@@ -1,0 +1,54 @@
+$ python3 l2_provas_reais.py
+== Texto-base BYOD (TJ-CE 2022, caderno C03 tipo 001, p. 4 do PDF)
+OK    paragrafo 1 (333 caracteres) consta na prova
+OK    paragrafo 2 (331 caracteres) consta na prova
+OK    paragrafo 3 (279 caracteres) consta na prova
+OK    paragrafo 4 (234 caracteres) consta na prova
+OK    paragrafo 5 (222 caracteres) consta na prova
+== Texto-base UAC (AL-SP 2010, caderno X22 tipo 001, p. 7 do PDF, coluna esquerda)
+OK    trecho 1 (584 caracteres) consta na prova
+OK    trecho 2 (243 caracteres) consta na prova
+OK    trecho 3 (290 caracteres) consta na prova
+OK    trecho 4 (121 caracteres) consta na prova
+OK    trecho 5 (253 caracteres) consta na prova
+OK    trecho 6 (40 caracteres) consta na prova
+OK    trecho 7 (10 caracteres) consta na prova
+OK    trecho 8 (191 caracteres) consta na prova
+OK    lacunas [PARTICLE], [VERB] e [TO USE] constam na prova
+OK    lacuna da questao 33 aparece como "X , Redmond" (quadrado do PDF) e foi escrita [X]
+== Enunciados e alternativas
+OK    questao 11: as 5 alternativas constam na prova
+OK    questao 11: enunciado consta na prova
+OK    questao 12: as 5 alternativas constam na prova
+OK    questao 12: enunciado consta na prova (a extracao OCR do PDF grudou "Inthe")
+OK    questao 28: as 5 alternativas constam na prova
+OK    questao 28: enunciado consta na prova
+OK    questao 29: as 5 alternativas constam na prova
+OK    questao 29: enunciado consta na prova
+OK    questao 30: as 5 alternativas constam na prova
+OK    questao 30: enunciado consta na prova
+OK    questao 31: as 5 alternativas constam na prova
+OK    questao 31: enunciado consta na prova
+OK    questao 32: as 5 alternativas constam na prova
+OK    questao 32: enunciado consta na prova
+OK    questao 33: as 5 alternativas constam na prova
+OK    questao 33: enunciado ("Qual a alternativa que melhor preenche a lacuna") consta na prova
+OK    questao 34: as 5 alternativas constam na prova
+OK    questao 34: enunciado consta na prova
+OK    questao 35: as 5 alternativas constam na prova
+OK    questao 35: enunciado consta na prova
+== Gabarito oficial
+OK    TJ-CE: cabecalho do gabarito traz "C03 - ANA JUD- CIÊNCIA DA COMP- SISTEMAS DA INFORMAÇÃO" e tipo 1
+OK    AL-SP: cabecalho do gabarito traz "X22 - AG LEG. DE SERVIÇOS TEC. E ADM. PROC. DE DADOS" e tipo 1
+OK    questao 11: gabarito oficial B, gabarito do curso B
+OK    questao 12: gabarito oficial D, gabarito do curso D
+OK    questao 28: gabarito oficial C, gabarito do curso C
+OK    questao 29: gabarito oficial B, gabarito do curso B
+OK    questao 30: gabarito oficial D, gabarito do curso D
+OK    questao 31: gabarito oficial A, gabarito do curso A
+OK    questao 32: gabarito oficial B, gabarito do curso B
+OK    questao 33: gabarito oficial E, gabarito do curso E
+OK    questao 34: gabarito oficial C, gabarito do curso C
+OK    questao 35: gabarito oficial A, gabarito do curso A
+
+RESUMO: 47 conferencias OK, 0 falhas

@@ -1,0 +1,66 @@
+Caderno de Pr
+Língua Inglesa
+Instruções: Considere o texto a seguir para responder às questões de números 28 a 35.
+Security: UAC Gets Tolerable
+Let's talk about User Account Control − the Windows
+Vista security element that was a prominent example for
+everything that bothered people about that OS. UAC aimed to
+prevent rogue software from tampering with your PC by
+endlessly prompting you to approve running applications or
+changing settings. The experience was so grating that many
+users preferred to turn UAC [PARTICLE] and [VERB] their
+chances with Internet attackers. Those who left it active risked
+slipping into the habit of incautiously clicking through every
+prompt, defeating whatever value the feature might have had.
+Whereas Vista's notorious User Account Control gave
+users no control over the feature other than to turn it off,
+Windows 7's version of UAC lets users choose from two
+intermediate notification levels between 'Always notify' and
+'Never notify'.
+Windows 7 gives you control over UAC, in the form of a
+slider containing four security settings. As before, you can
+accept the full-blown UAC or elect to disable it. But you can also
+tell UAC to notify you only when software changes Windows
+settings, not when you're tweaking them yourself. And you can
+instruct it not to perform the abrupt screen-dimming effect that
+Vista's version uses to grab your attention.
+If Microsoft had its druthers, all Windows 7 users [TO
+USE] UAC in full-tilt mode: The slider that you use to ratchet
+back its severity advises you not to do so if you routinely install
+new software or visit unfamiliar sites, and it warns that disabling
+
+X , Redmond: I
+the dimming effect is "Not recommended." KK
+have every intention of recommending the intermediate settings
+to most people who ask me for advice, since those settings
+retain most of UAC's theoretical value without driving users
+bonkers.
+(Adapted from
+http://www.pcworld.com/article/172602/windows_7_review.html)
+
+28.
+
+A synonym for grating, as it is used in the text, is
+(A)
+
+successful.
+
+(B)
+
+grateful.
+
+(C)
+
+annoying.
+
+(D)
+
+rewarding.
+
+(E)
+
+disappointing.
+
+ALESP-Ag.Leg.Serv.Téc.Adm-Proc-Dados-X22
+
+

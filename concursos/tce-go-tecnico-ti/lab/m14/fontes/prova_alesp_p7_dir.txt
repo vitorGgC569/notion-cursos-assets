@@ -1,0 +1,144 @@
+Prova ’X22’, Tipo 001
+29.
+
+A palavra que substitui corretamente a lacuna [PARTICLE]
+é
+(A)
+(B)
+(C)
+(D)
+(E)
+
+on.
+off.
+up.
+down.
+away.
+
+_________________________________________________________
+
+30.
+
+A alternativa que substitui corretamente a lacuna [VERB] é
+(A)
+(B)
+(C)
+(D)
+(E)
+
+do.
+get.
+make.
+take.
+give.
+
+_________________________________________________________
+
+31.
+
+A synonym for Whereas, as it is used in the text, is
+(A)
+(B)
+(C)
+(D)
+(E)
+
+While.
+Because.
+However.
+Therefore.
+Nevertheless.
+
+_________________________________________________________
+
+32.
+
+A forma correta de [TO USE] no texto é
+(A)
+(B)
+(C)
+(D)
+(E)
+
+will use.
+would use.
+will be using.
+will have used.
+would have used.
+
+_________________________________________________________
+
+33.
+
+X ?
+Qual a alternativa que melhor preenche a lacuna KK
+(A)
+(B)
+(C)
+(D)
+(E)
+
+Way to go.
+Go for it.
+I totally agree.
+Couldn’t be safer.
+Speak for yourself.
+
+_________________________________________________________
+
+34.
+
+Segundo o texto,
+(A)
+
+os usuários do Windows Vista apreciavam as funcionalidades do UAC.
+
+(B)
+
+o objetivo do UAC, no Windows Vista, é impedir que
+qualquer software afete a máquina do usuário.
+
+(C)
+
+no Windows Vista, o UAC continuamente pedia que
+o usuário aprovasse qualquer mudança nas configurações.
+
+(D)
+
+devido à dificuldade de usar o UAC, muitos usuários
+preferiram desativá-lo.
+
+(E)
+
+os usuários que optaram por deixar o UAC ativo
+beneficiaram-se de suas valiosas funcionalidades.
+
+_________________________________________________________
+
+35.
+
+De acordo com o texto, no Windows 7,
+(A)
+
+o usuário tem quatro opções para controlar o UAC.
+
+(B)
+
+o nível de segurança do UAC é muito baixo.
+
+(C)
+
+o usuário tem a opção de só ser alertado quando for
+instalado um novo programa.
+
+(D)
+
+as configurações intermediárias do UAC não são
+aconselháveis para usuários pouco experientes.
+
+(E)
+
+as novas opções do UAC estão deixando os usuários malucos.
+7
+
+

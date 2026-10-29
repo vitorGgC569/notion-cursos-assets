@@ -1,0 +1,15 @@
+C. Gerais/C. Espec./Redação
+Cargo ou Opção: X22 - AG LEG. DE SERVIÇOS TEC. E ADM. PROC. DE
+DADOS
+Tipo Gabarito: 1
+          001 - E   011 - D   021 - D   031 - A   041 - B   051 - D
+          002 - D   012 - A   022 - C   032 - B   042 - D   052 - E
+          003 - B   013 - E   023 - E   033 - E   043 - A   053 - C
+          004 - A   014 - C   024 - A   034 - C   044 - B   054 - A
+          005 - D   015 - D   025 - B   035 - A   045 - A   055 - B
+          006 - C   016 - B   026 - D   036 - B   046 - B   056 - C
+          007 - E   017 - A   027 - E   037 - A   047 - D   057 - B
+          008 - B   018 - E   028 - C   038 - D   048 - C   058 - A
+          009 - D   019 - C   029 - B   039 - C   049 - E   059 - D
+          010 - C   020 - B   030 - D   040 - E   050 - A   060 - E
+

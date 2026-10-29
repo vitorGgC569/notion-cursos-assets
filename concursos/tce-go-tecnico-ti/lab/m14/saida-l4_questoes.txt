@@ -1,0 +1,39 @@
+$ python3 l4_questoes.py
+== REAIS
+OK    q01 [real] texto=BYOD gabarito=B  evidencias OK 2/2, ausencias OK 3/3
+OK    q02 [real] texto=BYOD gabarito=D  evidencias OK 2/2, ausencias OK 0/0
+OK    q03 [real] texto=UAC gabarito=C  evidencias OK 1/1, ausencias OK 0/0
+OK    q04 [real] texto=UAC gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q05 [real] texto=UAC gabarito=D  evidencias OK 1/1, ausencias OK 0/0
+OK    q06 [real] texto=UAC gabarito=A  evidencias OK 1/1, ausencias OK 0/0
+OK    q07 [real] texto=UAC gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q08 [real] texto=UAC gabarito=E  evidencias OK 1/1, ausencias OK 0/0
+OK    q09 [real] texto=UAC gabarito=C  evidencias OK 3/3, ausencias OK 1/1
+OK    q10 [real] texto=UAC gabarito=A  evidencias OK 4/4, ausencias OK 0/0
+== EXERCICIOS
+OK    q01 [autoral] texto=A gabarito=B  evidencias OK 4/4, ausencias OK 4/4
+OK    q02 [autoral] texto=A gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q03 [autoral] texto=A gabarito=A  evidencias OK 1/1, ausencias OK 0/0
+OK    q04 [autoral] texto=A gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q05 [autoral] texto=B gabarito=A  evidencias OK 1/1, ausencias OK 2/2
+OK    q06 [autoral] texto=B gabarito=A  evidencias OK 1/1, ausencias OK 0/0
+OK    q07 [autoral] texto=B gabarito=D  evidencias OK 4/4, ausencias OK 2/2
+OK    q08 [autoral] texto=D_rfc_should gabarito=B  evidencias OK 2/2, ausencias OK 2/2
+OK    q09 [autoral] texto=D_mdn_403 gabarito=C  evidencias OK 3/3, ausencias OK 3/3
+OK    q10 [autoral] texto=D_venv gabarito=A  evidencias OK 1/1, ausencias OK 2/2
+OK    q11 [autoral] texto=D_pg gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q12 [autoral] texto=D_idem gabarito=B  evidencias OK 2/2, ausencias OK 1/1
+== SIMULADO
+OK    q01 [autoral] texto=C gabarito=B  evidencias OK 1/1, ausencias OK 1/1
+OK    q02 [autoral] texto=C gabarito=A  evidencias OK 1/1, ausencias OK 0/0
+OK    q03 [autoral] texto=C gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q04 [autoral] texto=C gabarito=B  evidencias OK 2/2, ausencias OK 0/0
+OK    q05 [autoral] texto=D_semmin gabarito=C  evidencias OK 1/1, ausencias OK 1/1
+OK    q06 [autoral] texto=D_mdn429 gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q07 [autoral] texto=D_gitc gabarito=B  evidencias OK 1/1, ausencias OK 0/0
+OK    q08 [autoral] texto=D_oas gabarito=B  evidencias OK 2/2, ausencias OK 1/1
+OK    q09 [autoral] texto=A gabarito=B  evidencias OK 2/2, ausencias OK 2/2
+OK    q10 [autoral] texto=B gabarito=A  evidencias OK 2/2, ausencias OK 0/0
+
+RESUMO: 32 questoes conferidas OK, 0 falhas
+Limite: o script confere frases do texto, nao o raciocinio; o gabarito das 10 reais vem do gabarito oficial (L2) e o das autorais e minha leitura do texto.

@@ -1,0 +1,44 @@
+$ python3 l5_vocabulario.py
+== 1. Frequencia dos termos nas 10 fontes em ingles (contagem simples, sem diferenciar maiusculas)
+termo                 total  fontes onde aparece
+deprecated               23  rfc9110:9, openapi:7, mdn_status:2, keepachangelog:2, man_curl:2, semver:1
+endpoint                  7  rfc9110:2, man_curl:2, openapi:2, mdn_status:1
+request                1268  rfc9110:939, man_curl:128, openapi:98, mdn_status:77, py_venv:21, rfc2119:2, kee
+response                800  rfc9110:585, openapi:95, mdn_status:67, man_curl:53
+payload                  27  openapi:24, rfc9110:3
+rate limiting             2  mdn_status:1, man_curl:1
+idempotent               18  rfc9110:18
+safe                     50  rfc9110:39, man_curl:6, semver:3, git_commit:2
+must                    360  rfc9110:212, openapi:65, man_curl:32, semver:23, rfc2119:12, mdn_status:8, pg_ba
+should                  261  rfc9110:131, man_curl:48, openapi:24, semver:15, keepachangelog:13, rfc2119:10, 
+may                     327  rfc9110:126, openapi:114, man_curl:51, semver:10, rfc2119:7, py_venv:6, mdn_stat
+backward compatible       3  semver:3
+language-agnostic         2  openapi:2
+self-contained            2  py_venv:1, openapi:1
+workaround                6  rfc9110:5, man_curl:1
+timeout                  33  man_curl:20, rfc9110:11, mdn_status:2
+changelog                70  keepachangelog:70
+pre-release              18  semver:18
+library                  18  man_curl:10, py_venv:5, rfc9110:1, semver:1, pg_backup:1
+parameter               249  openapi:122, rfc9110:114, man_curl:9, git_commit:3, pg_backup:1
+header                  783  rfc9110:556, man_curl:151, openapi:56, mdn_status:17, git_commit:3
+body                     81  openapi:42, rfc9110:20, man_curl:13, mdn_status:5, git_commit:1
+install                  39  py_venv:36, pg_backup:2, rfc9110:1
+troubleshoot              0  NAO aparece nas fontes baixadas
+default                 203  man_curl:89, openapi:59, rfc9110:26, git_commit:18, pg_backup:8, py_venv:2, keep
+retry                    83  man_curl:54, rfc9110:27, mdn_status:2
+obsolete                 15  rfc9110:14, py_venv:1
+specification           200  rfc9110:105, openapi:77, semver:6, rfc2119:5, man_curl:4, mdn_status:3
+
+== 2. Codigos HTTP do desafio contra a pagina da MDN (linha do codigo e frase seguinte)
+OK    201 Created                  The request succeeded, and a new resource was created as a result. Thi
+OK    301 Moved Permanently        The URL of the requested resource has been changed permanently. The ne
+OK    400 Bad Request              The server cannot or will not process the request due to something tha
+OK    401 Unauthorized             Although the HTTP standard specifies "unauthorized", semantically this
+OK    403 Forbidden                The client does not have access rights to the content; that is, it is 
+OK    404 Not Found                The server cannot find the requested resource.
+OK    429 Too Many Requests        The user has sent too many requests in a given amount of time (rate li
+OK    500 Internal Server Error    The server has encountered a situation it does not know how to handle.
+OK    503 Service Unavailable      The server is not ready to handle the request.
+
+RESUMO: 9 codigos conferidos OK, 0 falhas

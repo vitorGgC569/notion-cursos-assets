@@ -1,0 +1,19 @@
+$ python3 l1_fontes.py
+arquivo                          bytes palavras  sha256       origem
+gab_alesp.txt                      800       84  4a3fe9ba8a7f gabarito FCC AL-SP 2010 (PDF do agregador)
+gab_tjce.txt                      2406      154  e74c83101b14 gabarito FCC TJ-CE 2022 (PDF do agregador)
+git_commit.clean.txt             29404     4680  08b8dfac6848 https://git-scm.com/docs/git-commit
+keepachangelog.clean.txt         15455     2157  353aa7f84f0b https://keepachangelog.com/en/1.1.0/
+man_curl.clean.txt              214824    35161  8d4231be2e7d https://man7.org/linux/man-pages/man1/curl.1.html
+mdn_status.clean.txt             13979     2246  ff247c1d7840 https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+openapi.clean.txt               108221    15381  e0de37da3176 https://spec.openapis.org/oas/v3.1.0.html
+pg_backup.clean.txt               9995     1641  716a1ec544b1 https://www.postgresql.org/docs/current/backup-dump.html
+prova_alesp_p7_dir.txt            1961      282  063fce18d2c4 prova FCC AL-SP 2010, p. 7, coluna direita
+prova_alesp_p7_esq.txt            2166      353  a38a6dd42f42 prova FCC AL-SP 2010 (PDF do agregador estudegratis.com.br), p. 7, coluna esquerda
+prova_tjce_p4.txt                 4295      550  b334e6cfc0da prova FCC TJ-CE 2022 (PDF do agregador eticaconcursos.com.br), p. 4
+py_venv.clean.txt                 8184     1179  b6474321dcfa https://docs.python.org/3/tutorial/venv.html
+rfc2119.txt                       4723      615  3c2ceb7bfc84 https://www.rfc-editor.org/rfc/rfc2119.txt
+rfc9110.txt                     502941    66742  21c1cdce6ab0 https://www.rfc-editor.org/rfc/rfc9110.txt
+semver.clean.txt                 17265     2594  f6159261916c https://semver.org/
+
+Baixado em 28/10/2026 (fetch.sh). Paginas web mudam: o conteudo vale para essa data.
